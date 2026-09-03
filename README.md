@@ -1,6 +1,9 @@
 # Taller Evaluativo N.1 de Desarrollo Web y Movil
 ## Problematica Abordada
 El jardin necesita digitalizar y centralizar la informaciin que actualmente se entrega de manera fisica o mediante medios de comunicacion poco estructurados, permitiendo que los apoderados puedan acceder facilmente a ella desde Internet.
+
+Actualmente, la comunicación entre el establecimiento y los apoderados se realiza principalmente mediante WhatsApp, comunicaciones escritas y avisos verbales, siendo las educadoras de cada nivel y la dirección las responsables de entregar y coordinar la información. Sin embargo, este sistema presenta dificultades, ya que los mensajes y documentos pueden perderse entre las conversaciones y algunos apoderados pueden no revisar la información oportunamente.
+
 ## Integrantes del Proyecto
 - DANIEL CORTEZ FIERRO
 - DIEGO RUBILAR GOMEZ
