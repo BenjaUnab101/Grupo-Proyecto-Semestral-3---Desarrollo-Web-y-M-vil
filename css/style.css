@@ -1076,3 +1076,80 @@ textarea:focus-visible {
     gap: 4px;
   }
 }
+
+/* =========================================================
+   12. CALENDARIO DE ACTIVIDADES
+   ========================================================= */
+.calendar-section {
+  padding: 70px 0;
+  background-color: var(--pr-bg);
+  border-top: 1px solid var(--pr-border);
+}
+
+.activity-card {
+  background-color: var(--pr-surface);
+  border: 1px solid var(--pr-border);
+  border-left: 6px solid var(--pr-blue);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-subtle);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+
+.activity-card:hover {
+  box-shadow: var(--shadow-card);
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+}
+
+.activity-date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.activity-day {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--pr-blue);
+  line-height: 1;
+}
+
+.activity-month-year {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--pr-text-muted);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.activity-title {
+  font-size: 1.15rem;
+  color: var(--pr-text-main);
+  margin: 0 0 10px 0;
+}
+
+.activity-desc {
+  font-size: 0.88rem;
+  color: var(--pr-text-muted);
+  margin-bottom: 18px;
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+.activity-meta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pr-text-light);
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--pr-border);
+  padding-top: 12px;
+}
