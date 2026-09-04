@@ -1,585 +1,627 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Institucional | Escuela de Lenguaje y Jardín Infantil</title>
-  <meta name="description" content="Canal oficial de comunicación escolar: avisos, protocolos, estados de salas y admisión.">
-  
-  <!-- Google Fonts: Baloo 2 + Inter -->
+  <title>Escuela de Lenguaje Pequeños Reyes | Portal Institucional</title>
+  <meta name="description" content="Canal oficial de la Escuela de Lenguaje Pequeños Reyes: comunicados, aforo de salas, protocolos y proceso de matrícula.">
+
+  <!-- Fuentes Tipográficas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['"Baloo 2"', 'system-ui', 'sans-serif'],
-            body: ['"Inter"', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            colegio: {
-              petroleo: '#00557a', // Inspirado en el tono azul corporativo del referente
-              lima: '#b5ce35',     // Inspirado en el acento verde lima del referente
-              fondo: '#f8fafc'
-            }
-          }
-        }
-      }
-    };
-  </script>
+  <!-- Bootstrap 5 CSS (Framework de Grillas y Componentes Interactivos) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    h1, h2, h3, h4, .font-display { font-family: 'Baloo 2', system-ui, sans-serif; }
-    section[id] { scroll-margin-top: 6rem; }
-    .barra-aforo { transition: width 1s ease-out; }
-  </style>
+  <!-- Hoja de Estilos Personalizada (Se creará en el siguiente paso) -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
+<body class="site-body">
 
-<body class="bg-slate-50 text-slate-900 antialiased flex flex-col min-h-screen">
-
-  <!-- =========================================================
-       1. CINTILLO SUPERIOR DE INFORMACIÓN / ALERTA (TICKER)
-       (Inspirado en el scroll/top bar de la página amiga)
-       ========================================================= -->
-  <aside class="bg-amber-500 text-slate-950 px-4 py-2 text-xs sm:text-sm font-semibold border-b border-amber-600 shadow-inner">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-      <div class="flex items-center gap-2 truncate">
-        <span class="bg-slate-950 text-white text-[10px] uppercase font-black px-2 py-0.5 rounded tracking-wide shrink-0">Aviso del día</span>
-        <span class="truncate">Viernes 04 de Septiembre: Salida única a las 12:30 hrs por capacitación fonoaudiológica comunal.</span>
+  <!-- 1. CINTILLO / MARQUESINA DE ALERTA DIARIA -->
+  <aside class="top-banner" role="complementary" aria-label="Alerta institucional del día">
+    <div class="container">
+      <div class="top-banner-wrapper">
+        <span class="badge-alerta">Aviso del día</span>
+        <p class="top-banner-text">Viernes 04 de Septiembre: Salida a las 12:30 hrs por jornada de capacitación comunal.</p>
+        <a href="#avisos" class="top-banner-link">Ver detalles</a>
       </div>
-      <a href="#avisos" class="hidden sm:inline-block underline text-slate-950 font-bold shrink-0 hover:text-white transition">Detalles</a>
     </div>
   </aside>
 
-  <!-- =========================================================
-       2. HEADER PRINCIPAL
-       ========================================================= -->
-  <header class="sticky top-0 z-40 bg-colegio-petroleo text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
-      <!-- Marca -->
-      <a href="#" class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-colegio-lima text-slate-900 flex items-center justify-center font-display font-extrabold text-2xl shadow">
-          🌱
-        </div>
-        <div>
-          <span class="block font-display font-bold text-lg sm:text-xl leading-none tracking-tight">Escuela & Jardín</span>
-          <span class="block text-xs text-colegio-lima font-semibold mt-1">Educación Parvularia & Trastornos del Lenguaje</span>
-        </div>
-      </a>
+  <!-- 2. HEADER Y BARRA DE NAVEGACIÓN COLAPSABLE (BOOTSTRAP + SEMÁNTICA) -->
+  <header class="site-header sticky-top">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
+      <div class="container">
+        
+        <!-- Espacio reservado para Logo oficial e Identidad -->
+        <a class="navbar-brand brand-identity" href="index.html">
+          <figure class="brand-figure">
+            <img src="images/png/logojardin.png" alt="Logotipo Escuela de Lenguaje Pequeños Reyes" class="brand-logo" width="55" height="55">
+          </figure>
+          <div class="brand-text">
+            <span class="brand-subtitle">Escuela de Lenguaje</span>
+            <span class="brand-title">Pequeños Reyes</span>
+          </div>
+        </a>
 
-      <!-- Menú Desktop -->
-      <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-100">
-        <a href="#destacados" class="hover:text-colegio-lima transition">Accesos Directos</a>
-        <a href="#avisos" class="hover:text-colegio-lima transition">Comunicados</a>
-        <a href="#aforo" class="hover:text-colegio-lima transition">Salas (Aforo)</a>
-        <a href="#protocolos" class="hover:text-colegio-lima transition">Protocolos</a>
-        <a href="#matriculas" class="hover:text-colegio-lima transition">Admisión 2027</a>
-      </nav>
-
-      <!-- Botón Portal Apoderados -->
-      <div class="flex items-center gap-3">
-        <button onclick="toggleModal('modal-apoderados', true)" class="inline-flex items-center gap-2 bg-slate-900/60 hover:bg-slate-900 border border-slate-400/40 text-slate-100 px-3.5 py-2 rounded-xl text-xs font-bold transition">
-          <span>🔒 Acceso Familias</span>
-          <span class="bg-colegio-lima text-slate-950 text-[10px] px-1.5 py-0.2 rounded font-black">Fase 2</span>
+        <!-- Botón Menú Hamburguesa para Móviles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Alternar navegación">
+          <span class="navbar-toggler-icon"></span>
         </button>
-      </div>
 
-    </div>
+        <!-- Accesos directos y enlaces colapsables -->
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#destacados">Accesos Rápidos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#avisos">Comunicados</a></li>
+            <li class="nav-item"><a class="nav-link" href="#aforo">Salas y Aforo</a></li>
+            <li class="nav-item"><a class="nav-link" href="#protocolos">Documentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#matriculas">Admisión</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          </ul>
+
+          <!-- Botón de Acceso Portal Apoderados (Fase 2) -->
+          <div class="d-flex ms-lg-3">
+            <button type="button" class="btn-portal-familias" data-bs-toggle="modal" data-bs-target="#modalApoderados">
+              <span class="portal-icon">🔒</span>
+              <span class="portal-label">Portal Familias</span>
+              <span class="portal-badge">Fase 2</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </nav>
   </header>
 
-  <main class="flex-1">
+  <main id="main-content">
 
-    <!-- =========================================================
-         3. HERO INSTITUCIONAL
-         ========================================================= -->
-    <section class="bg-gradient-to-b from-colegio-petroleo to-slate-900 text-white py-14 px-4 sm:px-6">
-      <div class="max-w-4xl mx-auto text-center">
-        <span class="inline-block px-3 py-1 rounded-full bg-white/10 text-colegio-lima text-xs font-bold uppercase tracking-wider mb-4 border border-white/10">
-          Canal Digital Centralizado
-        </span>
-        <h1 class="font-display font-black text-3xl sm:text-5xl leading-tight">
-          Comunicación Directa, Transparente y Sin Pérdidas de Información
-        </h1>
-        <p class="mt-4 text-slate-300 text-base sm:text-lg max-w-2xl mx-auto">
-          Centralizamos circulares, estados de matrícula, protocolos sanitarios y seguimiento de nuestras 8 salas con enfoque fonoaudiológico.
-        </p>
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="#avisos" class="bg-colegio-lima hover:bg-lime-400 text-slate-950 font-bold text-sm px-6 py-3 rounded-xl shadow transition">
-            Ver Circulares del Mes
-          </a>
-          <button onclick="toggleModal('modal-pagos', true)" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-sm px-6 py-3 rounded-xl transition">
-            💳 Información de Mensualidad / Pagos
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         4. SECCIÓN PRINCIPAL: DESTACADOS Y MURO EN GRID
-         (Inspirado en el layout de 3 columnas de Saint Benedict)
-         ========================================================= -->
-    <section id="destacados" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-        <!-- COLUMNA IZQUIERDA: Destacados y Enlaces Rápidos (4 Cols) -->
-        <aside class="lg:col-span-4 space-y-6">
+    <!-- 3. SECCIÓN HERO (PORTADA CON ESPACIO PARA IMAGEN PRINCIPAL) -->
+    <section class="hero-section" id="inicio">
+      <div class="container">
+        <div class="row align-items-center">
           
-          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-            <h3 class="font-display font-bold text-lg text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-              <span>📌</span> Accesos Frecuentes
-            </h3>
-            <ul class="space-y-2.5 text-sm font-semibold">
-              <li>
-                <button onclick="toggleModal('modal-pagos', true)" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-colegio-lima/20 text-slate-800 flex items-center justify-between transition border border-slate-200/60">
-                  <span class="flex items-center gap-2">💳 Pago de Colegiatura / Datos</span>
-                  <span class="text-xs text-slate-400">Ver</span>
-                </button>
-              </li>
-              <li>
-                <a href="#protocolos" class="p-3 rounded-xl bg-slate-50 hover:bg-colegio-lima/20 text-slate-800 flex items-center justify-between transition border border-slate-200/60">
-                  <span class="flex items-center gap-2">📄 Lista de Útiles y Materiales</span>
-                  <span class="text-xs text-slate-400">PDF</span>
-                </a>
-              </li>
-              <li>
-                <a href="#protocolos" class="p-3 rounded-xl bg-slate-50 hover:bg-colegio-lima/20 text-slate-800 flex items-center justify-between transition border border-slate-200/60">
-                  <span class="flex items-center gap-2">🩺 Protocolo Alergias e Inasistencias</span>
-                  <span class="text-xs text-slate-400">PDF</span>
-                </a>
-              </li>
-              <li>
-                <a href="#matriculas" class="p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 flex items-center justify-between transition border border-emerald-200">
-                  <span class="flex items-center gap-2">📝 Formulario Pre-Matrícula 2027</span>
-                  <span class="text-xs font-bold text-emerald-700">Abierto</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Cuadro Institucional de Alerta Administrativa -->
-          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm">
-            <h4 class="font-display font-bold text-base text-colegio-lima mb-2">Aviso a la Comunidad</h4>
-            <p class="text-xs text-slate-300 leading-relaxed">
-              Nuestro establecimiento cuenta con reconocimiento oficial y cupos reducidos de máximo 15 párvulos por sala para el trabajo fonoaudiológico.
+          <div class="col-12 col-lg-7 text-content">
+            <span class="pill-badge">Educación Parvularia & Trastornos del Lenguaje</span>
+            <h1 class="hero-title">Donde cada niño crece, juega y descubre su propia voz</h1>
+            <p class="hero-lead">
+              Acompañamos las primeras etapas del desarrollo con estimulación fonoaudiológica especializada, grupos reducidos de máximo 15 alumnos y un canal digital transparente para las familias.
             </p>
-          </div>
-
-        </aside>
-
-        <!-- COLUMNA DERECHA: Muro de Comunicados Filtrable (8 Cols) -->
-        <div id="avisos" class="lg:col-span-8">
-          
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h2 class="font-display font-bold text-2xl sm:text-3xl text-slate-900">Muro Oficial de Avisos</h2>
-              <p class="text-xs text-slate-500">Filtrar por nivel para ver información pertinente a su sala</p>
-            </div>
-
-            <!-- Filtros -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="filter-container">
-              <button onclick="filtrar('todos')" class="btn-filter bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Todos</button>
-              <button onclick="filtrar('general')" class="btn-filter bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-100">General</button>
-              <button onclick="filtrar('tel')" class="btn-filter bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-100">Salas TEL</button>
-              <button onclick="filtrar('preescolar')" class="btn-filter bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-100">Preescolar</button>
+            <div class="hero-buttons">
+              <a href="#avisos" class="btn-institucional-primary">Muro de Comunicados</a>
+              <a href="#matriculas" class="btn-institucional-secondary">Postular a Matrícula</a>
             </div>
           </div>
 
-          <!-- Contenedor de Tarjetas -->
-          <div class="space-y-4" id="contenedor-cards">
-            
-            <!-- Aviso 1: Urgente / General -->
-            <article class="card-aviso bg-white rounded-2xl border-2 border-amber-400 p-6 shadow-sm" data-tipo="general">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="bg-amber-100 text-amber-900 text-xs font-black px-2.5 py-0.5 rounded-full uppercase">Urgente Institucional</span>
-                <span class="text-xs text-slate-400 font-mono">02 Sep 2026</span>
-              </div>
-              <h3 class="font-display font-bold text-lg text-slate-900 mb-1">Corte Programado y Salida Anticipada de Alumnos</h3>
-              <p class="text-sm text-slate-600 leading-relaxed">
-                Informamos a los apoderados que este viernes se suspenden las actividades de la tarde a contar de las 12:30 hrs debido a trabajos sanitarios en el sector. Rogamos puntualidad en el retiro de los menores.
-              </p>
-              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <span>Emite: Dirección</span>
-                <span class="font-bold text-slate-700">Afecta: Todo el jardín</span>
-              </div>
-            </article>
-
-            <!-- Aviso 2: Fonoaudiología / TEL -->
-            <article class="card-aviso bg-white rounded-2xl border border-slate-200 p-6 shadow-sm" data-tipo="tel">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="bg-blue-100 text-blue-900 text-xs font-black px-2.5 py-0.5 rounded-full uppercase">Fonoaudiología</span>
-                <span class="text-xs text-slate-400 font-mono">29 Ago 2026</span>
-              </div>
-              <h3 class="font-display font-bold text-lg text-slate-900 mb-1">Inicio de Evaluaciones Diagnósticas y Reevaluación</h3>
-              <p class="text-sm text-slate-600 leading-relaxed">
-                Durante la primera quincena de septiembre se realizarán las sesiones de reevaluación semestral de habla y lenguaje para los niveles Medio Mayor B y Transición TEL. Se enviará informe individual a cada apoderado.
-              </p>
-              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <span>Emite: Equipo Fonoaudiológico</span>
-                <span class="font-bold text-slate-700">Afecta: Salas 3, 5 y 7</span>
-              </div>
-            </article>
-
-            <!-- Aviso 3: Preescolar Regular -->
-            <article class="card-aviso bg-white rounded-2xl border border-slate-200 p-6 shadow-sm" data-tipo="preescolar">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-2.5 py-0.5 rounded-full uppercase">Actividad Escolar</span>
-                <span class="text-xs text-slate-400 font-mono">25 Ago 2026</span>
-              </div>
-              <h3 class="font-display font-bold text-lg text-slate-900 mb-1">Celebración Fiestas Patrias y Minuta de Convivencia</h3>
-              <p class="text-sm text-slate-600 leading-relaxed">
-                Se encuentra disponible en el panel de descargas la minuta de alimentos saludables y trajes típicos sugeridos para la muestra folclórica de este mes.
-              </p>
-              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <span>Emite: Docentes de Nivel</span>
-                <span class="font-bold text-slate-700">Afecta: Preescolar</span>
-              </div>
-            </article>
-
+          <!-- Espacio reservado para foto de cabecera con niños en actividades -->
+          <div class="col-12 col-lg-5 media-content">
+            <figure class="hero-figure">
+              <img src="images/png/jugando-pintando.png" alt="Párvulos de la Escuela de Lenguaje Pequeños Reyes participando en actividades lúdicas" class="hero-image img-fluid">
+            </figure>
           </div>
+
         </div>
-
       </div>
     </section>
 
-    <!-- =========================================================
-         5. AFORO Y NIVELES (MAPA DE LAS 8 SALAS)
-         ========================================================= -->
-    <section id="aforo" class="bg-white border-y border-slate-200 py-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="max-w-3xl mb-10">
-          <span class="text-xs font-bold text-colegio-petroleo uppercase tracking-wider">Capacidad Operativa</span>
-          <h2 class="font-display font-bold text-3xl text-slate-900">Estado de Ocupación por Sala</h2>
-          <p class="text-sm text-slate-500 mt-1">Límite normativo de 15 alumnos por sala para garantizar atención integral.</p>
+    <!-- 4. SECCIÓN DESTACADOS Y MURO OFICIAL DE AVISOS (GRID PRINCIPAL) -->
+    <section class="board-section" id="destacados">
+      <div class="container">
+        <div class="row g-4">
+
+          <!-- Columna Lateral: Accesos Directos Frecuentes -->
+          <aside class="col-12 col-lg-4">
+            <div class="sidebar-sticky-wrapper">
+              
+              <div class="quick-access-card">
+                <header class="card-custom-header">
+                  <h2 class="card-custom-title">📌 Accesos Frecuentes</h2>
+                </header>
+                <ul class="quick-access-list">
+                  <li>
+                    <button type="button" class="btn-quick-link" data-bs-toggle="modal" data-bs-target="#modalPagos">
+                      <span class="link-label">💳 Datos de Mensualidad / Pagos</span>
+                      <span class="link-indicator">Ver</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a href="#protocolos" class="quick-link-anchor">
+                      <span class="link-label">📄 Lista de Materiales 2026</span>
+                      <span class="link-indicator">PDF</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#protocolos" class="quick-link-anchor">
+                      <span class="link-label">🩺 Protocolo Alergias e Inasistencias</span>
+                      <span class="link-indicator">PDF</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#matriculas" class="quick-link-anchor highlight-link">
+                      <span class="link-label">📝 Formulario Pre-Matrícula 2027</span>
+                      <span class="link-badge">Abierto</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="notice-info-card">
+                <h3 class="notice-info-title">Aforo y Capacidad Oficial</h3>
+                <p class="notice-info-text">
+                  El establecimiento cuenta con capacidad de 8 salas estructuradas para un límite estricto de 15 párvulos por aula, garantizando atención fonoaudiológica personalizada.
+                </p>
+              </div>
+
+            </div>
+          </aside>
+
+          <!-- Columna Central: Muro de Avisos con Filtrado -->
+          <div class="col-12 col-lg-8" id="avisos">
+            
+            <header class="section-heading-wrapper">
+              <div>
+                <h2 class="section-title">Muro Oficial de Comunicados</h2>
+                <p class="section-subtitle">Canal directo de información institucional y pedagógica.</p>
+              </div>
+              
+              <!-- Filtros de categoría de comunicados -->
+              <nav class="filter-controls" aria-label="Filtro de comunicados">
+                <button type="button" class="btn-filter is-active" onclick="filterNotices('all')">Todos</button>
+                <button type="button" class="btn-filter" onclick="filterNotices('general')">General</button>
+                <button type="button" class="btn-filter" onclick="filterNotices('tel')">Salas TEL</button>
+                <button type="button" class="btn-filter" onclick="filterNotices('preescolar')">Preescolar</button>
+              </nav>
+            </header>
+
+            <div class="feed-container" id="noticesFeed">
+              
+              <!-- Aviso 1: Urgente / General -->
+              <article class="notice-item notice-urgent" data-category="general">
+                <header class="notice-header">
+                  <span class="tag-status tag-urgent">Urgente Institucional</span>
+                  <time datetime="2026-09-02">02 Sep 2026</time>
+                </header>
+                <h3 class="notice-title">Corte Programado y Salida Anticipada de Alumnos</h3>
+                <p class="notice-body">
+                  Informamos a los apoderados que este viernes se suspenden las actividades de la jornada de la tarde a contar de las 12:30 hrs debido a trabajos sanitarios en el sector. Rogamos puntualidad en el retiro de los menores.
+                </p>
+                <footer class="notice-footer">
+                  <span class="notice-emitter">Emite: Dirección</span>
+                  <span class="notice-scope">Alcance: Todo el establecimiento</span>
+                </footer>
+              </article>
+
+              <!-- Aviso 2: Fonoaudiología / TEL -->
+              <article class="notice-item" data-category="tel">
+                <header class="notice-header">
+                  <span class="tag-status tag-tel">Fonoaudiología</span>
+                  <time datetime="2026-08-29">29 Ago 2026</time>
+                </header>
+                <h3 class="notice-title">Inicio de Evaluaciones Diagnósticas y Reevaluación</h3>
+                <p class="notice-body">
+                  Durante la primera quincena de septiembre se realizarán las sesiones de reevaluación semestral de habla y lenguaje para los niveles Medio Mayor B y Transición TEL. Se emitirán informes individuales.
+                </p>
+                <footer class="notice-footer">
+                  <span class="notice-emitter">Emite: Equipo Fonoaudiológico</span>
+                  <span class="notice-scope">Alcance: Salas 3, 5 y 7</span>
+                </footer>
+              </article>
+
+              <!-- Aviso 3: Preescolar Regular -->
+              <article class="notice-item" data-category="preescolar">
+                <header class="notice-header">
+                  <span class="tag-status tag-activity">Actividad Escolar</span>
+                  <time datetime="2026-08-25">25 Ago 2026</time>
+                </header>
+                <h3 class="notice-title">Celebración Fiestas Patrias y Minuta de Convivencia</h3>
+                <p class="notice-body">
+                  Se encuentra disponible en el panel de descargas la minuta de alimentos saludables y sugerencias de vestimenta para la muestra folclórica de este mes.
+                </p>
+                <footer class="notice-footer">
+                  <span class="notice-emitter">Emite: Docentes de Nivel</span>
+                  <span class="notice-scope">Alcance: Preescolar</span>
+                </footer>
+              </article>
+
+            </div>
+
+          </div>
+
         </div>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- 5. SECCIÓN AFORO Y NIVELES (MAPA DE LAS 8 SALAS) -->
+    <section class="capacity-section" id="aforo">
+      <div class="container">
+        
+        <header class="capacity-header">
+          <span class="section-tag">Capacidad y Aulas</span>
+          <h2 class="section-title">Estado de Cupos por Sala</h2>
+          <p class="section-subtitle">Aforo limitado a un máximo de 15 alumnos por sala para atención especializada.</p>
+        </header>
+
+        <div class="row g-3">
           
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 1</span> <span class="text-emerald-700 font-extrabold">1 Cupo</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Medio Menor</h4>
-            <p class="text-xs text-slate-500 mb-3">2 a 3 años</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-colegio-petroleo" style="width: 93%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">14 / 15 alumnos</p>
+          <!-- Sala 1 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 1</span>
+                <span class="room-badge badge-available">1 Cupo</span>
+              </header>
+              <h3 class="room-name">Medio Menor</h3>
+              <p class="room-meta">2 a 3 años Regular</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 93%;"></div>
+              </div>
+              <footer class="room-count">14 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 2</span> <span class="text-slate-800 font-extrabold">Completo</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Medio Mayor A</h4>
-            <p class="text-xs text-slate-500 mb-3">3 a 4 años Regular</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-slate-700" style="width: 100%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">15 / 15 alumnos</p>
+          <!-- Sala 2 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 2</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Medio Mayor A</h3>
+              <p class="room-meta">3 a 4 años Regular</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 3</span> <span class="text-emerald-700 font-extrabold">2 Cupos</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Medio Mayor B (TEL)</h4>
-            <p class="text-xs text-slate-500 mb-3">3 a 4 años Lenguaje</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-colegio-petroleo" style="width: 86%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">13 / 15 alumnos</p>
+          <!-- Sala 3 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 3</span>
+                <span class="room-badge badge-available">2 Cupos</span>
+              </header>
+              <h3 class="room-name">Medio Mayor B (TEL)</h3>
+              <p class="room-meta">3 a 4 años Lenguaje</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 86%;"></div>
+              </div>
+              <footer class="room-count">13 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 4</span> <span class="text-slate-800 font-extrabold">Completo</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Prekínder Regular</h4>
-            <p class="text-xs text-slate-500 mb-3">Primer Nivel Transición</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-slate-700" style="width: 100%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">15 / 15 alumnos</p>
+          <!-- Sala 4 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 4</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Prekínder Regular</h3>
+              <p class="room-meta">1er Nivel Transición</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 5</span> <span class="text-emerald-700 font-extrabold">1 Cupo</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Prekínder TEL</h4>
-            <p class="text-xs text-slate-500 mb-3">Primer Nivel Lenguaje</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-colegio-petroleo" style="width: 93%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">14 / 15 alumnos</p>
+          <!-- Sala 5 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 5</span>
+                <span class="room-badge badge-available">1 Cupo</span>
+              </header>
+              <h3 class="room-name">Prekínder TEL</h3>
+              <p class="room-meta">1er Nivel Lenguaje</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 93%;"></div>
+              </div>
+              <footer class="room-count">14 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 6</span> <span class="text-slate-800 font-extrabold">Completo</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Kínder Regular</h4>
-            <p class="text-xs text-slate-500 mb-3">Segundo Nivel Transición</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-slate-700" style="width: 100%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">15 / 15 alumnos</p>
+          <!-- Sala 6 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 6</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Kínder Regular</h3>
+              <p class="room-meta">2do Nivel Transición</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
           </div>
 
-          <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-2">
-              <span>SALA 7</span> <span class="text-emerald-700 font-extrabold">3 Cupos</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Kínder Especial / TEL</h4>
-            <p class="text-xs text-slate-500 mb-3">Apoyo Multidisciplinar</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="barra-aforo h-full bg-colegio-petroleo" style="width: 80%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-slate-700 text-right">12 / 15 alumnos</p>
+          <!-- Sala 7 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 7</span>
+                <span class="room-badge badge-available">3 Cupos</span>
+              </header>
+              <h3 class="room-name">Kínder Especial</h3>
+              <p class="room-meta">Apoyo Multidisciplinar</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 80%;"></div>
+              </div>
+              <footer class="room-count">12 / 15 alumnos</footer>
+            </article>
           </div>
 
           <!-- Sala 8: Proyectada -->
-          <div class="bg-lime-50/50 rounded-2xl p-5 border-2 border-dashed border-colegio-lima">
-            <div class="flex justify-between items-center text-xs font-bold text-colegio-petroleo mb-2">
-              <span>SALA 8</span> <span class="bg-colegio-lima text-slate-950 px-1.5 py-0.5 rounded font-black text-[10px]">2027</span>
-            </div>
-            <h4 class="font-display font-bold text-base text-slate-900">Nueva Apertura</h4>
-            <p class="text-xs text-slate-500 mb-3">Ampliación de Infraestructura</p>
-            <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="h-full bg-emerald-500" style="width: 0%;"></div>
-            </div>
-            <p class="mt-2 text-xs font-bold text-emerald-700 text-right">15 Cupos Disponibles</p>
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box room-box-projected">
+              <header class="room-box-header">
+                <span class="room-id">SALA 8</span>
+                <span class="room-badge badge-projected">2027</span>
+              </header>
+              <h3 class="room-name">Nueva Apertura</h3>
+              <p class="room-meta">Ampliación de Sala</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 0%;"></div>
+              </div>
+              <footer class="room-count text-projected">15 Cupos Proyectados</footer>
+            </article>
           </div>
 
         </div>
+
       </div>
     </section>
 
-    <!-- =========================================================
-         6. PROTOCOLOS Y REPOSITORIO DOCUMENTAL
-         ========================================================= -->
-    <section id="protocolos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-      <div class="max-w-3xl mb-8">
-        <span class="text-xs font-bold text-colegio-petroleo uppercase tracking-wider">Transparencia</span>
-        <h2 class="font-display font-bold text-3xl text-slate-900">Protocolos y Reglamentos Oficiales</h2>
-        <p class="text-sm text-slate-500 mt-1">Archivos oficiales disponibles para descarga directa sin contraseñas.</p>
-      </div>
+    <!-- 6. SECCIÓN PROTOCOLOS Y DOCUMENTACIÓN OFICIAL -->
+    <section class="docs-section" id="protocolos">
+      <div class="container">
+        
+        <header class="docs-header">
+          <span class="section-tag">Transparencia Institucional</span>
+          <h2 class="section-title">Protocolos y Reglamentos</h2>
+          <p class="section-subtitle">Archivos normativos de consulta pública permanente.</p>
+        </header>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-3xl">📘</span>
-            <h3 class="font-display font-bold text-slate-900 text-base mt-3">Reglamento Interno y Convivencia</h3>
-            <p class="text-xs text-slate-500 mt-1">Derechos, deberes y normas aplicables al año escolar 2026.</p>
-          </div>
-          <button onclick="alert('Abriendo PDF oficial: Reglamento_Interno_2026.pdf')" class="mt-6 w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
-            Descargar Documento (PDF)
-          </button>
-        </div>
-
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-3xl">🩺</span>
-            <h3 class="font-display font-bold text-slate-900 text-base mt-3">Protocolo de Salud y Alergias</h3>
-            <p class="text-xs text-slate-500 mt-1">Procedimientos ante contingencias médicas, fiebres y administración de medicamentos.</p>
-          </div>
-          <button onclick="alert('Abriendo PDF oficial: Protocolo_Salud_Alergias.pdf')" class="mt-6 w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
-            Descargar Documento (PDF)
-          </button>
-        </div>
-
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-3xl">🚨</span>
-            <h3 class="font-display font-bold text-slate-900 text-base mt-3">Plan de Seguridad Escolar (PISE)</h3>
-            <p class="text-xs text-slate-500 mt-1">Zonas de seguridad, evacuación y protocolos ante sismos o emergencias.</p>
-          </div>
-          <button onclick="alert('Abriendo PDF oficial: PISE_Seguridad_Escolar.pdf')" class="mt-6 w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
-            Descargar Documento (PDF)
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         7. ADMISIÓN Y FORMULARIO (CAPTACIÓN 120 CUPOS)
-         ========================================================= -->
-    <section id="matriculas" class="bg-slate-100 border-t border-slate-200 py-14">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6">
-        <div class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm">
+        <div class="row g-4">
           
-          <div class="text-center mb-8">
-            <span class="text-xs font-bold text-colegio-petroleo uppercase tracking-wider">Admisión Período 2027</span>
-            <h2 class="font-display font-bold text-3xl text-slate-900 mt-1">Formulario de Pre-Matrícula</h2>
-            <p class="text-xs sm:text-sm text-slate-500 mt-1">Complete los antecedentes para agendar la entrevista fonoaudiológica de diagnóstico.</p>
+          <div class="col-12 col-sm- 6 col-lg-4">
+            <article class="doc-card">
+              <span class="doc-icon">📘</span>
+              <h3 class="doc-title">Reglamento Interno Escolar</h3>
+              <p class="doc-description">Normativa de funcionamiento institucional, derechos y deberes escolares.</p>
+              <footer class="doc-footer">
+                <button type="button" class="btn-download" onclick="alert('Descargando: Reglamento_Interno.pdf')">
+                  Descargar PDF
+                </button>
+              </footer>
+            </article>
           </div>
 
-          <form id="form-admision" onsubmit="enviarFormulario(event)" class="space-y-4">
+          <div class="col-12 col-sm- 6 col-lg-4">
+            <article class="doc-card">
+              <span class="doc-icon">🩺</span>
+              <h3 class="doc-title">Protocolo Salud y Alergias</h3>
+              <p class="doc-description">Directrices para la atención de contingencias médicas y administración de fármacos.</p>
+              <footer class="doc-footer">
+                <button type="button" class="btn-download" onclick="alert('Descargando: Protocolo_Salud.pdf')">
+                  Descargar PDF
+                </button>
+              </footer>
+            </article>
+          </div>
+
+          <div class="col-12 col-sm- 6 col-lg-4">
+            <article class="doc-card">
+              <span class="doc-icon">🚨</span>
+              <h3 class="doc-title">Plan de Seguridad Escolar (PISE)</h3>
+              <p class="doc-description">Zonas de seguridad, procedimientos de evacuación ante sismos y emergencias.</p>
+              <footer class="doc-footer">
+                <button type="button" class="btn-download" onclick="alert('Descargando: PISE_Seguridad.pdf')">
+                  Descargar PDF
+                </button>
+              </footer>
+            </article>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. SECCIÓN ADMISIÓN Y PRE-MATRÍCULA -->
+    <section class="admission-section" id="matriculas">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8">
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre Apoderado/a *</label>
-                <input type="text" required placeholder="Ej: Patricia Morales" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">RUT Apoderado/a *</label>
-                <input type="text" id="rut-input" required placeholder="12.345.678-9" maxlength="12" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
-                <p id="rut-error" class="hidden text-[11px] text-red-600 mt-1">Formato de RUT no válido.</p>
-              </div>
-            </div>
+            <article class="form-container-card">
+              <header class="form-header">
+                <span class="section-tag">Admisión 2027</span>
+                <h2 class="section-title">Formulario de Pre-Matrícula</h2>
+                <p class="section-subtitle">Complete los antecedentes para agendar la entrevista fonoaudiológica de diagnóstico.</p>
+              </header>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Teléfono Móvil (WhatsApp) *</label>
-                <input type="tel" required placeholder="+56 9 8765 4321" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
+              <div id="formSuccess" class="alert-success-banner" style="display: none;" role="alert">
+                <strong>✓ Solicitud Recibida:</strong> Nos pondremos en contacto con el apoderado para coordinar la evaluación presencial.
               </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre del Párvulo/a *</label>
-                <input type="text" required placeholder="Ej: Mateo Gómez" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
-              </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nivel de Interés *</label>
-                <select required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
-                  <option value="">Seleccione sala</option>
-                  <option>Medio Menor (2 a 3 años)</option>
-                  <option>Medio Mayor Regular</option>
-                  <option>Medio Mayor TEL (Lenguaje)</option>
-                  <option>Prekínder Regular / TEL</option>
-                  <option>Kínder Regular / TEL</option>
-                  <option>Sala 8 (Apertura 2027)</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">¿Diagnóstico TEL Previo?</label>
-                <select class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo">
-                  <option>No, requiere evaluación aquí</option>
-                  <option>Sí, cuenta con informe fonoaudiológico</option>
-                  <option>En evaluación con especialista externo</option>
-                </select>
-              </div>
-            </div>
+              <form id="formAdmision" onsubmit="handleAdmissionSubmit(event)">
+                
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label for="parentName" class="form-field-label">Nombre Apoderado/a *</label>
+                    <input type="text" id="parentName" class="form-control" required placeholder="Ej: Patricia Morales">
+                  </div>
 
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Observaciones / Alergias</label>
-              <textarea rows="3" placeholder="Información relevante de salud o antecedentes de desarrollo..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-colegio-petroleo"></textarea>
-            </div>
+                  <div class="col-12 col-md-6">
+                    <label for="parentRut" class="form-field-label">RUT Apoderado/a *</label>
+                    <input type="text" id="parentRut" class="form-control" required placeholder="12.345.678-9" maxlength="12">
+                    <span id="rutError" class="input-error-msg" style="display: none;">RUT inválido. Formato esperado: 12.345.678-9</span>
+                  </div>
 
-            <button type="submit" class="w-full py-3 rounded-xl bg-colegio-petroleo hover:bg-slate-900 text-white font-bold text-sm shadow transition">
-              Registrar Postulación
-            </button>
+                  <div class="col-12 col-md-6">
+                    <label for="parentPhone" class="form-field-label">Teléfono Móvil (WhatsApp) *</label>
+                    <input type="tel" id="parentPhone" class="form-control" required placeholder="+56 9 8765 4321">
+                  </div>
 
-          </form>
+                  <div class="col-12 col-md-6">
+                    <label for="childName" class="form-field-label">Nombre del Párvulo/a *</label>
+                    <input type="text" id="childName" class="form-control" required placeholder="Ej: Mateo Gómez">
+                  </div>
 
-          <div id="banner-exito" class="hidden mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs">
-            <span class="font-bold">✓ Registro exitoso:</span> Nos pondremos en contacto al teléfono indicado para coordinar la evaluación presencial.
+                  <div class="col-12 col-md-6">
+                    <label for="roomLevel" class="form-field-label">Nivel de Interés *</label>
+                    <select id="roomLevel" class="form-select" required>
+                      <option value="">Seleccione sala</option>
+                      <option>Medio Menor (2 a 3 años)</option>
+                      <option>Medio Mayor Regular</option>
+                      <option>Medio Mayor TEL (Lenguaje)</option>
+                      <option>Prekínder Regular / TEL</option>
+                      <option>Kínder Regular / TEL</option>
+                      <option>Sala 8 (Apertura 2027)</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="diagnosisStatus" class="form-field-label">¿Diagnóstico TEL Previo?</label>
+                    <select id="diagnosisStatus" class="form-select">
+                      <option>No, requiere evaluación diagnóstica</option>
+                      <option>Sí, cuenta con informe fonoaudiológico</option>
+                      <option>En evaluación con especialista externo</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="observations" class="form-field-label">Observaciones o Alergias</label>
+                    <textarea id="observations" class="form-control" rows="3" placeholder="Indicar si presenta alergias alimentarias, controles médicos u otra observación relevante..."></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <button type="submit" class="btn-submit-form">Enviar Solicitud de Admisión</button>
+                  </div>
+                </div>
+
+              </form>
+            </article>
+
           </div>
-
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- =========================================================
-       8. FOOTER
-       ========================================================= -->
-  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-xs">
-      <div>
-        <div class="font-display font-bold text-white text-base mb-2">Escuela Especial & Jardín Infantil</div>
-        <p class="leading-relaxed">Institución orientada a la estimulación temprana y superación de dificultades del lenguaje en la primera infancia.</p>
-        <p class="mt-4 font-mono text-slate-500">Viña del Mar, Chile</p>
+  <!-- 8. FOOTER INSTITUCIONAL -->
+  <footer class="site-footer" id="contacto">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-12 col-lg-4">
+          <h3 class="footer-brand-title">Pequeños Reyes</h3>
+          <p class="footer-description">
+            Escuela de Lenguaje y Jardín Infantil orientada a la estimulación comunicativa temprana y superación de barreras del habla en la primera infancia.
+          </p>
+          <address class="footer-address">
+            Viña del Mar, Valparaíso, Chile
+          </address>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <h4 class="footer-section-title">Canales de Contacto</h4>
+          <ul class="footer-contact-list">
+            <li>Recepción: <span class="mono-text">(32) 296 0500</span></li>
+            <li>Teléfono Urgencias: <span class="mono-text">+56 9 8765 4321</span></li>
+            <li>Correo: contacto@pequenosreyes.cl</li>
+            <li>Horario: Lunes a Viernes 08:30 a 16:30 hrs</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <h4 class="footer-section-title">Confidencialidad</h4>
+          <p class="footer-description">
+            Los datos personales, antecedentes de salud y evaluaciones fonoaudiológicas se resguardan bajo estricta reserva institucional conforme a la normativa vigente.
+          </p>
+        </div>
+
       </div>
-      <div>
-        <div class="font-bold text-white uppercase tracking-wider mb-2">Canales de Contacto Directo</div>
-        <ul class="space-y-1.5">
-          <li>Teléfono de Urgencias: <span class="text-slate-200 font-mono">+56 9 8765 4321</span></li>
-          <li>Recepción: <span class="text-slate-200 font-mono">(32) 296 0500</span></li>
-          <li>Correo Oficial: <span class="text-slate-200">contacto@jardinlenguaje.cl</span></li>
-          <li>Horario: Lunes a Viernes 08:30 a 16:30 hrs</li>
-        </ul>
-      </div>
-      <div>
-        <div class="font-bold text-white uppercase tracking-wider mb-2">Privacidad y Protección</div>
-        <p class="leading-relaxed">Los antecedentes personales, médicos y evaluaciones de habla se encuentran resguardados bajo estricta reserva conforme a la normativa vigente.</p>
-        <p class="mt-4 text-slate-600">© 2026 Todos los derechos reservados.</p>
+
+      <div class="footer-legal-bar">
+        <p>© 2026 Escuela de Lenguaje Pequeños Reyes. Todos los derechos reservados.</p>
       </div>
     </div>
   </footer>
 
-  <!-- =========================================================
-       MODAL 1: ACCESO APODERADOS (FASE 2)
-       ========================================================= -->
-  <div id="modal-apoderados" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200">
-      <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-3">🔒</div>
-      <h3 class="font-display font-bold text-slate-900 text-lg">Portal Privado en Desarrollo</h3>
-      <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-        Este acceso permitirá consultar atrasos, inasistencias acumuladas y agendar entrevistas individuales con educadoras y fonoaudiólogas.
-      </p>
-      <button onclick="toggleModal('modal-apoderados', false)" class="mt-5 w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs">
-        Cerrar
-      </button>
+  <!-- 9. MODALES (BOOTSTRAP MODAL COMPONENTS) -->
+
+  <!-- Modal Portal Familias (Fase 2) -->
+  <div class="modal fade" id="modalApoderados" tabindex="-1" aria-labelledby="modalApoderadosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal-content">
+        <header class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </header>
+        <div class="modal-body text-center pt-0 px-4">
+          <div class="modal-icon-badge">🔒</div>
+          <h3 class="modal-title" id="modalApoderadosTitle">Portal Privado en Desarrollo</h3>
+          <p class="modal-text">
+            Este módulo permitirá consultar atrasos, inasistencias acumuladas y agendar entrevistas individuales con educadoras y fonoaudiólogas con usuario y contraseña personal.
+          </p>
+          <button type="button" class="btn-modal-dismiss" data-bs-dismiss="modal">Entendido</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- =========================================================
-       MODAL 2: PAGOS Y TRANSFERENCIAS (Inspirado en Saint Benedict)
-       ========================================================= -->
-  <div id="modal-pagos" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
-        <h3 class="font-display font-bold text-slate-900 text-base flex items-center gap-2">
-          <span>💳</span> Datos de Transferencia y Mensualidad
-        </h3>
-        <button onclick="toggleModal('modal-pagos', false)" class="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+  <!-- Modal Pagos y Transferencia (Inspirado en Saint Benedict) -->
+  <div class="modal fade" id="modalPagos" tabindex="-1" aria-labelledby="modalPagosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal-content">
+        <header class="modal-header">
+          <h3 class="modal-title" id="modalPagosTitle">💳 Datos de Transferencia Bancaria</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </header>
+        <div class="modal-body">
+          <dl class="bank-details-list">
+            <dt>Titular:</dt>
+            <dd>Escuela de Lenguaje Pequeños Reyes</dd>
+            <dt>RUT:</dt>
+            <dd>65.123.456-7</dd>
+            <dt>Banco:</dt>
+            <dd>Banco Estado</dd>
+            <dt>Tipo de Cuenta:</dt>
+            <dd>Cuenta Corriente N° 12345678</dd>
+            <dt>Correo de Comprobantes:</dt>
+            <dd>pagos@pequenosreyes.cl</dd>
+          </dl>
+          <p class="bank-note">* En el asunto indicar el nombre del párvulo y su sala respectiva para la conciliación administrativa.</p>
+          <button type="button" class="btn-modal-dismiss w-100" data-bs-dismiss="modal">Entendido</button>
+        </div>
       </div>
-      <div class="space-y-3 text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono">
-        <div><span class="text-slate-400 block font-sans text-[10px]">TITULAR:</span> Corporación Educacional Jardín Infantil</div>
-        <div><span class="text-slate-400 block font-sans text-[10px]">RUT:</span> 65.123.456-7</div>
-        <div><span class="text-slate-400 block font-sans text-[10px]">BANCO:</span> Banco Estado</div>
-        <div><span class="text-slate-400 block font-sans text-[10px]">TIPO DE CUENTA:</span> Cuenta Corriente N° 12345678</div>
-        <div><span class="text-slate-400 block font-sans text-[10px]">CORREO DE COMPROBANTES:</span> pagos@jardinlenguaje.cl</div>
-      </div>
-      <p class="text-[11px] text-slate-500 mt-3 leading-tight">
-        * Al realizar la transferencia, favor indicar en el asunto el <strong>Nombre del Alumno y Sala</strong> para la conciliación administrativa.
-      </p>
-      <button onclick="toggleModal('modal-pagos', false)" class="mt-5 w-full py-2.5 rounded-xl bg-colegio-petroleo hover:bg-slate-900 text-white font-bold text-xs transition">
-        Entendido
-      </button>
     </div>
   </div>
 
-  <!-- =========================================================
-       JAVASCRIPT
-       ========================================================= -->
+  <!-- Scripts: Bootstrap 5 JS Bundle con Popper (Manejo de dropdowns, colapsables y modales) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Lógica de Dominio Nativa: Filtros y Validación de RUT -->
   <script>
-    // 1. Filtrado dinámico de avisos
-    function filtrar(tipo) {
-      const cards = document.querySelectorAll('.card-aviso');
-      const botones = document.querySelectorAll('.btn-filter');
+    // Filtrado de comunicados
+    function filterNotices(category) {
+      const cards = document.querySelectorAll('.notice-item');
+      const buttons = document.querySelectorAll('.btn-filter');
 
-      botones.forEach(btn => {
-        btn.classList.remove('bg-slate-900', 'text-white');
-        btn.classList.add('bg-white', 'text-slate-700');
-      });
-
-      event.target.classList.remove('bg-white', 'text-slate-700');
-      event.target.classList.add('bg-slate-900', 'text-white');
+      buttons.forEach(btn => btn.classList.remove('is-active'));
+      event.target.classList.add('is-active');
 
       cards.forEach(card => {
-        if (tipo === 'todos' || card.dataset.tipo === tipo) {
+        if (category === 'all' || card.dataset.category === category) {
           card.style.display = 'block';
         } else {
           card.style.display = 'none';
@@ -587,19 +629,9 @@
       });
     }
 
-    // 2. Control de Modales
-    function toggleModal(id, mostrar) {
-      const modal = document.getElementById(id);
-      if (mostrar) {
-        modal.classList.remove('hidden');
-      } else {
-        modal.classList.add('hidden');
-      }
-    }
-
-    // 3. Formateo y Validación de RUT chileno (Módulo 11)
-    const rutInput = document.getElementById('rut-input');
-    const rutError = document.getElementById('rut-error');
+    // Validación y formateo de RUT chileno (Módulo 11)
+    const rutInput = document.getElementById('parentRut');
+    const rutError = document.getElementById('rutError');
 
     rutInput.addEventListener('input', function() {
       let valor = this.value.replace(/[^0-9kK]/g, '').toUpperCase();
@@ -610,17 +642,18 @@
       } else {
         this.value = valor;
       }
-      rutError.classList.add('hidden');
+      rutError.style.display = 'none';
     });
 
-    function validarRut(rut) {
+    function validateRut(rut) {
       let limpio = rut.replace(/\./g, '').replace('-', '');
       if (limpio.length < 2) return false;
       let cuerpo = limpio.slice(0, -1);
       let dv = limpio.slice(-1).toUpperCase();
+      if (!/^\d+$/.test(cuerpo)) return false;
       let suma = 0, multiplo = 2;
       for (let i = cuerpo.length - 1; i >= 0; i--) {
-        suma += parseInt(cuerpo.charAt(i)) * multiplo;
+        suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
         multiplo = multiplo === 7 ? 2 : multiplo + 1;
       }
       let dvEsperado = 11 - (suma % 11);
@@ -628,19 +661,24 @@
       return dv === dvEsperado;
     }
 
-    // 4. Envío de formulario
-    function enviarFormulario(event) {
+    // Envío del formulario
+    function handleAdmissionSubmit(event) {
       event.preventDefault();
-      if (!validarRut(rutInput.value)) {
-        rutError.classList.remove('hidden');
+      if (!validateRut(rutInput.value)) {
+        rutError.style.display = 'block';
         rutInput.focus();
         return;
       }
-      document.getElementById('banner-exito').classList.remove('hidden');
-      document.getElementById('form-admision').reset();
-      document.getElementById('banner-exito').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('formSuccess').style.display = 'block';
+      document.getElementById('formAdmision').reset();
+      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelectorAll('#menuPrincipal .nav-link').forEach(link => {
+        link.addEventListener('click', () =>{
+          bootstrap.Collapse.getOrCreateInstance(document.getElementById('menuPrincipal')).hide();
+        })
+      })
     }
   </script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
