@@ -57,6 +57,7 @@
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="#destacados">Accesos Rápidos</a></li>
             <li class="nav-item"><a class="nav-link" href="#avisos">Comunicados</a></li>
+            <li class="nav-item"><a class="nav-link" href="#calendario">Calendario</a></li>
             <li class="nav-item"><a class="nav-link" href="#aforo">Salas y Aforo</a></li>
             <li class="nav-item"><a class="nav-link" href="#protocolos">Documentos</a></li>
             <li class="nav-item"><a class="nav-link" href="#matriculas">Admisión</a></li>
@@ -169,68 +170,37 @@
               
               <!-- Filtros de categoría de comunicados -->
               <nav class="filter-controls" aria-label="Filtro de comunicados">
-                <button type="button" class="btn-filter is-active" onclick="filterNotices('all')">Todos</button>
-                <button type="button" class="btn-filter" onclick="filterNotices('general')">General</button>
-                <button type="button" class="btn-filter" onclick="filterNotices('tel')">Salas TEL</button>
-                <button type="button" class="btn-filter" onclick="filterNotices('preescolar')">Preescolar</button>
+                <button type="button" class="btn-filter is-active" data-filter="all">Todos</button>
+                <button type="button" class="btn-filter" data-filter="general">General</button>
+                <button type="button" class="btn-filter" data-filter="tel">Salas TEL</button>
+                <button type="button" class="btn-filter" data-filter="preescolar">Preescolar</button>
               </nav>
             </header>
 
             <div class="feed-container" id="noticesFeed">
-              
-              <!-- Aviso 1: Urgente / General -->
-              <article class="notice-item notice-urgent" data-category="general">
-                <header class="notice-header">
-                  <span class="tag-status tag-urgent">Urgente Institucional</span>
-                  <time datetime="2026-09-02">02 Sep 2026</time>
-                </header>
-                <h3 class="notice-title">Corte Programado y Salida Anticipada de Alumnos</h3>
-                <p class="notice-body">
-                  Informamos a los apoderados que este viernes se suspenden las actividades de la jornada de la tarde a contar de las 12:30 hrs debido a trabajos sanitarios en el sector. Rogamos puntualidad en el retiro de los menores.
-                </p>
-                <footer class="notice-footer">
-                  <span class="notice-emitter">Emite: Dirección</span>
-                  <span class="notice-scope">Alcance: Todo el establecimiento</span>
-                </footer>
-              </article>
 
-              <!-- Aviso 2: Fonoaudiología / TEL -->
-              <article class="notice-item" data-category="tel">
-                <header class="notice-header">
-                  <span class="tag-status tag-tel">Fonoaudiología</span>
-                  <time datetime="2026-08-29">29 Ago 2026</time>
-                </header>
-                <h3 class="notice-title">Inicio de Evaluaciones Diagnósticas y Reevaluación</h3>
-                <p class="notice-body">
-                  Durante la primera quincena de septiembre se realizarán las sesiones de reevaluación semestral de habla y lenguaje para los niveles Medio Mayor B y Transición TEL. Se emitirán informes individuales.
-                </p>
-                <footer class="notice-footer">
-                  <span class="notice-emitter">Emite: Equipo Fonoaudiológico</span>
-                  <span class="notice-scope">Alcance: Salas 3, 5 y 7</span>
-                </footer>
-              </article>
-
-              <!-- Aviso 3: Preescolar Regular -->
-              <article class="notice-item" data-category="preescolar">
-                <header class="notice-header">
-                  <span class="tag-status tag-activity">Actividad Escolar</span>
-                  <time datetime="2026-08-25">25 Ago 2026</time>
-                </header>
-                <h3 class="notice-title">Celebración Fiestas Patrias y Minuta de Convivencia</h3>
-                <p class="notice-body">
-                  Se encuentra disponible en el panel de descargas la minuta de alimentos saludables y sugerencias de vestimenta para la muestra folclórica de este mes.
-                </p>
-                <footer class="notice-footer">
-                  <span class="notice-emitter">Emite: Docentes de Nivel</span>
-                  <span class="notice-scope">Alcance: Preescolar</span>
-                </footer>
-              </article>
+              <!-- Contenido dinámico de comunicados generado por JavaScript -->
 
             </div>
 
           </div>
 
         </div>
+      </div>
+    </section>
+
+    <!-- 4.1 SECCIÓN CALENDARIO DE ACTIVIDADES -->
+    
+    <section class="calendar-section" id="calendario">
+      <div class="container">
+        <header class="text-center mb-5">
+          <span class="section-tag">Agenda Institucional</span>
+          <h2 class="section-title">Calendario de Actividades</h2>
+          <p class="section-subtitle mx-auto">Próximos eventos, reuniones y evaluaciones del establecimiento.</p>
+        </header>
+
+        <div class="row g-4 justify-content-center" id="calendar-container">
+          </div>
       </div>
     </section>
 
@@ -610,25 +580,8 @@
   <!-- Scripts: Bootstrap 5 JS Bundle con Popper (Manejo de dropdowns, colapsables y modales) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-  <!-- Lógica de Dominio Nativa: Filtros y Validación de RUT -->
+  <!-- Lógica de Dominio Nativa: Validación de RUT -->
   <script>
-    // Filtrado de comunicados
-    function filterNotices(category) {
-      const cards = document.querySelectorAll('.notice-item');
-      const buttons = document.querySelectorAll('.btn-filter');
-
-      buttons.forEach(btn => btn.classList.remove('is-active'));
-      event.target.classList.add('is-active');
-
-      cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
     // Validación y formateo de RUT chileno (Módulo 11)
     const rutInput = document.getElementById('parentRut');
     const rutError = document.getElementById('rutError');
@@ -680,5 +633,6 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
