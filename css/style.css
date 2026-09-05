@@ -1153,3 +1153,26 @@ textarea:focus-visible {
   border-top: 1px solid var(--pr-border);
   padding-top: 12px;
 }
+
+/* =========================================================
+   13. RESALTADOS DE ACTIVIDADES POR VENCER
+   ========================================================= */
+
+.activity-soon {
+  border-left-color: var(--pr-orange);
+}
+
+.badge-soon {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: var(--pr-orange);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(245, 124, 0, 0.25);
+  z-index: 10;
+}

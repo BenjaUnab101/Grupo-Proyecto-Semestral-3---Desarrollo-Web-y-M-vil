@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             titulo: "Reunión de Apoderados",
-            fecha: "2026-09-08",
+            fecha: "2026-09-14",
             hora: "18:30 hrs",
             lugar: "Salas respectivas",
             descripcion: "Entrega de informes de evaluación fonoaudiológica del primer semestre y directrices generales."
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             titulo: "Salida Anticipada por Capacitación",
-            fecha: "2026-09-04",
+            fecha: "2026-09-10",
             hora: "12:30 hrs",
             lugar: "Establecimiento",
             descripcion: "Suspensión de actividades jornada tarde por capacitación comunal docente."
@@ -56,14 +56,35 @@ document.addEventListener("DOMContentLoaded", () => {
     if (contenedor) {
         let htmlContenido = '';
         
+        // Se establece la fecha de hoy a las 00:00 para comparar días exactos
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        
         actividades.forEach(act => {
             const { dia, mes, anio } = formatearFecha(act.fecha);
             
+            // Convertir la fecha de la actividad para hacer la resta matemática
+            const fechaActividad = new Date(act.fecha + "T00:00:00");
+            const diferenciaMilisegundos = fechaActividad - hoy;
+            const diferenciaDias = diferenciaMilisegundos / (1000 * 60 * 60 * 24);
+            
+            // Lógica: Si faltan entre 0 y 7 días, asignamos el diseño urgente
+            let claseAlerta = '';
+            let badgeHTML = '';
+            let colorDia = '';
+            
+            if (diferenciaDias >= 0 && diferenciaDias <= 7) {
+                claseAlerta = 'activity-soon';
+                badgeHTML = '<span class="badge-soon">¡Esta semana!</span>';
+                colorDia = 'color: var(--pr-orange);';
+            }
+            
             htmlContenido += `
-                <div class="col-12 col-md-6 col-lg-4">
-                    <article class="activity-card">
+                <div class="col-12 col-md-6 col-lg-4" style="position: relative;">
+                    ${badgeHTML}
+                    <article class="activity-card ${claseAlerta}">
                         <div class="activity-date">
-                            <span class="activity-day">${dia}</span>
+                            <span class="activity-day" style="${colorDia}">${dia}</span>
                             <div class="activity-month-year">
                                 <span>${mes}</span>
                                 <span>${anio}</span>
