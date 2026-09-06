@@ -1176,3 +1176,491 @@ textarea:focus-visible {
   box-shadow: 0 4px 6px rgba(245, 124, 0, 0.25);
   z-index: 10;
 }
+
+/* =========================================================
+   14. SECCIÓN INFORMACIÓN DEL JARDÍN (HISTORIA, NIVELES Y CONTACTO)
+   ========================================================= */
+.about-section {
+  padding: 4rem 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--pr-border);
+}
+
+.info-card {
+  background-color: var(--pr-bg);
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--pr-border);
+}
+
+.info-card-icon {
+  font-size: 2rem;
+  background-color: #ffffff;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-subtle);
+}
+
+.info-card-title {
+  font-size: 1.25rem;
+  color: var(--pr-text-main);
+  margin: 0;
+}
+
+.info-card-sub {
+  font-size: 0.82rem;
+  color: var(--pr-text-muted);
+}
+
+.info-card-body {
+  color: var(--pr-text-main);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.info-highlight-box {
+  background-color: var(--pr-orange-light);
+  border-left: 4px solid var(--pr-orange);
+  padding: 12px 16px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.88rem;
+  color: #7c2d12;
+  margin-top: 16px;
+}
+
+.levels-structured-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.level-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--pr-border);
+  gap: 12px;
+}
+
+.level-name {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--pr-blue-dark);
+}
+
+.level-desc {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--pr-text-muted);
+}
+
+.room-pill {
+  background-color: var(--pr-blue-light);
+  color: var(--pr-blue);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.room-pill.pill-future {
+  background-color: #f1f5f9;
+  color: var(--pr-text-muted);
+  border: 1px dashed #cbd5e1;
+}
+
+.official-contact-card {
+  background: linear-gradient(135deg, #ffffff 0%, var(--pr-blue-light) 100%);
+  border: 1px solid #b9e2f5;
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  margin-top: 10px;
+}
+
+.official-contact-header {
+  margin-bottom: 20px;
+}
+
+.official-contact-title {
+  font-size: 1.3rem;
+  color: var(--pr-blue-dark);
+  margin: 8px 0 4px 0;
+}
+
+.official-contact-subtitle {
+  font-size: 0.88rem;
+  color: var(--pr-text-muted);
+  margin: 0;
+}
+
+.contact-pill-box {
+  background-color: #ffffff;
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.2s ease;
+}
+
+.contact-pill-box:hover {
+  transform: translateY(-2px);
+  border-color: var(--pr-blue);
+}
+
+.contact-box-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.contact-box-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--pr-text-light);
+  display: block;
+}
+
+.contact-box-value {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--pr-text-main);
+  display: block;
+}
+
+.contact-box-sub {
+  font-size: 0.75rem;
+  color: var(--pr-text-muted);
+  display: block;
+}
+
+/* =========================================================
+   15. SECCIÓN GALERÍA INSTITUCIONAL Y LIGHTBOX SIMPLE
+   ========================================================= */
+.gallery-section {
+  background-color: var(--pr-bg);
+  border-top: 1px solid var(--pr-border);
+  border-bottom: 1px solid var(--pr-border);
+}
+
+.gallery-card {
+  background-color: #ffffff;
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--pr-blue);
+}
+
+.gallery-media-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background-color: #e2e8f0;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.gallery-card:hover .gallery-img {
+  transform: scale(1.05);
+}
+
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 77, 110, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.gallery-card:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-zoom-badge {
+  background-color: #ffffff;
+  color: var(--pr-blue-dark);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(10px);
+  transition: transform 0.25s ease;
+}
+
+.gallery-card:hover .gallery-zoom-badge {
+  transform: translateY(0);
+}
+
+.gallery-caption-bar {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--pr-orange);
+  margin-bottom: 4px;
+}
+
+.gallery-item-title {
+  font-size: 1.05rem;
+  color: var(--pr-text-main);
+  margin: 0 0 6px 0;
+}
+
+.gallery-item-desc {
+  font-size: 0.82rem;
+  color: var(--pr-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Lightbox Simple Modal CSS */
+.gallery-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1090;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.gallery-lightbox-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gallery-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.gallery-lightbox-container {
+  position: relative;
+  z-index: 1091;
+  max-width: 800px;
+  width: 100%;
+  animation: lightboxScaleUp 0.25s ease-out;
+}
+
+@keyframes lightboxScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.gallery-lightbox-close:hover {
+  transform: scale(1.15);
+  color: var(--pr-orange);
+}
+
+.gallery-lightbox-dialog {
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-lightbox-media {
+  background-color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 480px;
+  overflow: hidden;
+}
+
+.gallery-lightbox-img {
+  max-width: 100%;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.gallery-lightbox-caption {
+  padding: 20px 24px;
+  background-color: #ffffff;
+  border-top: 1px solid var(--pr-border);
+}
+
+.gallery-lightbox-title {
+  font-size: 1.25rem;
+  color: var(--pr-text-main);
+}
+
+.gallery-lightbox-text {
+  font-size: 0.9rem;
+  color: var(--pr-text-muted);
+}
+
+/* =========================================================
+   16. PORTAL FAMILIAS (LOGIN Y FICHA DEL ALUMNO)
+   ========================================================= */
+.portal-modal-content {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--pr-border);
+}
+
+.portal-modal-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.demo-user-btn {
+  font-size: 0.78rem;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.demo-user-btn:hover {
+  transform: translateY(-1px);
+}
+
+.student-profile-card {
+  background-color: #ffffff;
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.student-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--pr-border);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.student-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pr-blue-light) 0%, #b9e2f5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 2px solid var(--pr-blue);
+  flex-shrink: 0;
+}
+
+.metric-badge-card {
+  background-color: var(--pr-bg);
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  text-align: center;
+  height: 100%;
+}
+
+.metric-badge-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: block;
+  line-height: 1.1;
+  color: var(--pr-blue);
+}
+
+.metric-badge-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--pr-text-muted);
+  font-weight: 700;
+  margin-top: 4px;
+  display: block;
+}
+
+.privacy-notice-box {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  border-radius: var(--radius-md);
+}
