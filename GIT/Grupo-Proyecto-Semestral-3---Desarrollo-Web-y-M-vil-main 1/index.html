@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escuela de Lenguaje Pequeños Reyes | Portal Institucional</title>
+  <meta name="description" content="Canal oficial de la Escuela de Lenguaje Pequeños Reyes: comunicados, aforo de salas, protocolos y proceso de matrícula.">
+
+  <!-- Fuentes Tipográficas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS (Framework de Grillas y Componentes Interactivos) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Hoja de Estilos Personalizada (Se creará en el siguiente paso) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="site-body">
+
+  <!-- 1. CINTILLO / MARQUESINA DE ALERTA DIARIA -->
+  <aside class="top-banner" role="complementary" aria-label="Alerta institucional del día">
+    <div class="container">
+      <div class="top-banner-wrapper">
+        <span class="badge-alerta">Aviso del día</span>
+        <p class="top-banner-text">Viernes 04 de Septiembre: Salida a las 12:30 hrs por jornada de capacitación comunal.</p>
+        <a href="#avisos" class="top-banner-link">Ver detalles</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 2. HEADER Y BARRA DE NAVEGACIÓN COLAPSABLE (BOOTSTRAP + SEMÁNTICA) -->
+  <header class="site-header sticky-top">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
+      <div class="container">
+        
+        <!-- Espacio reservado para Logo oficial e Identidad -->
+        <a class="navbar-brand brand-identity" href="index.html">
+          <figure class="brand-figure">
+            <img src="images/png/logoJardin.png" alt="Logotipo Escuela de Lenguaje Pequeños Reyes" class="brand-logo" width="55" height="55">
+          </figure>
+          <div class="brand-text">
+            <span class="brand-subtitle">Escuela de Lenguaje</span>
+            <span class="brand-title">Pequeños Reyes</span>
+          </div>
+        </a>
+
+        <!-- Botón Menú Hamburguesa para Móviles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Alternar navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Accesos directos y enlaces colapsables -->
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#informacion">Nuestro Jardín</a></li>
+            <li class="nav-item"><a class="nav-link" href="#destacados">Accesos Rápidos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#avisos">Comunicados</a></li>
+            <li class="nav-item"><a class="nav-link" href="#calendario">Calendario</a></li>
+            <li class="nav-item"><a class="nav-link" href="#galeria">Galería</a></li>
+            <li class="nav-item"><a class="nav-link" href="#aforo">Salas y Aforo</a></li>
+            <li class="nav-item"><a class="nav-link" href="#protocolos">Documentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#matriculas">Admisión</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          </ul>
+
+          <!-- Botón de Acceso Portal Apoderados -->
+          <div class="d-flex ms-lg-3">
+            <button type="button" class="btn-portal-familias" data-bs-toggle="modal" data-bs-target="#modalApoderados">
+              <span class="portal-icon">🔒</span>
+              <span class="portal-label">Portal Familias</span>
+              <span class="portal-badge">Acceso</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- 3. SECCIÓN HERO (PORTADA CON ESPACIO PARA IMAGEN PRINCIPAL) -->
+    <section class="hero-section" id="inicio">
+      <div class="container">
+        <div class="row align-items-center">
+          
+          <div class="col-12 col-lg-7 text-content">
+            <span class="pill-badge">Educación Parvularia & Trastornos del Lenguaje</span>
+            <h1 class="hero-title">Donde cada niño crece, juega y descubre su propia voz</h1>
+            <p class="hero-lead">
+              Acompañamos las primeras etapas del desarrollo con estimulación fonoaudiológica especializada, grupos reducidos de máximo 15 alumnos y un canal digital transparente para las familias.
+            </p>
+            <div class="hero-buttons">
+              <a href="#avisos" class="btn-institucional-primary">Muro de Comunicados</a>
+              <a href="#matriculas" class="btn-institucional-secondary">Postular a Matrícula</a>
+            </div>
+          </div>
+
+          <!-- Espacio reservado para foto de cabecera con niños en actividades -->
+          <div class="col-12 col-lg-5 media-content">
+            <figure class="hero-figure">
+              <img src="images/png/jugando-pintando.png" alt="Párvulos de la Escuela de Lenguaje Pequeños Reyes participando en actividades lúdicas" class="hero-image img-fluid">
+            </figure>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3.1 SECCIÓN INFORMACIÓN DEL JARDÍN (HISTORIA, NIVELES Y CONTACTO) -->
+    <section class="about-section" id="informacion">
+      <div class="container">
+        
+        <header class="section-heading-wrapper text-center mb-4">
+          <div>
+            <span class="pill-badge">Conócenos</span>
+            <h2 class="section-title">Información del Jardín</h2>
+            <p class="section-subtitle mx-auto" style="max-width: 650px;">
+              Historia institucional, niveles disponibles y datos de contacto oficial requeridos por Dirección.
+            </p>
+          </div>
+        </header>
+
+        <div class="row g-4 mb-4">
+          <!-- Historia Institucional -->
+          <div class="col-12 col-lg-6">
+            <article class="info-card h-100">
+              <header class="info-card-header">
+                <span class="info-card-icon">🏛️</span>
+                <div>
+                  <h3 class="info-card-title">Historia Institucional</h3>
+                  <span class="info-card-sub">Compromiso y vocación con la primera infancia</span>
+                </div>
+              </header>
+              <div class="info-card-body">
+                <p>
+                  La <strong>Escuela de Lenguaje y Jardín Infantil Pequeños Reyes</strong> fue fundada con el propósito de brindar una educación parvularia de excelencia enfocada en la estimulación temprana y la superación de Trastornos Específicos del Lenguaje (TEL).
+                </p>
+                <p>
+                  Desde nuestros inicios en Viña del Mar, hemos combinado la calidez del cuidado infantil con el rigor de un equipo multidisciplinario compuesto por educadoras diferenciales, técnicos en educación parvularia y fonoaudiólogas especializadas.
+                </p>
+                <div class="info-highlight-box">
+                  <strong>💡 Sello Pedagógico:</strong> Aulas con cupo estricto de máximo 15 alumnos para una interacción cercana, respetuosa y adaptada al desarrollo individual de cada niño.
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Niveles Disponibles -->
+          <div class="col-12 col-lg-6">
+            <article class="info-card h-100">
+              <header class="info-card-header">
+                <span class="info-card-icon">🎓</span>
+                <div>
+                  <h3 class="info-card-title">Niveles Educativos Disponibles</h3>
+                  <span class="info-card-sub">Atención regular y programas de apoyo fonoaudiológico</span>
+                </div>
+              </header>
+              <div class="info-card-body">
+                <p class="mb-3 text-muted">
+                  Nuestra oferta pedagógica comprende 8 salas equipadas con material sensorial y fonoaudiológico adaptado:
+                </p>
+                <ul class="levels-structured-list">
+                  <li class="level-row">
+                    <div class="level-info">
+                      <strong class="level-name">Nivel Medio Menor</strong>
+                      <span class="level-desc">2 a 3 años · Estimulación sensorial, juego cooperativo y lenguaje</span>
+                    </div>
+                    <span class="room-pill">Sala 1</span>
+                  </li>
+                  <li class="level-row">
+                    <div class="level-info">
+                      <strong class="level-name">Nivel Medio Mayor Regular y TEL</strong>
+                      <span class="level-desc">3 a 4 años · Expresión verbal estructurada y conciencia fonológica</span>
+                    </div>
+                    <span class="room-pill">Salas 2 y 3</span>
+                  </li>
+                  <li class="level-row">
+                    <div class="level-info">
+                      <strong class="level-name">Prekínder Regular y TEL</strong>
+                      <span class="level-desc">4 a 5 años (1er Nivel Transición) · Articulación y apresto lector</span>
+                    </div>
+                    <span class="room-pill">Salas 4 y 5</span>
+                  </li>
+                  <li class="level-row">
+                    <div class="level-info">
+                      <strong class="level-name">Kínder Regular y Apoyo Multidisciplinar</strong>
+                      <span class="level-desc">5 a 6 años (2do Nivel Transición) · Transición a educación básica</span>
+                    </div>
+                    <span class="room-pill">Salas 6 y 7</span>
+                  </li>
+                  <li class="level-row level-future">
+                    <div class="level-info">
+                      <strong class="level-name">Sala 8 (Ampliación Proyectada 2027)</strong>
+                      <span class="level-desc">Proceso de expansión institucional con lista de espera</span>
+                    </div>
+                    <span class="room-pill pill-future">Apertura 2027</span>
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Canales Oficiales de Contacto Pedidos por Dirección -->
+        <article class="official-contact-card">
+          <header class="official-contact-header">
+            <span class="badge-alerta">Canal Directo</span>
+            <h3 class="official-contact-title">Datos Oficiales de Contacto (Dirección)</h3>
+            <p class="official-contact-subtitle">Información verificada para atención a la comunidad escolar y apoderados.</p>
+          </header>
+          <div class="row g-3 official-contact-grid">
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="contact-pill-box">
+                <span class="contact-box-icon">📍</span>
+                <div class="contact-box-content">
+                  <span class="contact-box-label">Dirección Física</span>
+                  <span class="contact-box-value">Los Castaños #450</span>
+                  <span class="contact-box-sub">Viña del Mar, Región de Valparaíso</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="contact-pill-box">
+                <span class="contact-box-icon">📞</span>
+                <div class="contact-box-content">
+                  <span class="contact-box-label">Central Telefónica</span>
+                  <span class="contact-box-value">(32) 296 0500</span>
+                  <span class="contact-box-sub">Recepción y secretaría escolar</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="contact-pill-box">
+                <span class="contact-box-icon">💬</span>
+                <div class="contact-box-content">
+                  <span class="contact-box-label">WhatsApp Urgencias</span>
+                  <span class="contact-box-value">+56 9 8765 4321</span>
+                  <span class="contact-box-sub">Avisos de retiro e inasistencia</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="contact-pill-box">
+                <span class="contact-box-icon">✉️</span>
+                <div class="contact-box-content">
+                  <span class="contact-box-label">Correo Institucional</span>
+                  <span class="contact-box-value">direccion@pequenosreyes.cl</span>
+                  <span class="contact-box-sub">Lunes a Viernes: 08:30 a 16:30 hrs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 4. SECCIÓN DESTACADOS Y MURO OFICIAL DE AVISOS (GRID PRINCIPAL) -->
+    <section class="board-section" id="destacados">
+      <div class="container">
+        <div class="row g-4">
+
+          <!-- Columna Lateral: Accesos Directos Frecuentes -->
+          <aside class="col-12 col-lg-4">
+            <div class="sidebar-sticky-wrapper">
+              
+              <div class="quick-access-card">
+                <header class="card-custom-header">
+                  <h2 class="card-custom-title">📌 Accesos Frecuentes</h2>
+                </header>
+                <ul class="quick-access-list">
+                  <li>
+                    <button type="button" class="btn-quick-link" data-bs-toggle="modal" data-bs-target="#modalPagos">
+                      <span class="link-label">💳 Datos de Mensualidad / Pagos</span>
+                      <span class="link-indicator">Ver</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a href="#protocolos" class="quick-link-anchor">
+                      <span class="link-label">📄 Lista de Materiales 2026</span>
+                      <span class="link-indicator">PDF</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#protocolos" class="quick-link-anchor">
+                      <span class="link-label">🩺 Protocolo Alergias e Inasistencias</span>
+                      <span class="link-indicator">PDF</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#matriculas" class="quick-link-anchor highlight-link">
+                      <span class="link-label">📝 Formulario Pre-Matrícula 2027</span>
+                      <span class="link-badge">Abierto</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="notice-info-card">
+                <h3 class="notice-info-title">Aforo y Capacidad Oficial</h3>
+                <p class="notice-info-text">
+                  El establecimiento cuenta con capacidad de 8 salas estructuradas para un límite estricto de 15 párvulos por aula, garantizando atención fonoaudiológica personalizada.
+                </p>
+              </div>
+
+            </div>
+          </aside>
+
+          <!-- Columna Central: Muro de Avisos con Filtrado -->
+          <div class="col-12 col-lg-8" id="avisos">
+            
+            <header class="section-heading-wrapper">
+              <div>
+                <h2 class="section-title">Muro Oficial de Comunicados</h2>
+                <p class="section-subtitle">Canal directo de información institucional y pedagógica.</p>
+              </div>
+              
+              <!-- Filtros de categoría de comunicados -->
+              <nav class="filter-controls" aria-label="Filtro de comunicados">
+                <button type="button" class="btn-filter is-active" data-filter="all">Todos</button>
+                <button type="button" class="btn-filter" data-filter="general">General</button>
+                <button type="button" class="btn-filter" data-filter="tel">Salas TEL</button>
+                <button type="button" class="btn-filter" data-filter="preescolar">Preescolar</button>
+              </nav>
+            </header>
+
+            <div class="feed-container" id="noticesFeed">
+
+              <!-- Contenido dinámico de comunicados generado por JavaScript -->
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4.1 SECCIÓN CALENDARIO DE ACTIVIDADES -->
+    
+    <section class="calendar-section" id="calendario">
+      <div class="container">
+        <header class="text-center mb-5">
+          <span class="section-tag">Agenda Institucional</span>
+          <h2 class="section-title">Calendario de Actividades</h2>
+          <p class="section-subtitle mx-auto">Próximos eventos, reuniones y evaluaciones del establecimiento.</p>
+        </header>
+
+        <div class="row g-4 justify-content-center" id="calendar-container">
+          </div>
+      </div>
+    </section>
+
+    <!-- 4.2 SECCIÓN GALERÍA INSTITUCIONAL CON INTERACCIÓN LIGHTBOX -->
+    <section class="gallery-section py-5" id="galeria">
+      <div class="container">
+        
+        <header class="section-heading-wrapper text-center mb-5">
+          <div>
+            <span class="pill-badge">Vida Escolar</span>
+            <h2 class="section-title">Galería de Actividades</h2>
+            <p class="section-subtitle mx-auto" style="max-width: 650px;">
+              Registros de talleres fonoaudiológicos, proyectos pedagógicos y momentos lúdicos de nuestros párvulos. <em>Haz clic en cualquier imagen para ampliarla.</em>
+            </p>
+          </div>
+        </header>
+
+        <div class="row g-4" id="galleryGrid">
+          
+          <!-- Foto 1 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/png/jugando-pintando.png" data-title="Taller Creativo y Expresión Plástica" data-desc="Párvulos explorando colores y texturas para el desarrollo de la motricidad fina y la interacción compartida.">
+              <div class="gallery-media-wrap">
+                <img src="images/png/jugando-pintando.png" alt="Párvulos en taller creativo de pintura y manualidades" class="gallery-img" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Arte & Expresión</span>
+                <h3 class="gallery-item-title">Taller Creativo Infantil</h3>
+                <p class="gallery-item-desc">Desarrollo de motricidad fina y estímulo del lenguaje.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Foto 2 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/taller-fonoaudiologia.svg" data-title="Estimulación Fonoaudiológica Personalizada" data-desc="Sesiones de apoyo individual y grupal con fonoaudiólogas acreditadas para la adquisición correcta de fonemas y estructuración oral.">
+              <div class="gallery-media-wrap">
+                <img src="images/taller-fonoaudiologia.svg" alt="Ilustración de estimulación fonoaudiológica de habla y lenguaje" class="gallery-img" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Fonoaudiología TEL</span>
+                <h3 class="gallery-item-title">Apoyo del Habla y Lenguaje</h3>
+                <p class="gallery-item-desc">Atención en salas adaptadas con recursos fonéticos.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Foto 3 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/actividad-arte.svg" data-title="Rincón Sensorial y Pintura Dactilar" data-desc="Exploración sensorial táctil y visual para la estimulación de la confianza y el pensamiento simbólico en la primera infancia.">
+              <div class="gallery-media-wrap">
+                <img src="images/actividad-arte.svg" alt="Ilustración de rincón sensorial con paleta de pintura y expresión dactilar" class="gallery-img" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Desarrollo Sensorial</span>
+                <h3 class="gallery-item-title">Rincón de Pintura Dactilar</h3>
+                <p class="gallery-item-desc">Estimulación sensorial y reconocimiento de formas y colores.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Foto 4 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/muestra-folclorica.svg" data-title="Muestra Folclórica y Tradiciones Chilenas" data-desc="Actividad anual en el patio central donde niños y niñas participan en bailes típicos promoviendo el sentido de pertenencia y expresión corporal.">
+              <div class="gallery-media-wrap">
+                <img src="images/muestra-folclorica.svg" alt="Ilustración de celebración folclórica con trajes típicos y banderas" class="gallery-img" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Comunidad Escolar</span>
+                <h3 class="gallery-item-title">Muestra Folclórica Anual</h3>
+                <p class="gallery-item-desc">Expresión musical, baile y convivencia institucional.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Foto 5 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/psicomotricidad.svg" data-title="Patio Activo y Psicomotricidad Grupal" data-desc="Circuitos recreativos y juegos guiados para fortalecer el equilibrio, la coordinación corporal y la cooperación entre pares.">
+              <div class="gallery-media-wrap">
+                <img src="images/psicomotricidad.svg" alt="Ilustración de patio activo infantil con pelotas y juegos motrices" class="gallery-img" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Psicomotricidad</span>
+                <h3 class="gallery-item-title">Patio Activo y Circuitos</h3>
+                <p class="gallery-item-desc">Coordinación corporal, equilibrio y juegos de patio.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Foto 6 -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="gallery-card" data-img="images/png/logoJardin.png" data-title="Identidad Institucional y Corona de Logros" data-desc="El logotipo de Pequeños Reyes representa la voz de nuestros párvulos, el respeto por sus etapas de desarrollo y el trabajo conjunto con las familias.">
+              <div class="gallery-media-wrap bg-white d-flex align-items-center justify-content-center p-3">
+                <img src="images/png/logoJardin.png" alt="Logotipo institucional Escuela de Lenguaje Pequeños Reyes" class="gallery-img object-fit-contain" style="max-height: 200px;" loading="lazy">
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom-badge">🔍 Ampliar Imagen</span>
+                </div>
+              </div>
+              <div class="gallery-caption-bar">
+                <span class="gallery-tag">Identidad</span>
+                <h3 class="gallery-item-title">Escuela Pequeños Reyes</h3>
+                <p class="gallery-item-desc">Emblema institucional y compromiso pedagógico.</p>
+              </div>
+            </article>
+          </div>
+
+        </div>
+        
+        <!-- AVISO LEGAL: AUTORIZACIÓN DE USO DE IMAGEN (SCRUM-22) -->
+        <aside class="privacy-notice-box mt-4 p-3 rounded-3 small">
+          <div class="d-flex align-items-start gap-2">
+            <span class="fs-5">📷</span>
+            <div>
+              <strong>Autorización de Uso de Imagen:</strong>
+              <p class="mb-0 text-muted">
+                Las fotografías publicadas en esta galería cuentan con la debida autorización de los padres y apoderados de los párvulos registrados, conforme a la normativa vigente de protección de datos personales y resguardo de la imagen de niños, niñas y adolescentes. Cualquier apoderado que requiera la remoción o consulta sobre un registro fotográfico puede solicitarlo directamente en Dirección.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 5. SECCIÓN AFORO Y NIVELES (MAPA DE LAS 8 SALAS) -->
+    <section class="capacity-section" id="aforo">
+      <div class="container">
+        
+        <header class="capacity-header">
+          <span class="section-tag">Capacidad y Aulas</span>
+          <h2 class="section-title">Estado de Cupos por Sala</h2>
+          <p class="section-subtitle">Aforo limitado a un máximo de 15 alumnos por sala para atención especializada.</p>
+        </header>
+
+        <div class="row g-3">
+          
+          <!-- Sala 1 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 1</span>
+                <span class="room-badge badge-available">1 Cupo</span>
+              </header>
+              <h3 class="room-name">Medio Menor</h3>
+              <p class="room-meta">2 a 3 años Regular</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 93%;"></div>
+              </div>
+              <footer class="room-count">14 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 2 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 2</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Medio Mayor A</h3>
+              <p class="room-meta">3 a 4 años Regular</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 3 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 3</span>
+                <span class="room-badge badge-available">2 Cupos</span>
+              </header>
+              <h3 class="room-name">Medio Mayor B (TEL)</h3>
+              <p class="room-meta">3 a 4 años Lenguaje</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 86%;"></div>
+              </div>
+              <footer class="room-count">13 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 4 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 4</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Prekínder Regular</h3>
+              <p class="room-meta">1er Nivel Transición</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 5 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 5</span>
+                <span class="room-badge badge-available">1 Cupo</span>
+              </header>
+              <h3 class="room-name">Prekínder TEL</h3>
+              <p class="room-meta">1er Nivel Lenguaje</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 93%;"></div>
+              </div>
+              <footer class="room-count">14 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 6 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 6</span>
+                <span class="room-badge badge-full">Completo</span>
+              </header>
+              <h3 class="room-name">Kínder Regular</h3>
+              <p class="room-meta">2do Nivel Transición</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 100%;"></div>
+              </div>
+              <footer class="room-count">15 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 7 -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box">
+              <header class="room-box-header">
+                <span class="room-id">SALA 7</span>
+                <span class="room-badge badge-available">3 Cupos</span>
+              </header>
+              <h3 class="room-name">Kínder Especial</h3>
+              <p class="room-meta">Apoyo Multidisciplinar</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 80%;"></div>
+              </div>
+              <footer class="room-count">12 / 15 alumnos</footer>
+            </article>
+          </div>
+
+          <!-- Sala 8: Proyectada -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <article class="room-box room-box-projected">
+              <header class="room-box-header">
+                <span class="room-id">SALA 8</span>
+                <span class="room-badge badge-projected">2027</span>
+              </header>
+              <h3 class="room-name">Nueva Apertura</h3>
+              <p class="room-meta">Ampliación de Sala</p>
+              <div class="meter-bar">
+                <div class="meter-fill" style="width: 0%;"></div>
+              </div>
+              <footer class="room-count text-projected">15 Cupos Proyectados</footer>
+            </article>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. SECCIÓN PROTOCOLOS Y DOCUMENTACIÓN OFICIAL -->
+    <section class="docs-section" id="protocolos">
+      <div class="container">
+        
+        <header class="docs-header">
+          <span class="section-tag">Transparencia Institucional</span>
+          <h2 class="section-title">Protocolos y Reglamentos</h2>
+          <p class="section-subtitle">Archivos normativos de consulta pública permanente.</p>
+        </header>
+
+        <div class="row g-4">
+          
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="doc-card h-100 p-4 d-flex flex-direction-column justify-content-between">
+              <span class="doc-icon">📘</span>
+              <h3 class="doc-title">Reglamento Interno Escolar</h3>
+              <p class="doc-description">Normativa de funcionamiento institucional, derechos y deberes escolares.</p>
+              <footer class="doc-footer mt-3">
+                <a href="data:application/pdf;base64,JVBERi0xLjAKMSAwIG9iajw8L1BhZ2VzIDIgMCBSPj5lbmRvYmo=" download="Reglamento_Interno_2026.pdf" class="btn-download d-block text-center text-decoration-none">
+                  Descargar PDF
+                </a>
+              </footer>
+            </article>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="doc-card h-100 p-4 d-flex flex-direction-column justify-content-between">
+              <span class="doc-icon">🩺</span>
+              <h3 class="doc-title">Protocolo Salud y Alergias</h3>
+              <p class="doc-description">Directrices para la atención de contingencias médicas y administración de fármacos.</p>
+              <footer class="doc-footer mt-3">
+                <a href="data:application/pdf;base64,JVBERi0xLjAKMSAwIG9iajw8L1BhZ2VzIDIgMCBSPj5lbmRvYmo=" download="Protocolo_Salud_Alergias.pdf" class="btn-download d-block text-center text-decoration-none">
+                  Descargar PDF
+                </a>
+              </footer>
+            </article>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-4">
+            <article class="doc-card h-100 p-4 d-flex flex-direction-column justify-content-between">
+              <span class="doc-icon">🚨</span>
+              <h3 class="doc-title">Plan de Seguridad Escolar (PISE)</h3>
+              <p class="doc-description">Zonas de seguridad, procedimientos de evacuación ante sismos y emergencias.</p>
+              <footer class="doc-footer mt-3">
+                <a href="data:application/pdf;base64,JVBERi0xLjAKMSAwIG9iajw8L1BhZ2VzIDIgMCBSPj5lbmRvYmo=" download="Plan_Seguridad_PISE.pdf" class="btn-download d-block text-center text-decoration-none">
+                  Descargar PDF
+                </a>
+              </footer>
+            </article>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. SECCIÓN ADMISIÓN Y PRE-MATRÍCULA -->
+    <section class="admission-section" id="matriculas">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8">
+            
+            <article class="form-container-card">
+              <header class="form-header">
+                <span class="section-tag">Admisión 2027</span>
+                <h2 class="section-title">Formulario de Pre-Matrícula</h2>
+                <p class="section-subtitle">Complete los antecedentes para agendar la entrevista fonoaudiológica de diagnóstico.</p>
+              </header>
+
+              <div id="formSuccess" class="alert-success-banner" style="display: none;" role="alert">
+                <strong>✓ Solicitud Recibida:</strong> Nos pondremos en contacto con el apoderado para coordinar la evaluación presencial.
+              </div>
+
+              <form id="formAdmision" onsubmit="handleAdmissionSubmit(event)">
+                
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label for="parentName" class="form-field-label">Nombre Apoderado/a *</label>
+                    <input type="text" id="parentName" class="form-control" required placeholder="Ej: Patricia Morales">
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="parentRut" class="form-field-label">RUT Apoderado/a *</label>
+                    <input type="text" id="parentRut" class="form-control" required placeholder="12.345.678-9" maxlength="12">
+                    <span id="rutError" class="input-error-msg" style="display: none;">RUT inválido. Formato esperado: 12.345.678-9</span>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="parentPhone" class="form-field-label">Teléfono Móvil (WhatsApp) *</label>
+                    <input type="tel" id="parentPhone" class="form-control" required placeholder="+56 9 8765 4321">
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="childName" class="form-field-label">Nombre del Párvulo/a *</label>
+                    <input type="text" id="childName" class="form-control" required placeholder="Ej: Mateo Gómez">
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="roomLevel" class="form-field-label">Nivel de Interés *</label>
+                    <select id="roomLevel" class="form-select" required>
+                      <option value="">Seleccione sala</option>
+                      <option>Medio Menor (2 a 3 años)</option>
+                      <option>Medio Mayor Regular</option>
+                      <option>Medio Mayor TEL (Lenguaje)</option>
+                      <option>Prekínder Regular / TEL</option>
+                      <option>Kínder Regular / TEL</option>
+                      <option>Sala 8 (Apertura 2027)</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="diagnosisStatus" class="form-field-label">¿Diagnóstico TEL Previo?</label>
+                    <select id="diagnosisStatus" class="form-select">
+                      <option>No, requiere evaluación diagnóstica</option>
+                      <option>Sí, cuenta con informe fonoaudiológico</option>
+                      <option>En evaluación con especialista externo</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="observations" class="form-field-label">Observaciones o Alergias</label>
+                    <textarea id="observations" class="form-control" rows="3" placeholder="Indicar si presenta alergias alimentarias, controles médicos u otra observación relevante..."></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <button type="submit" class="btn-submit-form">Enviar Solicitud de Admisión</button>
+                  </div>
+                </div>
+
+              </form>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 8. FOOTER INSTITUCIONAL -->
+  <footer class="site-footer" id="contacto">
+    <div class="container">
+      <div class="row g-4">
+        
+        <div class="col-12 col-lg-4">
+          <h3 class="footer-brand-title">Pequeños Reyes</h3>
+          <p class="footer-description">
+            Escuela de Lenguaje y Jardín Infantil orientada a la estimulación comunicativa temprana y superación de barreras del habla en la primera infancia.
+          </p>
+          <address class="footer-address">
+            Viña del Mar, Valparaíso, Chile
+          </address>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <h4 class="footer-section-title">Canales de Contacto</h4>
+          <ul class="footer-contact-list">
+            <li>Recepción: <span class="mono-text">(32) 296 0500</span></li>
+            <li>Teléfono Urgencias: <span class="mono-text">+56 9 8765 4321</span></li>
+            <li>Correo: contacto@pequenosreyes.cl</li>
+            <li>Horario: Lunes a Viernes 08:30 a 16:30 hrs</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <h4 class="footer-section-title">Confidencialidad</h4>
+          <p class="footer-description">
+            Los datos personales, antecedentes de salud y evaluaciones fonoaudiológicas se resguardan bajo estricta reserva institucional conforme a la normativa vigente.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="footer-legal-bar">
+        <p>© 2026 Escuela de Lenguaje Pequeños Reyes. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 9. MODALES (BOOTSTRAP MODAL COMPONENTS) -->
+
+  <!-- Modal Portal Familias (Simulación de Acceso y Ficha de Alumno) -->
+  <div class="modal fade" id="modalApoderados" tabindex="-1" aria-labelledby="modalApoderadosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content custom-modal-content portal-modal-content">
+        
+        <!-- CABECERA MODAL -->
+        <header class="modal-header border-0 pb-0 d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-2">
+            <span class="portal-modal-icon">🔒</span>
+            <div>
+              <h3 class="modal-title mb-0" id="modalApoderadosTitle">Portal Familias</h3>
+              <small class="text-muted" id="portalHeaderSub">Seguimiento general de párvulos</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </header>
+
+        <div class="modal-body p-4">
+          
+          <!-- VISTA 1: FORMULARIO DE ACCESO (LOGIN SIMULADO) -->
+          <div id="portalLoginView">
+            <div class="portal-login-intro mb-4 text-center">
+              <p class="modal-text mb-2">
+                Ingrese con sus credenciales de apoderado para consultar la ficha general y estado de asistencia de su pupilo.
+              </p>
+              <div class="alert alert-info py-2 px-3 small d-inline-block text-start" style="max-width: 550px;">
+                <strong>ℹ️ Cuentas de demostración disponibles:</strong>
+                <div class="d-flex flex-wrap gap-2 mt-2" id="demoAccountsContainer">
+                  <button type="button" class="btn btn-sm btn-outline-primary demo-user-btn" data-user="12.345.678-9" data-pass="clave123">
+                    👩‍👧‍👦 Fam. Morales (2 Alumnos: Mateo y Sofía)
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary demo-user-btn" data-user="15.678.901-2" data-pass="clave456">
+                    👨‍👦 Fam. Muñoz (1 Alumno: Lucas)
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary demo-user-btn" data-user="18.234.567-8" data-pass="clave789">
+                    👩‍👧 Fam. Vargas (1 Alumna: Valentina)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alerta de Error de Credenciales -->
+            <div id="portalLoginError" class="alert alert-danger py-2 px-3 small" style="display: none;" role="alert">
+              ⚠️ <strong>Error de autenticación:</strong> Usuario (RUT/correo) o contraseña incorrectos. Verifique los datos o use las cuentas demo de arriba.
+            </div>
+
+            <form id="portalLoginForm" novalidate>
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="portalUser" class="form-field-label">Usuario (RUT o Correo Electrónico) *</label>
+                  <input type="text" id="portalUser" class="form-control" required placeholder="Ej: 12.345.678-9 o correo@example.com" autocomplete="username">
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="portalPass" class="form-field-label">Contraseña de Apoderado *</label>
+                  <input type="password" id="portalPass" class="form-control" required placeholder="Ingrese contraseña" autocomplete="current-password">
+                </div>
+                <div class="col-12 text-end mt-4">
+                  <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn-institucional-primary">Ingresar al Portal</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- VISTA 2: FICHA DEL ALUMNO (AUTENTICADO) -->
+          <div id="portalDashboardView" style="display: none;">
+            
+            <!-- Barra de bienvenida y botón cerrar sesión -->
+            <div class="portal-user-bar d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-3">
+              <div>
+                <span class="small text-muted d-block">Sesión activa como Apoderado/a</span>
+                <strong class="fs-6 text-primary" id="portalParentName">Patricia Morales</strong>
+                <span class="badge bg-success-subtle text-success ms-2">Autenticado</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger" id="portalLogoutBtn">
+                Cerrar Sesión ↩
+              </button>
+            </div>
+
+            <!-- Selector de hermanos (se muestra solo si apoderado tiene > 1 alumno) -->
+            <div id="portalSiblingSelectorWrapper" class="mb-3" style="display: none;">
+              <span class="small fw-bold text-muted d-block mb-2">Seleccione la ficha del alumno a consultar:</span>
+              <div class="btn-group w-100" role="group" id="portalSiblingButtonGroup" aria-label="Selector de hermanos">
+                <!-- Botones inyectados dinámicamente -->
+              </div>
+            </div>
+
+            <!-- Ficha Detallada del Alumno -->
+            <article class="student-profile-card border p-4 rounded-4 shadow-sm" id="studentDetailContainer">
+              <!-- Renderizado dinámico desde JS -->
+            </article>
+
+            <!-- Aviso Institucional de Privacidad (Exigencia de las Educadoras) -->
+            <div class="privacy-notice-box mt-3 p-3 rounded-3 small">
+              <div class="d-flex align-items-start gap-2">
+                <span>🛡️</span>
+                <div>
+                  <strong>Política de Privacidad y Resguardo del Menor:</strong>
+                  <p class="mb-0 text-muted">
+                    Por estricta instrucción directiva y pedagógica, este portal digital exhibe únicamente parámetros generales de nivel, asistencia y participación escolar. <strong>Los antecedentes clínicos, diagnósticos TEL y evaluaciones fonoaudiológicas confidenciales no se almacenan ni divulgan en esta plataforma</strong>, siendo entregados en forma presencial en reuniones reservadas con los profesionales a cargo.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pagos y Transferencia (Inspirado en Saint Benedict) -->
+  <div class="modal fade" id="modalPagos" tabindex="-1" aria-labelledby="modalPagosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal-content">
+        <header class="modal-header">
+          <h3 class="modal-title" id="modalPagosTitle">💳 Datos de Transferencia Bancaria</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </header>
+        <div class="modal-body">
+          <dl class="bank-details-list">
+            <dt>Titular:</dt>
+            <dd>Escuela de Lenguaje Pequeños Reyes</dd>
+            <dt>RUT:</dt>
+            <dd>65.123.456-7</dd>
+            <dt>Banco:</dt>
+            <dd>Banco Estado</dd>
+            <dt>Tipo de Cuenta:</dt>
+            <dd>Cuenta Corriente N° 12345678</dd>
+            <dt>Correo de Comprobantes:</dt>
+            <dd>pagos@pequenosreyes.cl</dd>
+          </dl>
+          <p class="bank-note">* En el asunto indicar el nombre del párvulo y su sala respectiva para la conciliación administrativa.</p>
+          <button type="button" class="btn-modal-dismiss w-100" data-bs-dismiss="modal">Entendido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: Bootstrap 5 JS Bundle con Popper (Manejo de dropdowns, colapsables y modales) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Lógica de Dominio Nativa: Validación de RUT -->
+  <script>
+    // Validación y formateo de RUT chileno (Módulo 11)
+    const rutInput = document.getElementById('parentRut');
+    const rutError = document.getElementById('rutError');
+
+    rutInput.addEventListener('input', function() {
+      let valor = this.value.replace(/[^0-9kK]/g, '').toUpperCase();
+      if (valor.length > 1) {
+        const cuerpo = valor.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        const dv = valor.slice(-1);
+        this.value = `${cuerpo}-${dv}`;
+      } else {
+        this.value = valor;
+      }
+      rutError.style.display = 'none';
+    });
+
+    function validateRut(rut) {
+      let limpio = rut.replace(/\./g, '').replace('-', '');
+      if (limpio.length < 2) return false;
+      let cuerpo = limpio.slice(0, -1);
+      let dv = limpio.slice(-1).toUpperCase();
+      if (!/^\d+$/.test(cuerpo)) return false;
+      let suma = 0, multiplo = 2;
+      for (let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
+        multiplo = multiplo === 7 ? 2 : multiplo + 1;
+      }
+      let dvEsperado = 11 - (suma % 11);
+      dvEsperado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : dvEsperado.toString();
+      return dv === dvEsperado;
+    }
+
+    // Envío del formulario
+    function handleAdmissionSubmit(event) {
+      event.preventDefault();
+      if (!validateRut(rutInput.value)) {
+        rutError.style.display = 'block';
+        rutInput.focus();
+        return;
+      }
+      document.getElementById('formSuccess').style.display = 'block';
+      document.getElementById('formAdmision').reset();
+      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Cerrar menú colapsable en móvil al hacer clic en cualquier enlace de navegación
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuPrincipal = document.getElementById('menuPrincipal');
+      if (menuPrincipal) {
+        document.querySelectorAll('#menuPrincipal .nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            const bsCollapse = bootstrap.Collapse.getInstance(menuPrincipal);
+            if (bsCollapse) {
+              bsCollapse.hide();
+            }
+          });
+        });
+      }
+    });
+  </script>
+
+  <!-- Componente Lightbox para Galería de Fotos (Tarea 2) -->
+  <div id="galleryLightbox" class="gallery-lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="gallery-lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="gallery-lightbox-container">
+      <button type="button" class="gallery-lightbox-close" id="lightboxClose" aria-label="Cerrar ampliación">&times;</button>
+      <div class="gallery-lightbox-dialog">
+        <div class="gallery-lightbox-media">
+          <img id="lightboxImg" src="" alt="" class="gallery-lightbox-img">
+        </div>
+        <div class="gallery-lightbox-caption">
+          <span class="gallery-tag mb-1 d-inline-block" id="lightboxTag">Actividad Escolar</span>
+          <h4 id="lightboxTitle" class="gallery-lightbox-title mb-1">Título de la actividad</h4>
+          <p id="lightboxDesc" class="gallery-lightbox-text mb-0">Descripción detallada de la fotografía.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
