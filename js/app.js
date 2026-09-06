@@ -209,3 +209,371 @@ document.addEventListener("DOMContentLoaded", () => {
 
         noticesFeed.innerHTML = comunicadosHTML;
     }
+
+// ========================================================== //
+// TAREA 2: INTERACCIÓN DE GALERÍA (LIGHTBOX SIMPLE)          //
+// Manejo de evento click para mostrar imagen ampliada en JS  //
+// ========================================================== //
+
+function initGalleryLightbox() {
+    const lightbox = document.getElementById('galleryLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDesc = document.getElementById('lightboxDesc');
+    const lightboxTag = document.getElementById('lightboxTag');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxBackdrop = document.getElementById('lightboxBackdrop');
+    const galleryCards = document.querySelectorAll('.gallery-card');
+
+    if (!lightbox || !galleryCards.length) return;
+
+    const openLightbox = (card) => {
+        const imgSrc = card.getAttribute('data-img');
+        const title = card.getAttribute('data-title');
+        const desc = card.getAttribute('data-desc');
+        const tagElem = card.querySelector('.gallery-tag');
+        const tagText = tagElem ? tagElem.textContent : 'Actividad Institucional';
+
+        if (lightboxImg) {
+            lightboxImg.src = imgSrc;
+            lightboxImg.alt = title;
+        }
+        if (lightboxTitle) lightboxTitle.textContent = title;
+        if (lightboxDesc) lightboxDesc.textContent = desc;
+        if (lightboxTag) lightboxTag.textContent = tagText;
+
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lightboxImg) lightboxImg.src = '';
+    };
+
+    galleryCards.forEach(card => {
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Ampliar fotografía: ${card.getAttribute('data-title')}`);
+
+        card.addEventListener('click', () => openLightbox(card));
+
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openLightbox(card);
+            }
+        });
+    });
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+            closeLightbox();
+        }
+    });
+}
+
+// ========================================================== //
+// TAREA 3: ESTRUCTURA DE DATOS APODERADO–ALUMNOS             //
+// Modelado relacional en JS (1 apoderado a N alumnos)        //
+// Soporte para familias con hermanos (Patricia Morales).     //
+// Privacidad resguardada: solo nivel, asistencia, atrasos    //
+// y estado de participación escolar.                         //
+// ========================================================== //
+
+const apoderadosData = [
+    {
+        rut: "12.345.678-9",
+        email: "patricia.morales@example.com",
+        password: "clave123",
+        nombre: "Patricia Morales Castro",
+        telefono: "+56 9 8765 4321",
+        alumnos: [
+            {
+                id: "ALU-101",
+                nombreCompleto: "Mateo Gómez Morales",
+                edad: "3 años",
+                nivelCurso: "Medio Mayor B (TEL)",
+                sala: "Sala 3",
+                asistenciaPorcentaje: 95,
+                diasAsistidos: 57,
+                diasTotales: 60,
+                atrasosAcumulados: 1,
+                estadoParticipacion: "Sobresaliente",
+                observacionParticipacion: "Demuestra activa motivación en talleres grupales de estimulación fonoaudiológica y rondas lúdicas."
+            },
+            {
+                id: "ALU-102",
+                nombreCompleto: "Sofía Gómez Morales",
+                edad: "5 años",
+                nivelCurso: "Kínder Regular",
+                sala: "Sala 6",
+                asistenciaPorcentaje: 98,
+                diasAsistidos: 59,
+                diasTotales: 60,
+                atrasosAcumulados: 0,
+                estadoParticipacion: "Muy Activa y Colaborativa",
+                observacionParticipacion: "Excelente disposición social, liderazgo positivo en juegos guiados y actividades de expresión artística."
+            }
+        ]
+    },
+    {
+        rut: "15.678.901-2",
+        email: "carlos.munoz@example.com",
+        password: "clave456",
+        nombre: "Carlos Muñoz Soto",
+        telefono: "+56 9 7654 3210",
+        alumnos: [
+            {
+                id: "ALU-103",
+                nombreCompleto: "Lucas Muñoz Valenzuela",
+                edad: "4 años",
+                nivelCurso: "Prekínder TEL",
+                sala: "Sala 5",
+                asistenciaPorcentaje: 88,
+                diasAsistidos: 53,
+                diasTotales: 60,
+                atrasosAcumulados: 3,
+                estadoParticipacion: "Constante con Buena Disposición",
+                observacionParticipacion: "Se integra con gran entusiasmo a las sesiones de articulación fonética y dinámicas en el patio activo."
+            }
+        ]
+    },
+    {
+        rut: "18.234.567-8",
+        email: "carolina.vargas@example.com",
+        password: "clave789",
+        nombre: "Carolina Vargas Silva",
+        telefono: "+56 9 6543 2109",
+        alumnos: [
+            {
+                id: "ALU-104",
+                nombreCompleto: "Valentina Henríquez Vargas",
+                edad: "2 años",
+                nivelCurso: "Medio Menor",
+                sala: "Sala 1",
+                asistenciaPorcentaje: 96,
+                diasAsistidos: 58,
+                diasTotales: 60,
+                atrasosAcumulados: 1,
+                estadoParticipacion: "Frecuente y Lúdica",
+                observacionParticipacion: "Rápida y armoniosa adaptación al grupo de pares y excelente vinculación afectiva con sus educadoras."
+            }
+        ]
+    }
+];
+
+// Variable global de sesión simulada
+let sesionApoderadoActivo = null;
+
+// ========================================================== //
+// TAREA 4: SIMULACIÓN DE ACCESO USUARIO / CONTRASEÑA         //
+// Formulario de login validado contra arreglo JS sin backend //
+// ========================================================== //
+
+function initPortalLogin() {
+    const loginForm = document.getElementById('portalLoginForm');
+    const inputUser = document.getElementById('portalUser');
+    const inputPass = document.getElementById('portalPass');
+    const alertError = document.getElementById('portalLoginError');
+    const demoButtons = document.querySelectorAll('.demo-user-btn');
+
+    if (!loginForm) return;
+
+    // Relleno automático de credenciales para demostración / evaluación rápida
+    demoButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const user = btn.getAttribute('data-user');
+            const pass = btn.getAttribute('data-pass');
+            if (inputUser) inputUser.value = user;
+            if (inputPass) inputPass.value = pass;
+            if (alertError) alertError.style.display = 'none';
+        });
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userInput = (inputUser.value || '').trim().toLowerCase();
+        const passInput = (inputPass.value || '').trim();
+
+        // Normalizar entrada de usuario (remover puntos de RUT si los hubiere)
+        const userNormalizado = userInput.replace(/\./g, '');
+
+        const apoderadoEncontrado = apoderadosData.find(ap => {
+            const rutNormalizado = ap.rut.toLowerCase().replace(/\./g, '');
+            const emailNormalizado = ap.email.toLowerCase();
+
+            const coincideUsuario = (userNormalizado === rutNormalizado || userInput === emailNormalizado);
+            const coincideClave = (passInput === ap.password);
+
+            return coincideUsuario && coincideClave;
+        });
+
+        if (apoderadoEncontrado) {
+            sesionApoderadoActivo = apoderadoEncontrado;
+            if (alertError) alertError.style.display = 'none';
+            loginForm.reset();
+            mostrarDashboardApoderado(apoderadoEncontrado);
+        } else {
+            if (alertError) {
+                alertError.style.display = 'block';
+                alertError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    });
+
+    // Botón de Cerrar Sesión
+    const btnLogout = document.getElementById('portalLogoutBtn');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', cerrarSesionApoderado);
+    }
+}
+
+function cerrarSesionApoderado() {
+    sesionApoderadoActivo = null;
+    const viewLogin = document.getElementById('portalLoginView');
+    const viewDashboard = document.getElementById('portalDashboardView');
+    const headerSub = document.getElementById('portalHeaderSub');
+    const alertError = document.getElementById('portalLoginError');
+
+    if (viewLogin) viewLogin.style.display = 'block';
+    if (viewDashboard) viewDashboard.style.display = 'none';
+    if (headerSub) headerSub.textContent = 'Seguimiento general de párvulos';
+    if (alertError) alertError.style.display = 'none';
+}
+
+// ========================================================== //
+// TAREA 5: VISTA SIMULADA DE FICHA DEL ALUMNO                //
+// Presenta curso, asistencia, atrasos y estado escolar       //
+// con soporte para alternar entre hermanos.                  //
+// Respeto absoluto a la privacidad (sin datos de salud/TEL). //
+// ========================================================== //
+
+function mostrarDashboardApoderado(apoderado) {
+    const viewLogin = document.getElementById('portalLoginView');
+    const viewDashboard = document.getElementById('portalDashboardView');
+    const labelParentName = document.getElementById('portalParentName');
+    const headerSub = document.getElementById('portalHeaderSub');
+    const siblingWrapper = document.getElementById('portalSiblingSelectorWrapper');
+    const siblingBtnGroup = document.getElementById('portalSiblingButtonGroup');
+
+    if (viewLogin) viewLogin.style.display = 'none';
+    if (viewDashboard) viewDashboard.style.display = 'block';
+    if (labelParentName) labelParentName.textContent = apoderado.nombre;
+    if (headerSub) headerSub.textContent = `Apoderado/a: ${apoderado.nombre}`;
+
+    // Si el apoderado tiene más de un pupilo (caso hermanos)
+    if (apoderado.alumnos.length > 1) {
+        if (siblingWrapper) siblingWrapper.style.display = 'block';
+        if (siblingBtnGroup) {
+            siblingBtnGroup.innerHTML = '';
+            apoderado.alumnos.forEach((alumno, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `btn btn-sm ${index === 0 ? 'btn-primary' : 'btn-outline-primary'}`;
+                btn.innerHTML = `👶 <strong>${alumno.nombreCompleto.split(' ')[0]}</strong> (${alumno.nivelCurso})`;
+                btn.addEventListener('click', () => {
+                    siblingBtnGroup.querySelectorAll('button').forEach(b => {
+                        b.className = 'btn btn-sm btn-outline-primary';
+                    });
+                    btn.className = 'btn btn-sm btn-primary';
+                    renderizarFichaAlumno(alumno);
+                });
+                siblingBtnGroup.appendChild(btn);
+            });
+        }
+    } else {
+        if (siblingWrapper) siblingWrapper.style.display = 'none';
+    }
+
+    // Renderizar por defecto el primer alumno
+    if (apoderado.alumnos.length > 0) {
+        renderizarFichaAlumno(apoderado.alumnos[0]);
+    }
+}
+
+function renderizarFichaAlumno(alumno) {
+    const container = document.getElementById('studentDetailContainer');
+    if (!container) return;
+
+    let barraColor = 'bg-success';
+    let asistenciaBadge = 'Excelente';
+    if (alumno.asistenciaPorcentaje < 90) {
+        barraColor = 'bg-warning text-dark';
+        asistenciaBadge = 'Regular';
+    }
+
+    container.innerHTML = `
+        <header class="student-header-meta">
+            <div class="student-avatar" aria-hidden="true">
+                👶
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                    <div>
+                        <h4 class="mb-1 text-primary fw-bold">${alumno.nombreCompleto}</h4>
+                        <span class="badge bg-secondary-subtle text-secondary me-2">ID Alumno: ${alumno.id}</span>
+                        <span class="text-muted small">Edad: ${alumno.edad}</span>
+                    </div>
+                    <span class="room-pill">${alumno.sala}</span>
+                </div>
+                <div class="mt-1">
+                    <strong class="text-dark small">Nivel Educativo Asignado:</strong>
+                    <span class="text-muted small ms-1">${alumno.nivelCurso}</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="row g-3 my-2">
+            <!-- Indicador 1: Asistencia General -->
+            <div class="col-12 col-md-6">
+                <div class="metric-badge-card">
+                    <span class="metric-badge-value text-success">${alumno.asistenciaPorcentaje}%</span>
+                    <span class="metric-badge-label">Asistencia General (${asistenciaBadge})</span>
+                    <div class="progress mt-2" style="height: 10px; border-radius: 6px;">
+                        <div class="progress-bar ${barraColor}" role="progressbar" style="width: ${alumno.asistenciaPorcentaje}%;" aria-valuenow="${alumno.asistenciaPorcentaje}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted d-block mt-2">${alumno.diasAsistidos} de ${alumno.diasTotales} jornadas asistidas en el año</small>
+                </div>
+            </div>
+
+            <!-- Indicador 2: Atrasos Acumulados -->
+            <div class="col-12 col-md-6">
+                <div class="metric-badge-card">
+                    <span class="metric-badge-value ${alumno.atrasosAcumulados > 2 ? 'text-warning' : 'text-primary'}">${alumno.atrasosAcumulados}</span>
+                    <span class="metric-badge-label">Atrasos Registrados</span>
+                    <div class="mt-2">
+                        <span class="badge ${alumno.atrasosAcumulados === 0 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
+                            ${alumno.atrasosAcumulados === 0 ? '✓ Registro de Puntualidad Impecable' : '⚠️ Notificar justificativo a Inspectoría'}
+                        </span>
+                    </div>
+                    <small class="text-muted d-block mt-2">Tolerancia oficial de recepción: hasta 08:45 hrs</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicador 3: Estado de Participación en Aula -->
+        <div class="p-3 mt-3 bg-light rounded-3 border">
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="fs-5">🌟</span>
+                <strong class="text-dark">Estado de Participación e Integración:</strong>
+                <span class="badge bg-primary-subtle text-primary">${alumno.estadoParticipacion}</span>
+            </div>
+            <p class="mb-0 text-muted small">
+                ${alumno.observacionParticipacion}
+            </p>
+        </div>
+    `;
+}
+
+// Inicialización de componentes al cargar el DOM
+document.addEventListener("DOMContentLoaded", () => {
+    initGalleryLightbox();
+    initPortalLogin();
+});
