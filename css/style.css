@@ -476,6 +476,11 @@ textarea:focus-visible {
   margin-bottom: 24px;
 }
 
+.section-heading-wrapper.text-center {
+  justify-content: center;
+  align-items: center;
+}
+
 .section-title {
   font-size: 2rem;
   margin: 0 0 4px 0;
@@ -794,6 +799,12 @@ textarea:focus-visible {
   border-top: 1px solid var(--pr-border);
 }
 
+.contact-form-section {
+  padding: 70px 0;
+  background-color: var(--pr-surface);
+  border-top: 1px solid var(--pr-border);
+}
+
 .form-container-card {
   background-color: var(--pr-surface);
   border: 1px solid var(--pr-border);
@@ -1055,6 +1066,10 @@ textarea:focus-visible {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .section-heading-wrapper.text-center {
+    align-items: center;
+  }
 }
 
 @media (max-width: 575.98px) {
@@ -1296,6 +1311,42 @@ textarea:focus-visible {
   background-color: #f1f5f9;
   color: var(--pr-text-muted);
   border: 1px dashed #cbd5e1;
+}
+
+.requirement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.92rem;
+  color: var(--pr-text-main);
+  background-color: #ffffff;
+  border: 1px solid var(--pr-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+}
+
+.requirement-check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--pr-green-light);
+  color: var(--pr-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-top: 1px;
 }
 
 .official-contact-card {

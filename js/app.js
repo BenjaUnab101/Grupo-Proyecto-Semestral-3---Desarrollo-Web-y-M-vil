@@ -572,8 +572,224 @@ function renderizarFichaAlumno(alumno) {
     `;
 }
 
+// ========================================================== //
+// Validación de Formularios (Pre-Matrícula y Contacto)        //
+// ========================================================== //
+
+// ---------- Validación y formateo de RUT chileno (Módulo 11) ----------
+function validateRut(rut) {
+    let limpio = rut.replace(/\./g, '').replace('-', '');
+    if (limpio.length < 2) return false;
+    let cuerpo = limpio.slice(0, -1);
+    let dv = limpio.slice(-1).toUpperCase();
+    if (!/^\d+$/.test(cuerpo)) return false;
+    let suma = 0, multiplo = 2;
+    for (let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i), 10) * multiplo;
+        multiplo = multiplo === 7 ? 2 : multiplo + 1;
+    }
+    let dvEsperado = 11 - (suma % 11);
+    dvEsperado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : dvEsperado.toString();
+    return dv === dvEsperado;
+}
+
+// Aplica formato en vivo (12.345.678-9) mientras el usuario escribe
+function attachRutFormatting(inputEl) {
+    inputEl.addEventListener('input', function () {
+        let valor = this.value.replace(/[^0-9kK]/g, '').toUpperCase();
+        if (valor.length > 1) {
+            const cuerpo = valor.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            const dv = valor.slice(-1);
+            this.value = `${cuerpo}-${dv}`;
+        } else {
+            this.value = valor;
+        }
+    });
+}
+
+// ---------- Validación de correo electrónico ----------
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(value.trim());
+}
+
+// ---------- Validación de teléfono (mínimo 8 dígitos) ----------
+function isValidPhone(value) {
+    const digitos = value.replace(/\D/g, '');
+    return digitos.length >= 8;
+}
+
+// ---------- Helpers de error en pantalla (sin recargar la página) ----------
+function showFieldError(inputEl, errorEl) {
+    inputEl.classList.add('is-invalid');
+    if (errorEl) errorEl.style.display = 'block';
+}
+
+function clearFieldError(inputEl, errorEl) {
+    inputEl.classList.remove('is-invalid');
+    if (errorEl) errorEl.style.display = 'none';
+}
+
+// Limpia el error de un campo apenas el usuario empieza a corregirlo
+function attachLiveClear(inputEl, errorEl) {
+    const evento = (inputEl.tagName === 'SELECT') ? 'change' : 'input';
+    inputEl.addEventListener(evento, () => clearFieldError(inputEl, errorEl));
+}
+
+// Valida un campo de texto/select/textarea obligatorio simple (no vacío)
+function validateRequired(inputEl, errorEl) {
+    if (!inputEl.value || !inputEl.value.trim()) {
+        showFieldError(inputEl, errorEl);
+        return false;
+    }
+    clearFieldError(inputEl, errorEl);
+    return true;
+}
+
+// ---------- FORMULARIO: PRE-MATRÍCULA ----------
+function initAdmissionFormValidation() {
+    const form = document.getElementById('formAdmision');
+    if (!form) return;
+
+    const parentName = document.getElementById('parentName');
+    const parentNameError = document.getElementById('parentNameError');
+    const rutInput = document.getElementById('parentRut');
+    const rutError = document.getElementById('rutError');
+    const parentPhone = document.getElementById('parentPhone');
+    const parentPhoneError = document.getElementById('parentPhoneError');
+    const childName = document.getElementById('childName');
+    const childNameError = document.getElementById('childNameError');
+    const roomLevel = document.getElementById('roomLevel');
+    const roomLevelError = document.getElementById('roomLevelError');
+
+    attachRutFormatting(rutInput);
+    [
+        [parentName, parentNameError], [rutInput, rutError],
+        [parentPhone, parentPhoneError], [childName, childNameError],
+        [roomLevel, roomLevelError]
+    ].forEach(([el, errEl]) => attachLiveClear(el, errEl));
+
+    // Expuesta globalmente porque el <form> la invoca vía onsubmit="handleAdmissionSubmit(event)"
+    window.handleAdmissionSubmit = function (event) {
+        event.preventDefault();
+        let esValido = true;
+
+        if (!validateRequired(parentName, parentNameError)) esValido = false;
+
+        if (!rutInput.value.trim() || !validateRut(rutInput.value)) {
+            showFieldError(rutInput, rutError);
+            esValido = false;
+        } else {
+            clearFieldError(rutInput, rutError);
+        }
+
+        if (!parentPhone.value.trim() || !isValidPhone(parentPhone.value)) {
+            showFieldError(parentPhone, parentPhoneError);
+            esValido = false;
+        } else {
+            clearFieldError(parentPhone, parentPhoneError);
+        }
+
+        if (!validateRequired(childName, childNameError)) esValido = false;
+        if (!validateRequired(roomLevel, roomLevelError)) esValido = false;
+
+        if (!esValido) {
+            const primerError = form.querySelector('.is-invalid');
+            if (primerError) primerError.focus();
+            return;
+        }
+
+        document.getElementById('formSuccess').style.display = 'block';
+        form.reset();
+        document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+}
+
+// ---------- FORMULARIO: CONTACTO GENERAL ----------
+function initContactFormValidation() {
+    const form = document.getElementById('formContacto');
+    if (!form) return;
+
+    const contactName = document.getElementById('contactName');
+    const contactNameError = document.getElementById('contactNameError');
+    const contactRutInput = document.getElementById('contactRut');
+    const contactRutError = document.getElementById('contactRutError');
+    const contactEmail = document.getElementById('contactEmail');
+    const contactEmailError = document.getElementById('contactEmailError');
+    const contactPhone = document.getElementById('contactPhone');
+    const contactPhoneError = document.getElementById('contactPhoneError');
+    const contactMessage = document.getElementById('contactMessage');
+    const contactMessageError = document.getElementById('contactMessageError');
+
+    attachRutFormatting(contactRutInput);
+    [
+        [contactName, contactNameError], [contactRutInput, contactRutError],
+        [contactEmail, contactEmailError], [contactPhone, contactPhoneError],
+        [contactMessage, contactMessageError]
+    ].forEach(([el, errEl]) => attachLiveClear(el, errEl));
+
+    // Expuesta globalmente porque el <form> la invoca vía onsubmit="handleContactSubmit(event)"
+    window.handleContactSubmit = function (event) {
+        event.preventDefault();
+        let esValido = true;
+
+        if (!validateRequired(contactName, contactNameError)) esValido = false;
+
+        if (!contactRutInput.value.trim() || !validateRut(contactRutInput.value)) {
+            showFieldError(contactRutInput, contactRutError);
+            esValido = false;
+        } else {
+            clearFieldError(contactRutInput, contactRutError);
+        }
+
+        if (!contactEmail.value.trim() || !isValidEmail(contactEmail.value)) {
+            showFieldError(contactEmail, contactEmailError);
+            esValido = false;
+        } else {
+            clearFieldError(contactEmail, contactEmailError);
+        }
+
+        if (!contactPhone.value.trim() || !isValidPhone(contactPhone.value)) {
+            showFieldError(contactPhone, contactPhoneError);
+            esValido = false;
+        } else {
+            clearFieldError(contactPhone, contactPhoneError);
+        }
+
+        if (!validateRequired(contactMessage, contactMessageError)) esValido = false;
+
+        if (!esValido) {
+            const primerError = form.querySelector('.is-invalid');
+            if (primerError) primerError.focus();
+            return;
+        }
+
+        document.getElementById('contactFormSuccess').style.display = 'block';
+        form.reset();
+        document.getElementById('contactFormSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+}
+
+// ========================================================== //
+// Cierre del menú colapsable en móvil al navegar              //
+// ========================================================== //
+function initNavbarAutoClose() {
+    const menuPrincipal = document.getElementById('menuPrincipal');
+    if (!menuPrincipal) return;
+    document.querySelectorAll('#menuPrincipal .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const bsCollapse = bootstrap.Collapse.getInstance(menuPrincipal);
+            if (bsCollapse) {
+                bsCollapse.hide();
+            }
+        });
+    });
+}
+
 // Inicialización de componentes al cargar el DOM
 document.addEventListener("DOMContentLoaded", () => {
     initGalleryLightbox();
     initPortalLogin();
+    initAdmissionFormValidation();
+    initContactFormValidation();
+    initNavbarAutoClose();
 });
