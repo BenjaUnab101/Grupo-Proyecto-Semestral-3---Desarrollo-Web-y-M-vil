@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
+}
+
+.contenedor {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 24px 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.header {
+  background: #1f5f8b;
+  color: white;
+  padding: 16px 0;
+}
+
+.header h1,
+.header p {
+  margin: 4px 0;
+}
+
+.lista-mascotas {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(220px, 1fr)
+  );
+  gap: 16px;
+}
+
+.mascota-card {
+  background: white;
+  color: #1f2937;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.formulario {
+  display: grid;
+  gap: 10px;
+  background: white;
+  color: #1f2937;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.formulario input,
+.formulario select,
+.formulario button {
+  padding: 10px;
+}
+
+.formulario button {
+  cursor: pointer;
+  background-color: #1f5f8b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
