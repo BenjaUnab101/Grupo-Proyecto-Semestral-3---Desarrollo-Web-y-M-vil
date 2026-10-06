@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import SectionTitle from './components/SectionTitle';
 import Footer from './components/Footer';
+import ComunicadosBoard from './components/ComunicadosBoard';
+import comunicados from './data/comunicados.json';
 
 export default function App() {
   const [modalPortalVisible, setModalPortalVisible] = useState(false);
@@ -37,14 +39,13 @@ export default function App() {
 
         {/* Secciones objetivo de anclaje para los enlaces del menú */}
         <section className="container py-4">
-          <SectionTitle
-            id="comunicados"
-            titulo="Comunicados Oficiales"
-            subtitulo="Información y avisos institucionales para la comunidad escolar"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-02 Muro de comunicados]
-          </div>
+          <section id="comunicados">
+            <SectionTitle
+              titulo="Comunicados Oficiales"
+              subtitulo="Información y avisos institucionales para la comunidad escolar"
+            />
+            <ComunicadosBoard comunicados={comunicados} />
+          </section>
 
           <SectionTitle
             id="calendario"

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "com-001",
+    "titulo": "Suspensión de clases por alerta meteorológica",
+    "cuerpo": "Por el sistema frontal previsto para mañana, el jardín no abrirá. Las actividades se retoman el jueves en el horario habitual.",
+    "fecha": "2026-09-29",
+    "emisor": "Dirección",
+    "alcance": "Todo el jardín",
+    "categoria": "Suspensión",
+    "esUrgente": true
+  },
+  {
+    "id": "com-002",
+    "titulo": "Reunión de apoderados nivel medio mayor",
+    "cuerpo": "La reunión será el miércoles 7 de octubre a las 18:30 en la sala de actividades. Se tratará el calendario del último trimestre.",
+    "fecha": "2026-09-25",
+    "emisor": "Educadora Camila Soto",
+    "alcance": "Nivel medio mayor",
+    "categoria": "Reunión",
+    "esUrgente": false
+  },
+  {
+    "id": "com-003",
+    "titulo": "Campaña de vacunación escolar",
+    "cuerpo": "El consultorio vacunará en el jardín el 14 de octubre. Envíe la autorización firmada en la agenda antes del lunes 12.",
+    "fecha": "2026-09-18",
+    "emisor": "Dirección",
+    "alcance": "Todo el jardín",
+    "categoria": "Salud",
+    "esUrgente": true
+  },
+  {
+    "id": "com-004",
+    "titulo": "Material para la semana de la lectura",
+    "cuerpo": "Cada niño puede traer un cuento favorito, con su nombre en la tapa, desde el lunes 5 de octubre.",
+    "fecha": "2026-09-10",
+    "emisor": "Educadora Paula Reyes",
+    "alcance": "Nivel transición",
+    "categoria": "Actividades",
+    "esUrgente": false
+  },
+  {
+    "id": "com-005",
+    "titulo": "Horario de invierno vigente",
+    "cuerpo": "El horario de ingreso se mantiene a las 8:30 y la salida a las 16:00 mientras no se informe otra cosa.",
+    "fecha": "2026-08-03",
+    "emisor": "Dirección",
+    "alcance": "Todo el jardín",
+    "categoria": "Horarios",
+    "esUrgente": false
+  }
+]
