@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useClima } from './hooks/useClima'; 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import SectionTitle from './components/SectionTitle';
@@ -11,8 +12,16 @@ import Documentos from './components/Documentos.jsx';
 import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import comunicados from './data/comunicados.json';
 import seccionesPendientes from './data/secciones.js';
+import ClimaWidget from './components/ClimaWidget';
 
 export default function App() {
+  const {
+    pronostico,
+    cargando,
+    error,
+    reintentar,
+  } = useClima();
+  
   const [modalPortalVisible, setModalPortalVisible] = useState(false);
 
   const manejarAbrirPortal = () => {
@@ -62,6 +71,13 @@ export default function App() {
             <ProcesoMatricula />
           </section>
         </section>
+
+        <ClimaWidget
+          pronostico={pronostico}
+          cargando={cargando}
+          error={error}
+          reintentar={reintentar}
+        />
       </main>
 
       <Footer />
