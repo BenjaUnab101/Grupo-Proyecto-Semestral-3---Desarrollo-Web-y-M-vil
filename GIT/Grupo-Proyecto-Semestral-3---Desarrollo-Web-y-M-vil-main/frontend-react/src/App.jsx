@@ -5,6 +5,8 @@ import SectionTitle from './components/SectionTitle';
 import SeccionPendiente from './components/SeccionPendiente';
 import Footer from './components/Footer';
 import ComunicadosBoard from './components/ComunicadosBoard';
+import Modal from './components/Modal.jsx';
+import PortalApoderados from './components/PortalApoderados.jsx';
 import comunicados from './data/comunicados.json';
 import seccionesPendientes from './data/secciones.js';
 
@@ -22,21 +24,10 @@ export default function App() {
       <main className="flex-grow-1">
         <Hero onAbrirPortal={manejarAbrirPortal} />
 
-        {/* Modal feedback para verificar el evento del botón Portal familias */}
         {modalPortalVisible && (
-          <div className="container my-3">
-            <div className="alert alert-info alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
-              <div>
-                <strong>Portal Familias:</strong> Evento <code>onAbrirPortal</code> recibido correctamente en App.
-              </div>
-              <button
-                type="button"
-                className="btn-close"
-                aria-label="Cerrar"
-                onClick={() => setModalPortalVisible(false)}
-              ></button>
-            </div>
-          </div>
+          <Modal titulo="Portal familias" onCerrar={() => setModalPortalVisible(false)}>
+            <PortalApoderados onCerrar={() => setModalPortalVisible(false)} />
+          </Modal>
         )}
 
         {/* Secciones objetivo de anclaje para los enlaces del menú */}
