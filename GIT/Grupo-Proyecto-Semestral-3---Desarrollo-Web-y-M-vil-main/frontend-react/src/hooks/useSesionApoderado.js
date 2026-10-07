@@ -13,10 +13,15 @@ export default function useSesionApoderado() {
     setAlumnoSeleccionadoId(primerAlumnoId ?? null)
   }
 
+  const cerrarSesion = () => {
+    setApoderado(null)
+    setAlumnoSeleccionadoId(null)
+  }
+
   const seleccionarAlumno = (alumnoId) => {
     if (!apoderado?.alumnoIds.includes(alumnoId)) return
     setAlumnoSeleccionadoId(alumnoId)
   }
 
-  return { apoderado, alumnoSeleccionadoId, iniciarSesion, seleccionarAlumno }
+  return { apoderado, alumnoSeleccionadoId, iniciarSesion, cerrarSesion, seleccionarAlumno }
 }
