@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import ComunicadosBoard from './components/ComunicadosBoard';
 import Modal from './components/Modal.jsx';
 import PortalApoderados from './components/PortalApoderados.jsx';
+import Documentos from './components/Documentos.jsx';
+import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import comunicados from './data/comunicados.json';
 import seccionesPendientes from './data/secciones.js';
 
@@ -43,6 +45,22 @@ export default function App() {
           {seccionesPendientes.map((seccion) => (
             <SeccionPendiente key={seccion.id} {...seccion} />
           ))}
+
+          <section id="documentos">
+            <SectionTitle
+              titulo="Documentos y Protocolos"
+              subtitulo="Reglamentos internos y formularios informativos (demo)"
+            />
+            <Documentos />
+          </section>
+
+          <section id="matricula">
+            <SectionTitle
+              titulo="Proceso de Matrícula"
+              subtitulo="Etapas y requisitos de ingreso (demo)"
+            />
+            <ProcesoMatricula />
+          </section>
         </section>
       </main>
 
