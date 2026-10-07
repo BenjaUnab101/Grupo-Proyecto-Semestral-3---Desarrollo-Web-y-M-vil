@@ -5,10 +5,18 @@ import { useState } from 'react'
 // equivale automáticamente a cerrar sesión: no requiere limpieza manual aparte.
 export default function useSesionApoderado() {
   const [apoderado, setApoderado] = useState(null)
+  const [alumnoSeleccionadoId, setAlumnoSeleccionadoId] = useState(null)
 
   const iniciarSesion = (apoderadoAutenticado) => {
     setApoderado(apoderadoAutenticado)
+    const [primerAlumnoId] = apoderadoAutenticado.alumnoIds
+    setAlumnoSeleccionadoId(primerAlumnoId ?? null)
   }
 
-  return { apoderado, iniciarSesion }
+  const seleccionarAlumno = (alumnoId) => {
+    if (!apoderado?.alumnoIds.includes(alumnoId)) return
+    setAlumnoSeleccionadoId(alumnoId)
+  }
+
+  return { apoderado, alumnoSeleccionadoId, iniciarSesion, seleccionarAlumno }
 }
