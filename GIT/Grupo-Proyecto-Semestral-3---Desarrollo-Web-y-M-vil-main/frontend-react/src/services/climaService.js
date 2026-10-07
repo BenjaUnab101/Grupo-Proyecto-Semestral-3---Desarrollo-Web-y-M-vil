@@ -1,5 +1,9 @@
 const API_URL = 'https://api.open-meteo.com/v1/forecast';
 
+// si cambio la linea 1 por la linea 5, el codigo no funciona y me da un error
+// ideal para probar el error y la pestaña de "Reintentar" para la API
+// const API_URL = 'https://api.open-meteo.com/v1/forecast-error';
+
 export async function obtenerPronostico(signal) {
   const params = new URLSearchParams({
     latitude: '-33.0153',

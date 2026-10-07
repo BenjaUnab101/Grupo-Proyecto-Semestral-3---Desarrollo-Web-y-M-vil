@@ -1,3 +1,8 @@
+import {
+  obtenerCondicionClima,
+  obtenerRecomendacionesClima,
+} from '../utils/clima';
+
 function obtenerNombreDia(fecha) {
   if (!fecha) return 'Día no disponible';
 
@@ -10,52 +15,6 @@ function obtenerNombreDia(fecha) {
   }).format(fechaLocal);
 }
 
-function obtenerCondicion(codigo) {
-  const condiciones = {
-    0: 'Despejado',
-    1: 'Mayormente despejado',
-    2: 'Parcialmente nublado',
-    3: 'Nublado',
-    45: 'Niebla',
-    48: 'Niebla',
-    51: 'Llovizna',
-    53: 'Llovizna',
-    55: 'Llovizna',
-    61: 'Lluvia',
-    63: 'Lluvia',
-    65: 'Lluvia intensa',
-    71: 'Nieve',
-    73: 'Nieve',
-    75: 'Nieve intensa',
-    80: 'Chubascos',
-    81: 'Chubascos',
-    82: 'Chubascos intensos',
-    95: 'Tormenta',
-    96: 'Tormenta',
-    99: 'Tormenta',
-  };
-
-  return condiciones[codigo] || 'Condición no disponible';
-}
-
-function obtenerRecomendacion(probabilidadLluvia, indiceUV, temperaturaMinima) {
-  const recomendaciones = [];
-
-  if (probabilidadLluvia !== null && probabilidadLluvia >= 60) {
-    recomendaciones.push('Llevar protección para la lluvia.');
-  }
-
-  if (indiceUV !== null && indiceUV >= 6) {
-    recomendaciones.push('Se recomienda protección frente al sol.');
-  }
-
-  if (temperaturaMinima !== null && temperaturaMinima <= 7) {
-    recomendaciones.push('Se recomienda llevar ropa abrigada.');
-  }
-
-  return recomendaciones;
-}
-
 export default function ClimaDia({ dia }) {
   const {
     fecha,
@@ -66,27 +25,33 @@ export default function ClimaDia({ dia }) {
     indiceUV,
   } = dia;
 
-  const recomendaciones = obtenerRecomendacion(
+  const recomendaciones = obtenerRecomendacionesClima({
     probabilidadLluvia,
     indiceUV,
-    temperaturaMinima
-  );
+    temperaturaMinima,
+  });
 
   return (
     <article className="clima-dia">
       <h3>{obtenerNombreDia(fecha)}</h3>
 
       <p className="clima-condicion">
-        {obtenerCondicion(codigoClima)}
+        {obtenerCondicionClima(codigoClima)}
       </p>
 
       <div className="clima-temperaturas">
         <span>
-          Máx: {temperaturaMaxima !== null ? `${temperaturaMaxima} °C` : 'N/D'}
+          Máx:{' '}
+          {temperaturaMaxima !== null
+            ? `${temperaturaMaxima} °C`
+            : 'N/D'}
         </span>
 
         <span>
-          Mín: {temperaturaMinima !== null ? `${temperaturaMinima} °C` : 'N/D'}
+          Mín:{' '}
+          {temperaturaMinima !== null
+            ? `${temperaturaMinima} °C`
+            : 'N/D'}
         </span>
       </div>
 
