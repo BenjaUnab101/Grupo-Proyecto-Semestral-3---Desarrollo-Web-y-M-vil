@@ -2,6 +2,7 @@ import alumnos from '../data/alumnos.json'
 import useSesionApoderado from '../hooks/useSesionApoderado.js'
 import LoginForm from './LoginForm.jsx'
 import SelectorHermanos from './SelectorHermanos.jsx'
+import FichaAlumno from './FichaAlumno.jsx'
 
 // Orquesta el flujo del portal apoderados. El estado de sesión vive en
 // useSesionApoderado (solo memoria, sin backend real).
@@ -30,9 +31,7 @@ export default function PortalApoderados() {
             alumnoSeleccionadoId={alumnoSeleccionadoId}
             onSeleccionar={seleccionarAlumno}
           />
-          <p className="mb-0">
-            Alumno seleccionado: <strong>{alumnoSeleccionado?.nombre ?? 'Ninguno'}</strong>
-          </p>
+          <FichaAlumno alumno={alumnoSeleccionado} />
         </>
       )}
     </div>
