@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import SectionTitle from './components/SectionTitle';
+import SeccionPendiente from './components/SeccionPendiente';
 import Footer from './components/Footer';
 import ComunicadosBoard from './components/ComunicadosBoard';
 import comunicados from './data/comunicados.json';
+import seccionesPendientes from './data/secciones.js';
 
 export default function App() {
   const [modalPortalVisible, setModalPortalVisible] = useState(false);
@@ -16,7 +18,7 @@ export default function App() {
   return (
     <div className="min-vh-100 d-flex flex-column">
       <Navbar onAbrirPortal={manejarAbrirPortal} />
-      
+
       <main className="flex-grow-1">
         <Hero onAbrirPortal={manejarAbrirPortal} />
 
@@ -47,32 +49,9 @@ export default function App() {
             <ComunicadosBoard comunicados={comunicados} />
           </section>
 
-          <SectionTitle
-            id="calendario"
-            titulo="Calendario de Actividades"
-            subtitulo="Fechas importantes, reuniones y talleres"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-04 Calendario]
-          </div>
-
-          <SectionTitle
-            id="documentos"
-            titulo="Documentos y Protocolos"
-            subtitulo="Descarga de reglamentos internos y formularios informativos"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-10 Protocolos]
-          </div>
-
-          <SectionTitle
-            id="matricula"
-            titulo="Proceso de Matrícula"
-            subtitulo="Postulaciones y requisitos de ingreso"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-11 Formulario de pre-matrícula]
-          </div>
+          {seccionesPendientes.map((seccion) => (
+            <SeccionPendiente key={seccion.id} {...seccion} />
+          ))}
         </section>
       </main>
 
