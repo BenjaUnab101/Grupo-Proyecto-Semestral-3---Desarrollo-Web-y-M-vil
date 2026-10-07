@@ -1,0 +1,23 @@
+[
+  {
+    "id": "AL-001",
+    "nombre": "Sofía Pérez Soto",
+    "curso": "3° Básico A",
+    "asistencia": 96,
+    "atrasos": 1
+  },
+  {
+    "id": "AL-002",
+    "nombre": "Martín Muñoz Díaz",
+    "curso": "1° Básico B",
+    "asistencia": 88,
+    "atrasos": 3
+  },
+  {
+    "id": "AL-003",
+    "nombre": "Valentina Muñoz Díaz",
+    "curso": "Kínder A",
+    "asistencia": 100,
+    "atrasos": 0
+  }
+]
