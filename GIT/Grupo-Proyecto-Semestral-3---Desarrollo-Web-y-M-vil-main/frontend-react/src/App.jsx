@@ -2,9 +2,15 @@ import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import SectionTitle from './components/SectionTitle';
+import SeccionPendiente from './components/SeccionPendiente';
 import Footer from './components/Footer';
 import ComunicadosBoard from './components/ComunicadosBoard';
+import Modal from './components/Modal.jsx';
+import PortalApoderados from './components/PortalApoderados.jsx';
+import Documentos from './components/Documentos.jsx';
+import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import comunicados from './data/comunicados.json';
+import seccionesPendientes from './data/secciones.js';
 
 export default function App() {
   const [modalPortalVisible, setModalPortalVisible] = useState(false);
@@ -16,25 +22,14 @@ export default function App() {
   return (
     <div className="min-vh-100 d-flex flex-column">
       <Navbar onAbrirPortal={manejarAbrirPortal} />
-      
+
       <main className="flex-grow-1">
         <Hero onAbrirPortal={manejarAbrirPortal} />
 
-        {/* Modal feedback para verificar el evento del botón Portal familias */}
         {modalPortalVisible && (
-          <div className="container my-3">
-            <div className="alert alert-info alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
-              <div>
-                <strong>Portal Familias:</strong> Evento <code>onAbrirPortal</code> recibido correctamente en App.
-              </div>
-              <button
-                type="button"
-                className="btn-close"
-                aria-label="Cerrar"
-                onClick={() => setModalPortalVisible(false)}
-              ></button>
-            </div>
-          </div>
+          <Modal titulo="Portal familias" onCerrar={() => setModalPortalVisible(false)}>
+            <PortalApoderados onCerrar={() => setModalPortalVisible(false)} />
+          </Modal>
         )}
 
         {/* Secciones objetivo de anclaje para los enlaces del menú */}
@@ -47,32 +42,25 @@ export default function App() {
             <ComunicadosBoard comunicados={comunicados} />
           </section>
 
-          <SectionTitle
-            id="calendario"
-            titulo="Calendario de Actividades"
-            subtitulo="Fechas importantes, reuniones y talleres"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-04 Calendario]
-          </div>
+          {seccionesPendientes.map((seccion) => (
+            <SeccionPendiente key={seccion.id} {...seccion} />
+          ))}
 
-          <SectionTitle
-            id="documentos"
-            titulo="Documentos y Protocolos"
-            subtitulo="Descarga de reglamentos internos y formularios informativos"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-10 Protocolos]
-          </div>
+          <section id="documentos">
+            <SectionTitle
+              titulo="Documentos y Protocolos"
+              subtitulo="Reglamentos internos y formularios informativos (demo)"
+            />
+            <Documentos />
+          </section>
 
-          <SectionTitle
-            id="matricula"
-            titulo="Proceso de Matrícula"
-            subtitulo="Postulaciones y requisitos de ingreso"
-          />
-          <div className="p-4 bg-light rounded text-center text-muted mb-4 border">
-            [Espacio reservado para componente HU-11 Formulario de pre-matrícula]
-          </div>
+          <section id="matricula">
+            <SectionTitle
+              titulo="Proceso de Matrícula"
+              subtitulo="Etapas y requisitos de ingreso (demo)"
+            />
+            <ProcesoMatricula />
+          </section>
         </section>
       </main>
 

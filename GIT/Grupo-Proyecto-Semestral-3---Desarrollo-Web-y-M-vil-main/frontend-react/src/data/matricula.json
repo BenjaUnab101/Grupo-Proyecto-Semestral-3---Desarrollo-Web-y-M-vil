@@ -1,0 +1,27 @@
+{
+  "etapas": [
+    {
+      "id": 1,
+      "titulo": "Postulación",
+      "descripcion": "Completar el formulario de interés con los datos del postulante (demo)."
+    },
+    {
+      "id": 2,
+      "titulo": "Entrevista",
+      "descripcion": "Reunión informativa con el equipo del establecimiento (demo)."
+    },
+    {
+      "id": 3,
+      "titulo": "Matrícula",
+      "descripcion": "Confirmación del cupo y pago de matrícula (demo)."
+    }
+  ],
+  "transferenciaDemo": {
+    "banco": "Banco Demo (ficticio)",
+    "tipoCuenta": "Cuenta Corriente",
+    "numeroCuenta": "000-00000-00 (demo)",
+    "titular": "Fundación Educacional Pequeños Reyes (demo)",
+    "rutTitular": "76.000.000-0 (demo)",
+    "email": "pagos.demo@pequenosreyes.cl"
+  }
+}

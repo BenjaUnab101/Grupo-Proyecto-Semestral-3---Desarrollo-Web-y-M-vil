@@ -1,0 +1,20 @@
+[
+  {
+    "id": "doc-01",
+    "titulo": "Reglamento Interno 2026",
+    "categoria": "Reglamentos",
+    "descripcion": "Normas de convivencia y funcionamiento del establecimiento (documento demo)."
+  },
+  {
+    "id": "doc-02",
+    "titulo": "Protocolo de Seguridad Escolar",
+    "categoria": "Protocolos",
+    "descripcion": "Procedimientos ante emergencias y evacuación (documento demo)."
+  },
+  {
+    "id": "doc-03",
+    "titulo": "Formulario de Autorización de Salida",
+    "categoria": "Formularios",
+    "descripcion": "Autorización para retiro de alumnos por terceros (documento demo)."
+  }
+]
