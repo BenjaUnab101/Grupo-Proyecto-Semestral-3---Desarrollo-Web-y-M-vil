@@ -1,0 +1,10 @@
+[
+  { "id": "sala-1", "nombre": "Sala Naranja (Medio Mayor A)", "matriculados": 15, "capacidad": 15 },
+  { "id": "sala-2", "nombre": "Sala Azul (Medio Mayor B)", "matriculados": 13, "capacidad": 15 },
+  { "id": "sala-3", "nombre": "Sala Verde (Pre-Kínder A)", "matriculados": 14, "capacidad": 15 },
+  { "id": "sala-4", "nombre": "Sala Amarilla (Pre-Kínder B)", "matriculados": 8, "capacidad": 15 },
+  { "id": "sala-5", "nombre": "Sala Roja (Kínder A)", "matriculados": 15, "capacidad": 15 },
+  { "id": "sala-6", "nombre": "Sala Morada (Kínder B)", "matriculados": 10, "capacidad": 15 },
+  { "id": "sala-7", "nombre": "Sala Fonoaudiología 1", "matriculados": 12, "capacidad": 15 },
+  { "id": "sala-8", "nombre": "Sala Fonoaudiología 2", "matriculados": 14, "capacidad": 15 }
+]
