@@ -13,9 +13,9 @@ import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import comunicados from './data/comunicados.json';
 import seccionesPendientes from './data/secciones.js';
 import ClimaWidget from './components/ClimaWidget';
-
-// 1. AGREGADO: Import de HU-07
 import InfoJardin from './components/InfoJardin';
+import Galeria from './components/Galeria';
+import CuposSalas from './components/CuposSalas';
 
 export default function App() {
   const {
@@ -44,10 +44,15 @@ export default function App() {
           </Modal>
         )}
 
-        {/* 2. AGREGADO: Componente HU-07 institucional y niveles */}
         <InfoJardin />
 
-        {/* Secciones objetivo de anclaje para los enlaces del menú */}
+        {/* HU-08: Galería con Lightbox */}
+        <Galeria />
+
+        {/* HU-09: Estado de cupos por sala */}
+        <CuposSalas />
+
+        {/* Secciones restantes */}
         <section className="container py-4">
           <section id="comunicados">
             <SectionTitle
