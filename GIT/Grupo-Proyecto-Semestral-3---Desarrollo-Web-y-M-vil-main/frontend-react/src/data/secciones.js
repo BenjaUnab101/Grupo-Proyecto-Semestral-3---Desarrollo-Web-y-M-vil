@@ -1,12 +1,6 @@
 // Secciones de anclaje que aun no tienen un componente real implementado.
 // Cuando una historia entrega el componente definitivo, su entrada se retira de aqui.
-const seccionesPendientes = [
-  {
-    id: 'calendario',
-    titulo: 'Calendario de Actividades',
-    subtitulo: 'Fechas importantes, reuniones y talleres',
-    etiqueta: 'HU-04 Calendario',
-  },
-]
+// HU-04 entregó el calendario (components/Agenda.jsx), por eso ya no aparece aquí.
+const seccionesPendientes = []
 
 export default seccionesPendientes

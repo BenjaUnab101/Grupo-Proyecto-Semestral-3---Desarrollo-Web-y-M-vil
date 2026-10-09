@@ -1,0 +1,140 @@
+/* HU-04: calendario de actividades */
+.agenda {
+  --agenda-tinta: #1d2a3a;
+  --agenda-suave: #56606d;
+  --agenda-linea: #d9dee5;
+  --agenda-fondo: #ffffff;
+  --agenda-dia-fondo: #e8f4f9;
+  --agenda-dia-tinta: #004d6e;
+  --agenda-proxima: #b45309;
+  --agenda-proxima-fondo: #fff3e0;
+  --agenda-proxima-tinta: #7a3a00;
+
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 8px 20px 48px;
+  text-align: left;
+  color: var(--agenda-tinta);
+}
+
+@media (prefers-color-scheme: dark) {
+  .agenda {
+    --agenda-tinta: #eef1f5;
+    --agenda-suave: #aab3bf;
+    --agenda-linea: #343a45;
+    --agenda-fondo: #1c1e25;
+    --agenda-dia-fondo: #12303f;
+    --agenda-dia-tinta: #a9dcf2;
+    --agenda-proxima: #ffb74d;
+    --agenda-proxima-fondo: #3a2a14;
+    --agenda-proxima-tinta: #ffd8a1;
+  }
+}
+
+.agenda__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agenda__vacio {
+  padding: 24px;
+  border: 1px dashed var(--agenda-linea);
+  border-radius: 8px;
+  color: var(--agenda-suave);
+}
+
+.actividad {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  background: var(--agenda-fondo);
+  border: 1px solid var(--agenda-linea);
+  border-left: 4px solid var(--agenda-linea);
+  border-radius: 8px;
+}
+
+.actividad--proxima {
+  border-left-color: var(--agenda-proxima);
+}
+
+.actividad__dia {
+  display: flex;
+  flex: 0 0 56px;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  border-radius: 8px;
+  background: var(--agenda-dia-fondo);
+  color: var(--agenda-dia-tinta);
+  line-height: 1.1;
+}
+
+.actividad__dia-numero {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.actividad__dia-mes {
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.actividad__contenido {
+  flex: 1;
+  min-width: 0;
+}
+
+.actividad__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.actividad__titulo {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 130%;
+  color: var(--agenda-tinta);
+  overflow-wrap: anywhere;
+}
+
+.actividad__insignia {
+  padding: 1px 10px;
+  border: 2px solid var(--agenda-proxima);
+  border-radius: 999px;
+  background: var(--agenda-proxima-fondo);
+  color: var(--agenda-proxima-tinta);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.actividad__cuando {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--agenda-tinta);
+}
+
+.actividad__relativo {
+  color: var(--agenda-suave);
+}
+
+.actividad__detalle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--agenda-suave);
+}
+
+@media (max-width: 420px) {
+  .actividad {
+    gap: 12px;
+    padding: 12px;
+  }
+}
