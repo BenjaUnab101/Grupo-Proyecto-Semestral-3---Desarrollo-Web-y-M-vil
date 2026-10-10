@@ -6,6 +6,7 @@
     "fecha": "2026-09-29",
     "emisor": "Dirección",
     "alcance": "Todo el jardín",
+    "nivel": "General",
     "categoria": "Suspensión",
     "esUrgente": true
   },
@@ -16,6 +17,7 @@
     "fecha": "2026-09-25",
     "emisor": "Educadora Camila Soto",
     "alcance": "Nivel medio mayor",
+    "nivel": "Preescolar",
     "categoria": "Reunión",
     "esUrgente": false
   },
@@ -26,6 +28,7 @@
     "fecha": "2026-09-18",
     "emisor": "Dirección",
     "alcance": "Todo el jardín",
+    "nivel": "General",
     "categoria": "Salud",
     "esUrgente": true
   },
@@ -36,6 +39,7 @@
     "fecha": "2026-09-10",
     "emisor": "Educadora Paula Reyes",
     "alcance": "Nivel transición",
+    "nivel": "Preescolar",
     "categoria": "Actividades",
     "esUrgente": false
   },
@@ -46,6 +50,7 @@
     "fecha": "2026-08-03",
     "emisor": "Dirección",
     "alcance": "Todo el jardín",
+    "nivel": "General",
     "categoria": "Horarios",
     "esUrgente": false
   }
