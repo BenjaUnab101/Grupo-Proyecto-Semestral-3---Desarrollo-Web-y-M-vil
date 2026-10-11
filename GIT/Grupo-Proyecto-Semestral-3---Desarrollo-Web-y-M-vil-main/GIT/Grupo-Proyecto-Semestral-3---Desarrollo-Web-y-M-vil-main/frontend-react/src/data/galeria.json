@@ -1,0 +1,30 @@
+[
+  {
+    "id": "act-arte",
+    "titulo": "Taller de Expresión Artística y Pintura",
+    "descripcion": "Actividad de estimulación sensorial y motricidad fina mediante pintura libre.",
+    "imagenUrl": "/images/actividad-arte.svg",
+    "alt": "Ilustración de párvulos en actividades de arte y dibujo guiado"
+  },
+  {
+    "id": "act-folclor",
+    "titulo": "Muestra Folclórica y Tradiciones",
+    "descripcion": "Celebración de fiestas patrias fomentando la expresión corporal y musical.",
+    "imagenUrl": "/images/muestra-folclorica.svg",
+    "alt": "Ilustración de estudiantes celebrando una muestra folclórica escolar"
+  },
+  {
+    "id": "act-psico",
+    "titulo": "Circuito de Psicomotricidad",
+    "descripcion": "Ejercicios de coordinación, equilibrio y lateralidad en sala multiuso.",
+    "imagenUrl": "/images/psicomotricidad.svg",
+    "alt": "Ilustración de circuito recreativo y desarrollo psicomotor"
+  },
+  {
+    "id": "act-fono",
+    "titulo": "Taller Fonoaudiológico Integral",
+    "descripcion": "Dinámicas grupales de articulación fonética y habilidades comunicativas.",
+    "imagenUrl": "/images/taller-fonoaudiologia.svg",
+    "alt": "Ilustración de sesión de lenguaje y fonoaudiología en aula"
+  }
+]
