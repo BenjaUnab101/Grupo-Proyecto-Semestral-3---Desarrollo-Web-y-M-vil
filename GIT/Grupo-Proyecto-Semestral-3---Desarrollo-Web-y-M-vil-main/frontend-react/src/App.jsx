@@ -1,18 +1,28 @@
 import { useState } from 'react';
-import { useClima } from './hooks/useClima'; 
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import SectionTitle from './components/SectionTitle';
-import SeccionPendiente from './components/SeccionPendiente';
-import Footer from './components/Footer';
-import ComunicadosBoard from './components/ComunicadosBoard';
+import { useClima } from './hooks/useClima.js'; 
+import Navbar from './components/Navbar.jsx';
+import Hero from './components/Hero.jsx';
+import SectionTitle from './components/SectionTitle.jsx';
+import SeccionPendiente from './components/SeccionPendiente.jsx';
+import Footer from './components/Footer.jsx';
+import ComunicadosBoard from './components/ComunicadosBoard.jsx';
+import Agenda from './components/Agenda.jsx';
 import Modal from './components/Modal.jsx';
 import PortalApoderados from './components/PortalApoderados.jsx';
 import Documentos from './components/Documentos.jsx';
 import ProcesoMatricula from './components/ProcesoMatricula.jsx';
+import FormPreMatricula from './components/FormPreMatricula.jsx';
 import comunicados from './data/comunicados.json';
+import actividades from './data/actividades.json';
 import seccionesPendientes from './data/secciones.js';
-import ClimaWidget from './components/ClimaWidget';
+import ClimaWidget from './components/ClimaWidget.jsx';
+
+// HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
+// ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
+// siempre se usa la fecha real de America/Santiago.
+const hoyDePrueba = import.meta.env.DEV
+  ? new URLSearchParams(window.location.search).get('hoy')
+  : null;
 
 export default function App() {
   const {
@@ -51,6 +61,14 @@ export default function App() {
             <ComunicadosBoard comunicados={comunicados} />
           </section>
 
+          <section id="calendario">
+            <SectionTitle
+              titulo="Calendario de Actividades"
+              subtitulo="Próximas fechas importantes, reuniones y talleres"
+            />
+            <Agenda actividades={actividades} hoy={hoyDePrueba} />
+          </section>
+
           {seccionesPendientes.map((seccion) => (
             <SeccionPendiente key={seccion.id} {...seccion} />
           ))}
@@ -69,6 +87,7 @@ export default function App() {
               subtitulo="Etapas y requisitos de ingreso (demo)"
             />
             <ProcesoMatricula />
+            <FormPreMatricula />
           </section>
         </section>
 
