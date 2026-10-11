@@ -5,6 +5,7 @@ const ENLACES_NAV = [
   { id: 'calendario', label: 'Calendario' },
   { id: 'documentos', label: 'Documentos' },
   { id: 'matricula', label: 'Matrícula' },
+  { id: 'contacto', label: 'Contacto' },
 ];
 
 export default function Navbar({ onAbrirPortal }) {

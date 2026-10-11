@@ -1,21 +1,22 @@
 import { useState } from 'react';
-import { useClima } from './hooks/useClima.js'; 
-import Navbar from './components/Navbar.jsx';
-import Hero from './components/Hero.jsx';
-import SectionTitle from './components/SectionTitle.jsx';
-import SeccionPendiente from './components/SeccionPendiente.jsx';
-import Footer from './components/Footer.jsx';
-import ComunicadosBoard from './components/ComunicadosBoard.jsx';
+import { useClima } from './hooks/useClima'; 
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import SectionTitle from './components/SectionTitle';
+import SeccionPendiente from './components/SeccionPendiente';
+import Footer from './components/Footer';
+import ComunicadosBoard from './components/ComunicadosBoard';
 import Agenda from './components/Agenda.jsx';
 import Modal from './components/Modal.jsx';
 import PortalApoderados from './components/PortalApoderados.jsx';
 import Documentos from './components/Documentos.jsx';
 import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import FormPreMatricula from './components/FormPreMatricula.jsx';
+import FormContacto from './components/FormContacto.jsx';
 import comunicados from './data/comunicados.json';
 import actividades from './data/actividades.json';
 import seccionesPendientes from './data/secciones.js';
-import ClimaWidget from './components/ClimaWidget.jsx';
+import ClimaWidget from './components/ClimaWidget';
 
 // HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
 // ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
@@ -95,6 +96,14 @@ export default function App() {
             />
             <ProcesoMatricula />
             <FormPreMatricula />
+          </section>
+
+          <section id="contacto">
+            <SectionTitle
+              titulo="Contacto con la Dirección"
+              subtitulo="Canal propuesto para consultas de las familias (demo)"
+            />
+            <FormContacto />
           </section>
         </section>
 

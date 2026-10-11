@@ -1,12 +1,17 @@
+import '../styles/Formulario.css'
+
 // HU-11: campo de formulario reutilizable y controlado.
 // Props del contrato: label, name, type, value, error, onChange, onBlur.
-// Props opcionales: required, ayuda (texto de apoyo), opciones (para type="select"),
+// Props opcionales: id (por defecto "campo-<name>"; si hay dos formularios en la misma
+// página, cada uno debe entregar ids distintos), required, ayuda (texto de apoyo),
+// opciones (para type="select"),
 // y cualquier atributo extra del input (autoComplete, inputMode, maxLength…).
 //
 // Accesibilidad: el <label> está asociado por htmlFor/id; si hay error, el input
 // queda con aria-invalid="true" y aria-describedby apunta al mensaje de error
 // (y a la ayuda, si existe), así el lector de pantalla los lee al enfocar el campo.
 export default function FormField({
+  id: idRecibido,
   label,
   name,
   type = 'text',
@@ -19,7 +24,7 @@ export default function FormField({
   opciones = [],
   ...atributos
 }) {
-  const id = `campo-${name}`
+  const id = idRecibido ?? `campo-${name}`
   const idAyuda = ayuda ? `${id}-ayuda` : null
   const idError = error ? `${id}-error` : null
   const describedBy = [idAyuda, idError].filter(Boolean).join(' ') || undefined
