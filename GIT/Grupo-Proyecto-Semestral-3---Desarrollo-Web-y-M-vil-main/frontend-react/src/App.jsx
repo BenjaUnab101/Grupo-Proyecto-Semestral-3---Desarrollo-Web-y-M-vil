@@ -24,6 +24,13 @@ const hoyDePrueba = import.meta.env.DEV
   ? new URLSearchParams(window.location.search).get('hoy')
   : null;
 
+// HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
+// ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
+// siempre se usa la fecha real de America/Santiago.
+const hoyDePrueba = import.meta.env.DEV
+  ? new URLSearchParams(window.location.search).get('hoy')
+  : null;
+
 export default function App() {
   const {
     pronostico,
