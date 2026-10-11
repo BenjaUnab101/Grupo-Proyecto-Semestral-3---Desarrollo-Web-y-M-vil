@@ -1,0 +1,80 @@
+[
+  {
+    "id": "demo-act-01",
+    "demo": true,
+    "titulo": "Reunión de apoderados nivel medio mayor",
+    "fecha": "2026-10-07",
+    "hora": "18:30",
+    "lugar": "Sala de actividades",
+    "preparar": "Asistencia de un adulto responsable."
+  },
+  {
+    "id": "demo-act-02",
+    "demo": true,
+    "titulo": "Último día de la semana de la lectura",
+    "fecha": "2026-10-08",
+    "lugar": "Todas las salas",
+    "preparar": "Retirar el cuento que el niño trajo de la casa."
+  },
+  {
+    "id": "demo-act-03",
+    "demo": true,
+    "titulo": "Día del color",
+    "fecha": "2026-10-09",
+    "lugar": "Todo el jardín",
+    "preparar": "Venir con ropa de un color favorito."
+  },
+  {
+    "id": "demo-act-04",
+    "demo": true,
+    "titulo": "Plazo para entregar autorización de vacunación",
+    "fecha": "2026-10-12",
+    "lugar": "Agenda del alumno",
+    "preparar": "Autorización firmada por el apoderado."
+  },
+  {
+    "id": "demo-act-05",
+    "demo": true,
+    "titulo": "Campaña de vacunación escolar",
+    "fecha": "2026-10-14",
+    "hora": "09:30",
+    "lugar": "Enfermería del jardín",
+    "preparar": "Carnet de control de salud del niño."
+  },
+  {
+    "id": "demo-act-06",
+    "demo": true,
+    "titulo": "Salida pedagógica a la granja educativa",
+    "fecha": "2026-10-16",
+    "hora": "09:00",
+    "lugar": "Salida desde el jardín",
+    "preparar": "Colación, botella de agua, gorro y bloqueador."
+  },
+  {
+    "id": "demo-act-07",
+    "demo": true,
+    "titulo": "Taller de reciclaje con familias",
+    "fecha": "2026-10-17",
+    "hora": "10:00",
+    "lugar": "Patio central",
+    "preparar": "Dos envases plásticos limpios."
+  },
+  {
+    "id": "demo-act-08",
+    "demo": true,
+    "titulo": "Muestra de fin de semestre",
+    "fecha": "2026-11-20",
+    "hora": "11:00",
+    "lugar": "Patio central",
+    "preparar": "Vestimenta indicada por la educadora del nivel."
+  },
+  {
+    "id": "demo-act-09",
+    "demo": true,
+    "titulo": "Ceremonia de cierre nivel transición",
+    "fecha": "2026-12-11",
+    "hora": "18:00",
+    "lugar": "Salón principal",
+    "preparar": "Confirmar asistencia con la educadora."
+  }
+]
