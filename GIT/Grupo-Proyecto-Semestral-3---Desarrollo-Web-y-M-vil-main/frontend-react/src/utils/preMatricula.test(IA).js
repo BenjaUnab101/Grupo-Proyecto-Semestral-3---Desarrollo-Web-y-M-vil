@@ -147,23 +147,37 @@ test('comentario opcional y límites de largo', () => {
 // ---------- Contrato y privacidad (estático) ----------
 
 test('contrato: formulario controlado con valores/errores y FormField con aria', () => {
+  // Desde HU-12 el estado y los eventos viven en un hook compartido y el botón en
+  // FormularioDemo, para no duplicar la lógica entre pre-matrícula y contacto.
   const form = leer('../components/FormPreMatricula.jsx')
+  const hook = leer('../hooks/useFormularioDemo.js')
+  const contenedor = leer('../components/FormularioDemo.jsx')
   const campo = leer('../components/FormField.jsx')
-  assert.match(form, /const \[valores, setValores\] = useState\(VALORES_INICIALES\)/)
-  assert.match(form, /const \[errores, setErrores\] = useState\(\{\}\)/)
-  assert.match(form, /evento\.preventDefault\(\)/)
-  assert.match(form, /onSubmit=\{manejarEnvio\}/)
-  assert.match(form, /noValidate/)
-  // Regresión: sin esto, el error que aparece al perder el foco empuja el botón y el clic se pierde.
-  assert.match(form, /onMouseDown=\{\(evento\) => evento\.preventDefault\(\)\}/)
+  assert.match(form, /useFormularioDemo\(\{/)
+  assert.match(form, /valoresIniciales: VALORES_INICIALES/)
+  assert.match(form, /<FormField/)
   assert.match(form, /Demostración: solicitud validada, no enviada al jardín/)
+  assert.match(hook, /const \[valores, setValores\] = useState\(valoresIniciales\)/)
+  assert.match(hook, /const \[errores, setErrores\] = useState\(\{\}\)/)
+  assert.match(hook, /evento\.preventDefault\(\)/)
+  assert.match(contenedor, /onSubmit=\{onSubmit\}/)
+  assert.match(contenedor, /noValidate/)
+  // Regresión: sin esto, el error que aparece al perder el foco empuja el botón y el clic se pierde.
+  assert.match(contenedor, /onMouseDown=\{\(evento\) => evento\.preventDefault\(\)\}/)
   assert.match(campo, /'aria-invalid'/)
   assert.match(campo, /'aria-describedby'/)
   assert.match(campo, /key=\{opcion\.id\}/)
 })
 
 test('CA3 privacidad: el formulario no persiste ni envía datos', () => {
-  const codigo = ['../components/FormPreMatricula.jsx', '../components/FormField.jsx', './preMatricula.js']
+  const codigo = [
+    '../components/FormPreMatricula.jsx',
+    '../components/FormularioDemo.jsx',
+    '../components/FormField.jsx',
+    '../hooks/useFormularioDemo.js',
+    './preMatricula.js',
+    './validaciones.js',
+  ]
     .map(leer)
     .join('\n')
     .replace(/\/\/.*$/gm, '') // ignora comentarios
