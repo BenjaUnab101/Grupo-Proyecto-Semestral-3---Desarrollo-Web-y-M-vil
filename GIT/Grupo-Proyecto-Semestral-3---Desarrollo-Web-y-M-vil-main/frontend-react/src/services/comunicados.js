@@ -1,5 +1,21 @@
 const FORMATO_FECHA = /^(\d{4})-(\d{2})-(\d{2})$/
 
+// HU-03: valor del filtro que muestra la colección completa.
+export const FILTRO_TODOS = 'Todos'
+
+// HU-03: niveles válidos del campo `nivel` de cada comunicado.
+export const NIVELES = ['General', 'Salas TEL', 'Preescolar']
+
+// HU-03: opciones que ve el apoderado, en el orden en que se muestran.
+export const OPCIONES_FILTRO_NIVEL = [FILTRO_TODOS, ...NIVELES]
+
+// HU-03 — Regla pendiente de validar con la encuesta original (Q4, Q5).
+// Mientras no se contraste, el filtro es estricto: elegir "Salas TEL" o
+// "Preescolar" NO incluye los comunicados "General"; estos se ven en "Todos"
+// y en "General". Si la encuesta indica lo contrario, basta con cambiar este
+// valor a `true` (las pruebas cubren ambos casos). Ver docs/HU-03-filtro-nivel.md.
+export const INCLUIR_GENERALES_EN_NIVELES = false
+
 // Convierte una fecha con formato AAAA-MM-DD en un objeto Date válido.
 export function parseFecha(valor) {
   if (typeof valor !== 'string') return null
@@ -52,4 +68,20 @@ export function ordenarComunicados(comunicados) {
   })
 
   return comunicadosOrdenados
+}
+
+// HU-03: devuelve solo los comunicados del nivel elegido, sin mutar la entrada.
+// "Todos" (o un filtro desconocido) restaura la colección completa.
+export function filtrarPorNivel(
+  comunicados,
+  filtro,
+  { incluirGenerales = INCLUIR_GENERALES_EN_NIVELES } = {},
+) {
+  if (!Array.isArray(comunicados)) return []
+  if (filtro === FILTRO_TODOS || !NIVELES.includes(filtro)) return [...comunicados]
+
+  return comunicados.filter((comunicado) => {
+    if (comunicado?.nivel === filtro) return true
+    return incluirGenerales && filtro !== 'General' && comunicado?.nivel === 'General'
+  })
 }

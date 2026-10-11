@@ -5,6 +5,8 @@
   --muro-fondo: #ffffff;
   --muro-urgente: #b3261e;
   --muro-urgente-fondo: #fdecea;
+  --muro-activo: #006692;
+  --muro-activo-texto: #ffffff;
 
   max-width: 720px;
   margin: 0 auto;
@@ -21,6 +23,8 @@
     --muro-fondo: #1c1e25;
     --muro-urgente: #ff8a80;
     --muro-urgente-fondo: #3a1f1e;
+    --muro-activo: #7cc4e4;
+    --muro-activo-texto: #0f172a;
   }
 }
 
@@ -29,6 +33,40 @@
   font-size: 28px;
   text-align: left;
   color: var(--muro-tinta);
+}
+
+/* HU-03: filtro por nivel */
+.filtro-nivel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filtro-nivel__opcion {
+  padding: 6px 16px;
+  border: 1px solid var(--muro-linea);
+  border-radius: 999px;
+  background: var(--muro-fondo);
+  color: var(--muro-tinta);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.filtro-nivel__opcion:hover {
+  border-color: var(--muro-activo);
+}
+
+.filtro-nivel__opcion:focus-visible {
+  outline: 3px solid var(--muro-activo);
+  outline-offset: 2px;
+}
+
+.filtro-nivel__opcion--activa {
+  border-color: var(--muro-activo);
+  background: var(--muro-activo);
+  color: var(--muro-activo-texto);
+  font-weight: 600;
 }
 
 .muro__lista {
