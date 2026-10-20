@@ -1,0 +1,23 @@
+[
+  {
+    "rut": "20111222-2",
+    "nombre": "Marcela Soto Reyes",
+    "email": "apoderado.demo1@pequenosreyes.cl",
+    "clave": "Demo2026!",
+    "alumnoIds": []
+  },
+  {
+    "rut": "12345678-5",
+    "nombre": "Juan Pérez González",
+    "email": "apoderado.demo2@pequenosreyes.cl",
+    "clave": "Demo2026!",
+    "alumnoIds": ["AL-001"]
+  },
+  {
+    "rut": "9876543-3",
+    "nombre": "Carolina Muñoz Díaz",
+    "email": "apoderado.demo3@pequenosreyes.cl",
+    "clave": "Demo2026!",
+    "alumnoIds": ["AL-002", "AL-003"]
+  }
+]

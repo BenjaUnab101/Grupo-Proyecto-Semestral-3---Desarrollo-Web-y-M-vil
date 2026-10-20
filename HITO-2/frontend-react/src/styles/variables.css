@@ -1,0 +1,33 @@
+:root {
+  /* Paleta Oficial - Logotipo Pequeños Reyes */
+  --pr-blue: #006692;
+  --pr-blue-dark: #004d6e;
+  --pr-blue-light: #e8f4f9;
+  --pr-red: #e53935;
+  --pr-red-light: #fdecea;
+  --pr-orange: #f57c00;
+  --pr-orange-light: #fff3e0;
+  --pr-green: #2e7d32;
+  --pr-green-light: #e8f5e9;
+
+  /* Neutrales de Interfaz */
+  --pr-bg: #f8fafc;
+  --pr-surface: #ffffff;
+  --pr-border: #e2e8f0;
+  --pr-text-main: #0f172a;
+  --pr-text-muted: #64748b;
+  --pr-text-light: #94a3b8;
+
+  /* Tipografías */
+  --font-display: 'Baloo 2', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Elevación y Radios */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-subtle: 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 6px 16px -4px rgba(0, 102, 146, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 12px 24px -6px rgba(0, 102, 146, 0.14);
+}
