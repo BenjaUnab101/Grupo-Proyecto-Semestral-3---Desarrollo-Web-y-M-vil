@@ -1,7 +1,0 @@
-[
-  { "id": "medio-menor", "nombre": "Nivel medio menor" },
-  { "id": "medio-mayor", "nombre": "Nivel medio mayor" },
-  { "id": "transicion-1", "nombre": "Primer nivel de transición (Pre-kínder)" },
-  { "id": "transicion-2", "nombre": "Segundo nivel de transición (Kínder)" },
-  { "id": "sala-tel", "nombre": "Sala TEL (Trastorno Específico del Lenguaje)" }
-]
