@@ -163,3 +163,13 @@ textarea:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+/* HU-08: tarjetas de la galería (botones que abren el lightbox) */
+.btn-galeria:hover,
+.btn-galeria:focus-visible {
+  transform: translateY(-3px);
+}
+
+.btn-galeria:focus-visible {
+  outline: 3px solid var(--pr-blue);
+  outline-offset: 2px;
+}

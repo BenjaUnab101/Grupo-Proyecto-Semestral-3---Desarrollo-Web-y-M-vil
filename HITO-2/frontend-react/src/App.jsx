@@ -6,16 +6,27 @@ import SectionTitle from './components/SectionTitle';
 import SeccionPendiente from './components/SeccionPendiente';
 import Footer from './components/Footer';
 import ComunicadosBoard from './components/ComunicadosBoard';
+import Agenda from './components/Agenda.jsx';
 import Modal from './components/Modal.jsx';
 import PortalApoderados from './components/PortalApoderados.jsx';
 import Documentos from './components/Documentos.jsx';
 import ProcesoMatricula from './components/ProcesoMatricula.jsx';
+import FormPreMatricula from './components/FormPreMatricula.jsx';
+import FormContacto from './components/FormContacto.jsx';
 import comunicados from './data/comunicados.json';
+import actividades from './data/actividades.json';
 import seccionesPendientes from './data/secciones.js';
 import ClimaWidget from './components/ClimaWidget';
-import InfoJardin from './components/InfoJardin';
-import Galeria from './components/Galeria';
-import CuposSalas from './components/CuposSalas';
+import InfoJardin from './components/InfoJardin.jsx';
+import Galeria from './components/Galeria.jsx';
+import CuposSalas from './components/CuposSalas.jsx';
+
+// HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
+// ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
+// siempre se usa la fecha real de America/Santiago.
+const hoyDePrueba = import.meta.env.DEV
+  ? new URLSearchParams(window.location.search).get('hoy')
+  : null;
 
 export default function App() {
   const {
@@ -44,6 +55,7 @@ export default function App() {
           </Modal>
         )}
 
+        {/* HU-07: Información institucional, niveles y contacto */}
         <InfoJardin />
 
         {/* HU-08: Galería con Lightbox */}
@@ -52,7 +64,7 @@ export default function App() {
         {/* HU-09: Estado de cupos por sala */}
         <CuposSalas />
 
-        {/* Secciones restantes */}
+        {/* Secciones objetivo de anclaje para los enlaces del menú */}
         <section className="container py-4">
           <section id="comunicados">
             <SectionTitle
@@ -60,6 +72,14 @@ export default function App() {
               subtitulo="Información y avisos institucionales para la comunidad escolar"
             />
             <ComunicadosBoard comunicados={comunicados} />
+          </section>
+
+          <section id="calendario">
+            <SectionTitle
+              titulo="Calendario de Actividades"
+              subtitulo="Próximas fechas importantes, reuniones y talleres"
+            />
+            <Agenda actividades={actividades} hoy={hoyDePrueba} />
           </section>
 
           {seccionesPendientes.map((seccion) => (
@@ -80,6 +100,15 @@ export default function App() {
               subtitulo="Etapas y requisitos de ingreso (demo)"
             />
             <ProcesoMatricula />
+            <FormPreMatricula />
+          </section>
+
+          <section id="contacto">
+            <SectionTitle
+              titulo="Contacto con la Dirección"
+              subtitulo="Canal propuesto para consultas de las familias (demo)"
+            />
+            <FormContacto />
           </section>
         </section>
 

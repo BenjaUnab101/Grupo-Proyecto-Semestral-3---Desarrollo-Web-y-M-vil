@@ -1,7 +1,7 @@
 import NivelCard from './NivelCard';
 import SectionTitle from './SectionTitle';
 import jardinData from '../data/jardin.json';
-import nivelesData from '../data/niveles.json';
+import nivelesData from '../data/nivelesEducativos.json';
 
 export default function InfoJardin() {
   return (

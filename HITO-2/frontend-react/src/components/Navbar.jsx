@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
 const ENLACES_NAV = [
+  { id: 'informacion', label: 'Nosotros' },
+  { id: 'galeria', label: 'Galería' },
+  { id: 'cupos-salas', label: 'Cupos' },
   { id: 'comunicados', label: 'Comunicados' },
   { id: 'calendario', label: 'Calendario' },
   { id: 'documentos', label: 'Documentos' },
