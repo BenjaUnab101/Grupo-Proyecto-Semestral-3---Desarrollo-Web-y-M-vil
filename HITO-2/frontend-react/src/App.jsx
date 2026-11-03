@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useClima } from './hooks/useClima'; 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -13,7 +13,7 @@ import Documentos from './components/Documentos.jsx';
 import ProcesoMatricula from './components/ProcesoMatricula.jsx';
 import FormPreMatricula from './components/FormPreMatricula.jsx';
 import FormContacto from './components/FormContacto.jsx';
-import comunicados from './data/comunicados.json';
+import { obtenerComunicados } from './services/comunicados.js';
 import actividades from './data/actividades.json';
 import seccionesPendientes from './data/secciones.js';
 import ClimaWidget from './components/ClimaWidget';
@@ -37,6 +37,29 @@ export default function App() {
   } = useClima();
   
   const [modalPortalVisible, setModalPortalVisible] = useState(false);
+
+const [comunicados, setComunicados] = useState([]);
+const [cargandoComunicados, setCargandoComunicados] = useState(true);
+const [errorComunicados, setErrorComunicados] = useState('');
+
+useEffect(() => {
+  async function cargarComunicados() {
+    try {
+      setCargandoComunicados(true);
+      setErrorComunicados('');
+
+      const datos = await obtenerComunicados();
+      setComunicados(datos);
+    } catch (error) {
+      console.error('Error al cargar comunicados:', error);
+      setErrorComunicados('No fue posible cargar los comunicados.');
+    } finally {
+      setCargandoComunicados(false);
+    }
+  }
+
+  cargarComunicados();
+}, []);
 
   const manejarAbrirPortal = () => {
     setModalPortalVisible(true);
@@ -71,7 +94,13 @@ export default function App() {
               titulo="Comunicados Oficiales"
               subtitulo="Información y avisos institucionales para la comunidad escolar"
             />
-            <ComunicadosBoard comunicados={comunicados} />
+            {cargandoComunicados ? (
+              <p>Cargando comunicados...</p>
+            ) : errorComunicados ? (
+            <p role="alert">{errorComunicados}</p>
+          ) : (
+          <ComunicadosBoard comunicados={comunicados} />
+          )}
           </section>
 
           <section id="calendario">

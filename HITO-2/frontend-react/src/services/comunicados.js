@@ -85,3 +85,28 @@ export function filtrarPorNivel(
     return incluirGenerales && filtro !== 'General' && comunicado?.nivel === 'General'
   })
 }
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+
+// Obtiene los comunicados almacenados en MongoDB mediante FastAPI.
+export async function obtenerComunicados() {
+  const respuesta = await fetch(`${API_URL}/comunicados`)
+
+  if (!respuesta.ok) {
+    throw new Error(`Error al obtener comunicados: ${respuesta.status}`)
+  }
+
+  const datos = await respuesta.json()
+
+  return datos.map((comunicado) => ({
+    id: comunicado.id,
+    titulo: comunicado.titulo,
+    cuerpo: comunicado.cuerpo,
+    fecha: comunicado.fecha_publicacion?.slice(0, 10) ?? '',
+    emisor: comunicado.emisor_id === 1 ? 'Dirección' : `Usuario ${comunicado.emisor_id}`,
+    alcance: comunicado.alcance,
+    nivel: comunicado.nivel,
+    categoria: comunicado.categoria,
+    esUrgente: comunicado.es_urgente,
+  }))
+}
