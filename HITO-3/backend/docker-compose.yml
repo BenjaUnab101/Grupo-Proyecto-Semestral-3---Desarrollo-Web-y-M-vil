@@ -1,3 +1,4 @@
+
 services:
   api:
     build: .
@@ -12,7 +13,8 @@ services:
       postgres:
         condition: service_healthy
       mongo:
-        condition: service_started
+        condition: service_healthy
+
   postgres:
     image: postgres:16-alpine
     environment:
@@ -29,13 +31,23 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
   mongo:
     image: mongo:7
+    container_name: pequenos_reyes_mongo
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
       - ./mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
 volumes:
   postgres_data:
   mongo_data:
