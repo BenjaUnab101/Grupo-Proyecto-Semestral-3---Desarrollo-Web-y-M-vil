@@ -1,5 +1,6 @@
 from datetime import date
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from typing import Literal
 
 
 class AlumnoOut(BaseModel):
@@ -24,7 +25,7 @@ class MatriculaIn(BaseModel):
     alumno_id: int = Field(gt=0)
     sala_id: int = Field(gt=0)
     anio_escolar: int = Field(ge=2020, le=2100)
-    estado: str = "pendiente"
+    estado: Literal["pendiente", "vigente", "anulada"] = "pendiente"
 
 
 class MatriculaOut(BaseModel):

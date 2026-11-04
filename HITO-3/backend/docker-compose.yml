@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql+psycopg://pequenos_reyes:pequenos_reyes@postgres:5432/pequenos_reyes
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:?Falta POSTGRES_USER}:${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?Falta POSTGRES_DB}
       MONGODB_URL: mongodb://mongo:27017
       MONGODB_DATABASE: pequenos_reyes
       CORS_ORIGINS: http://localhost:5173
@@ -18,16 +18,16 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: pequenos_reyes
-      POSTGRES_USER: pequenos_reyes
-      POSTGRES_PASSWORD: pequenos_reyes
+      POSTGRES_DB: ${POSTGRES_DB:?Falta POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./sql/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pequenos_reyes -d pequenos_reyes"]
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
       interval: 5s
       timeout: 5s
       retries: 10
