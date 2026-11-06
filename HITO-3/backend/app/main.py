@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.postgres import Base, engine
 from app.db import models  # registra modelos SQLAlchemy
-from app.api import academico, comunicados, eventos
+from app.api import academico, comunicados, documentos, eventos
 from app.core.errors import registrar_errores
 from fastapi.openapi.utils import get_openapi
 
@@ -48,6 +48,12 @@ app.include_router(
 
 app.include_router(
     eventos.router,
+    prefix=settings.api_prefix,
+    responses=respuestas_error,
+)
+
+app.include_router(
+    documentos.router,
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )

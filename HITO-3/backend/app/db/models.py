@@ -139,3 +139,20 @@ class InscripcionPago(Base):
             name="ck_pago_estado",
         ),
     )
+
+
+class DocumentoInstitucional(Base):
+    __tablename__ = "documentos_institucionales"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    titulo: Mapped[str] = mapped_column(String(140), nullable=False, unique=True, index=True)
+    categoria: Mapped[str] = mapped_column(String(40), nullable=False)
+    descripcion: Mapped[str] = mapped_column(String(500), nullable=False)
+    url_archivo: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    vigente: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    fecha_actualizacion: Mapped[date] = mapped_column(Date, nullable=False, default=date.today)
+    __table_args__ = (
+        CheckConstraint(
+            "categoria IN ('Reglamentos','Protocolos','Formularios')",
+            name="ck_documento_categoria",
+        ),
+    )
