@@ -1,4 +1,4 @@
-import ClimaDia from './climaDia';
+import ClimaDia from './ClimaDia.jsx';
 
 export default function ClimaWidget({
   pronostico,
@@ -8,7 +8,7 @@ export default function ClimaWidget({
 }) {
   if (cargando) {
     return (
-      <section className="clima-widget">
+      <section className="clima-widget container" aria-live="polite" aria-busy="true">
         <div className="clima-loader">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">
@@ -24,9 +24,9 @@ export default function ClimaWidget({
 
   if (error) {
     return (
-      <section className="clima-widget">
+      <section className="clima-widget container" aria-live="assertive">
         <div className="alert alert-danger" role="alert">
-          <h3>No se pudo cargar el pronóstico</h3>
+          <h3 className="h5">No se pudo cargar el pronóstico</h3>
 
           <p>{error}</p>
 
@@ -43,9 +43,9 @@ export default function ClimaWidget({
   }
 
   return (
-    <section className="clima-widget">
+    <section className="clima-widget container" aria-labelledby="clima-titulo">
       <div className="clima-header">
-        <h2>Pronóstico del clima</h2>
+        <h2 id="clima-titulo">Pronóstico del clima</h2>
         <p>Viña del Mar · Próximos 7 días</p>
       </div>
 
@@ -59,7 +59,14 @@ export default function ClimaWidget({
       </div>
 
       <p className="clima-atribucion">
-        Datos meteorológicos: Open-Meteo.com
+        Datos meteorológicos:{' '}
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open-Meteo.com
+        </a>
       </p>
     </section>
   );
