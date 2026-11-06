@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_env: str = "development"
     api_prefix: str = "/api/v1"
-    database_url: str
+    database_url: str = "postgresql+psycopg://pequenos_reyes:pequenos_reyes@localhost:5432/pequenos_reyes"
     mongodb_url: str = "mongodb://localhost:27017"
     mongodb_database: str = "pequenos_reyes"
     cors_origins: str = "http://localhost:5173"
