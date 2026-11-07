@@ -95,6 +95,45 @@ export async function obtenerActividades(soloPublicadas = true, categoriaId = nu
   return res.json();
 }
 
+export async function obtenerEventosHU19() {
+  const res = await fetch(`${API_URL}/eventos`);
+  if (!res.ok) {
+    throw new Error(`Error al obtener eventos de inscripción (${res.status})`);
+  }
+  const eventos = await res.json();
+  return eventos.map((evento) => ({
+    ...evento,
+    estado: evento.inscripciones_abiertas ? 'publicada' : 'cancelada',
+    capacidad: evento.cupo_maximo,
+    categoria_id: null,
+    costo: evento.costo ?? 0,
+    fuente: 'hu19',
+  }));
+}
+
+export async function obtenerAlumnos() {
+  const res = await fetch(`${API_URL}/alumnos`);
+  if (!res.ok) {
+    throw new Error(`Error al obtener alumnos (${res.status})`);
+  }
+  return res.json();
+}
+
+export async function inscribirEnEvento(actividadId, alumnoId, apoderadoId) {
+  const res = await fetch(`${API_URL}/eventos/${actividadId}/inscripciones`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ alumno_id: Number(alumnoId), apoderado_id: Number(apoderadoId) }),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Error al inscribir al alumno (${res.status})`);
+  }
+  return res.json();
+}
+
 export async function crearActividad(payload, rol = 'organizador') {
   const res = await fetch(`${API_URL}/actividades`, {
     method: 'POST',

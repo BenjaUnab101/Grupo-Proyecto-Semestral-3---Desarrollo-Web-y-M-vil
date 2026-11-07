@@ -1,34 +1,31 @@
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.db.postgres import Base, engine
-from app.db import models  # registra modelos SQLAlchemy
-from app.api import academico, comunicados, documentos, eventos
+from app.api import academico, catalogo, comunicados, documentos, eventos, inscripciones
 from app.core.errors import registrar_errores
 from fastapi.openapi.utils import get_openapi
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
-    yield
+# TEC-16: el esquema de PostgreSQL lo crean SOLO las migraciones de sql/migraciones
+# (sql/migrar.sh). No se usa Base.metadata.create_all(), para no tener dos fuentes de esquema.
 
 app = FastAPI(
     title="Pequeños Reyes API",
     version="1.0.0",
     description="API REST para la plataforma institucional Pequeños Reyes.",
-    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Rol"],
+    # X-Rol: perfil que envían las pantallas de eventos (HU-17/18/20).
+    # X-Usuario-Id: la cuenta demo elegida en React (TEC-17).
+    allow_headers=["Authorization", "Content-Type", "X-Rol", "X-Usuario-Id"],
 )
 respuestas_error = {
     400: {"description": "Datos de entrada inválidos"},
-    403: {"description": "Operación no autorizada para el rol actual"},
+    401: {"description": "Falta identificarse (X-Usuario-Id) o el usuario no es válido"},
+    403: {"description": "Sin permiso para esta acción"},
     404: {"description": "Recurso no encontrado"},
     409: {"description": "Conflicto con datos existentes"},
     503: {"description": "Servicio de datos no disponible"},
@@ -57,6 +54,19 @@ app.include_router(
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
+
+app.include_router(
+    inscripciones.router,
+    prefix=settings.api_prefix,
+    responses=respuestas_error,
+)
+
+app.include_router(
+    catalogo.router,
+    prefix=settings.api_prefix,
+    responses=respuestas_error,
+)
+
 registrar_errores(app)
 
 @app.get("/health", tags=["sistema"])

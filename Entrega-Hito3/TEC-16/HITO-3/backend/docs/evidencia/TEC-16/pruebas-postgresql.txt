@@ -1,0 +1,47 @@
+TEC-16 · Pruebas de PostgreSQL 16 (2026-11-07 17:52 -0300)
+
+=== CA1 · Migraciones desde una base VACÍA ===
+== Migraciones ==
+  + V001__esquema_base aplicada
+  + V002__inscripciones aplicada
+  + V003__usuarios_eventos_pagos_institucion aplicada
+== Datos de demostración ==
+  + S001__datos_demo.sql cargado
+Listo.
+--- segunda ejecución (no debe aplicar nada nuevo ni duplicar datos)
+  = V001__esquema_base (ya aplicada)
+  = V002__inscripciones (ya aplicada)
+  = V003__usuarios_eventos_pagos_institucion (ya aplicada)
+schema_migraciones: V001__esquema_base, V002__inscripciones, V003__usuarios_eventos_pagos_institucion
+filas: institucion=1 categorias=4 usuarios=4 organizadores=2 apoderados=2 alumnos=6 actividades=3
+
+=== CA2 · Restricciones (cada caso debe ser RECHAZADO por PostgreSQL) ===
+OK       pago simulado válido aceptado
+RECHAZA  2º pago aprobado de la misma inscripción (violates unique constraint "uq_pagos_aprobado_por_inscripcion")
+RECHAZA  pago con método tarjeta (violates check constraint "ck_pagos_metodo_simulado")
+RECHAZA  pago con referencia no simulada (violates check constraint "ck_pagos_referencia_simulada")
+RECHAZA  pago con monto 0 (violates check constraint "ck_pagos_monto_positivo")
+RECHAZA  pago de inscripción inexistente (violates foreign key constraint "pagos_inscripcion_id_fkey")
+RECHAZA  segunda fila de institución (violates check constraint "ck_institucion_fila_unica")
+RECHAZA  usuario con rol inventado (violates check constraint "ck_usuarios_rol")
+RECHAZA  usuario apoderado sin apoderado_id (violates check constraint "ck_usuarios_apoderado_segun_rol")
+RECHAZA  usuario con email en mayúsculas (violates check constraint "ck_usuarios_email_minusculas")
+RECHAZA  usuario con email repetido (violates unique constraint "usuarios_email_key")
+RECHAZA  categoría repetida (violates unique constraint "categorias_nombre_key")
+RECHAZA  actividad con costo negativo (violates check constraint "ck_actividades_costo_no_negativo")
+RECHAZA  actividad con categoría inexistente (violates foreign key constraint "actividades_categoria_id_fkey")
+RECHAZA  inscripción duplicada (violates unique constraint "uq_inscripcion_actividad_alumno")
+RECHAZA  borrar categoría usada por actividades (violates foreign key constraint "actividades_categoria_id_fkey")
+RECHAZA  borrar inscripción que tiene pagos (violates foreign key constraint "pagos_inscripcion_id_fkey")
+RECHAZA  borrar alumno con inscripciones (violates foreign key constraint "inscripciones_alumno_id_fkey")
+OK       nuevo pago aceptado tras reembolsar el anterior (índice único parcial)
+
+=== Migración que falla: se deshace completa ===
+error: psql:<stdin>:2: ERROR:  relation "tabla_que_no_existe" does not exist
+tabla_a_medias existe después del error? false
+
+=== CA5 · Solo datos de demostración en la semilla ===
+datos fuera de @ejemplo.cl / DEMO-*: 0
+alumnos con fecha de nacimiento guardada: 0
+
+Bases temporales borradas.
