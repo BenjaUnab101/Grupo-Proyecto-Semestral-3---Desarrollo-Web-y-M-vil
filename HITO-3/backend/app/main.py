@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api import academico, catalogo, comunicados, documentos, eventos, inscripciones, prematricula, sesion
+from app.api import academico, catalogo, comunicados, documentos, eventos, inscripciones
 from app.core.errors import registrar_errores
 from fastapi.openapi.utils import get_openapi
 
@@ -67,18 +67,6 @@ app.include_router(
     responses=respuestas_error,
 )
 
-app.include_router(
-    sesion.router,
-    prefix=settings.api_prefix,
-    responses=respuestas_error,
-)
-
-# HU-25: solicitudes de pre-matrícula con seguimiento.
-app.include_router(
-    prematricula.router,
-    prefix=settings.api_prefix,
-    responses=respuestas_error,
-)
 registrar_errores(app)
 
 @app.get("/health", tags=["sistema"])
