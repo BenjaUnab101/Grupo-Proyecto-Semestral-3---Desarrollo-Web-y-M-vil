@@ -99,4 +99,10 @@ VALUES
     ('DEMO-CUPO-REDUCIDO', 'Taller de cuentacuentos (cupo reducido)',
      'Actividad demo con solo 2 cupos, para probar el control de sobrecupo (HTTP 409).',
      (now() AT TIME ZONE 'America/Santiago')::date + 5, '11:00', 'Biblioteca', 2)
-ON CONFLICT (codigo) DO NOTHING;
+ON CONFLICT (codigo) DO UPDATE SET
+    titulo = EXCLUDED.titulo,
+    descripcion = EXCLUDED.descripcion,
+    fecha = EXCLUDED.fecha,
+    hora = EXCLUDED.hora,
+    lugar = EXCLUDED.lugar,
+    cupo_maximo = EXCLUDED.cupo_maximo;

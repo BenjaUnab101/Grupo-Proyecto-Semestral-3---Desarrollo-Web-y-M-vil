@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   obtenerActividades,
+  obtenerEventosHU19,
+  obtenerAlumnos,
+  inscribirEnEvento,
   obtenerCategoriasActividad,
   registrarPagoInscripcion,
   obtenerPagosInscripciones,
@@ -14,6 +17,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
   const [actividades, setActividades] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [pagos, setPagos] = useState([]);
+  const [alumnos, setAlumnos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
@@ -26,6 +30,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
   // Formulario de inscripción y pago simulado (HU-20 CA1, CA4 / HU-23 CA1, CA3)
   const [actividadSeleccionadaId, setActividadSeleccionadaId] = useState('');
   const [apoderadoRut, setApoderadoRut] = useState('12.345.678-5');
+  const [apoderadoId, setApoderadoId] = useState(1);
   const [nombreParvulo, setNombreParvulo] = useState('');
   const [montoSimulado, setMontoSimulado] = useState(3500);
   const [metodoPago, setMetodoPago] = useState('Transferencia Simulada');
@@ -38,14 +43,20 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
     try {
       setCargando(true);
       setError('');
-      const [acts, cats, listaPagos] = await Promise.all([
+      const [actividadesAntiguas, cats, listaPagos] = await Promise.all([
         obtenerActividades(false),
         obtenerCategoriasActividad(true),
         obtenerPagosInscripciones(),
       ]);
+      const acts = actividadesAntiguas.length > 0
+        ? actividadesAntiguas
+        : await obtenerEventosHU19();
       setActividades(acts);
       setCategorias(cats);
       setPagos(listaPagos);
+      if (acts.some((actividad) => actividad.fuente === 'hu19')) {
+        setAlumnos(await obtenerAlumnos());
+      }
 
       const publicadasConCupo = acts.filter(
         (a) => a.estado === 'publicada' && a.cupos_disponibles > 0
@@ -84,18 +95,37 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
       return;
     }
 
-    const errorRut = validarRutCampo(apoderadoRut);
-    if (errorRut) {
-      setError(errorRut);
-      return;
-    }
-
     if (!nombreParvulo || nombreParvulo.trim().length < 2) {
       setError('Ingresa el nombre del párvulo (mínimo 2 caracteres).');
       return;
     }
 
     try {
+      const actividad = actividades.find((a) => String(a.id) === String(actividadSeleccionadaId));
+      if (actividad?.fuente === 'hu19') {
+        const alumno = alumnos.find(
+          (a) => a.nombre.trim().toLowerCase() === nombreParvulo.trim().toLowerCase()
+        );
+        if (!alumno) {
+          setError('Para HU-19 usa el nombre exacto de un alumno demo, por ejemplo: Alumno Demo 01.');
+          return;
+        }
+        const inscripcion = await inscribirEnEvento(actividad.id, alumno.id, apoderadoId);
+        setNombreParvulo('');
+        setMensajeExito(
+          `Inscripción registrada. Cupos disponibles: ${inscripcion.cupos_disponibles}.`
+        );
+        await cargarTodo();
+        if (onCambioInscripcion) await onCambioInscripcion();
+        return;
+      }
+
+      const errorRut = validarRutCampo(apoderadoRut);
+      if (errorRut) {
+        setError(errorRut);
+        return;
+      }
+
       const rutFormateado = normalizarRut(apoderadoRut);
       const nuevoComprobante = await registrarPagoInscripcion({
         actividad_id: Number(actividadSeleccionadaId),
@@ -372,14 +402,18 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
                 <div className="row g-2 mb-2">
                   <div className="col-6">
                     <label htmlFor="insc-rut" className="form-label small fw-bold mb-1">
-                      RUT Apoderado
+                      {actividades.some((a) => a.fuente === 'hu19') ? 'ID Apoderado (demo)' : 'RUT Apoderado'}
                     </label>
                     <input
                       id="insc-rut"
-                      type="text"
+                      type={actividades.some((a) => a.fuente === 'hu19') ? 'number' : 'text'}
                       className="form-control form-control-sm"
-                      value={apoderadoRut}
-                      onChange={(e) => setApoderadoRut(e.target.value)}
+                      value={actividades.some((a) => a.fuente === 'hu19') ? apoderadoId : apoderadoRut}
+                      onChange={(e) => (
+                        actividades.some((a) => a.fuente === 'hu19')
+                          ? setApoderadoId(e.target.value)
+                          : setApoderadoRut(e.target.value)
+                      )}
                       required
                     />
                   </div>
@@ -391,7 +425,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
                       id="insc-parvulo"
                       type="text"
                       className="form-control form-control-sm"
-                      placeholder="Ej: Sofía Pérez"
+                      placeholder={actividades.some((a) => a.fuente === 'hu19') ? 'Ej: Alumno Demo 01' : 'Ej: Sofía Pérez'}
                       value={nombreParvulo}
                       onChange={(e) => setNombreParvulo(e.target.value)}
                       required

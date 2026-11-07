@@ -1,0 +1,15 @@
+HU-19 · Evidencia de control de cupo con concurrencia (PostgreSQL 16, 2026-11-07 13:18 -0300)
+6 sesiones simultáneas por ronda, actividad con cupo 2, pausa artificial de 0,3 s entre contar e insertar.
+
+== Con SELECT ... FOR UPDATE (como la API) ==
+con FOR UPDATE · ronda 1: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+      4 ERROR:  SOBRECUPO
+con FOR UPDATE · ronda 2: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda 3: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda 4: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda 5: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+
+== Control SIN bloqueo (muestra el problema que se evita) ==
+sin FOR UPDATE · ronda 1: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)
+sin FOR UPDATE · ronda 2: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)
+sin FOR UPDATE · ronda 3: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)

@@ -1,0 +1,30 @@
+PASA  CA2 cupos desde GET /salas/cupos — 8 salas
+PASA  CA2 comunicados desde GET /comunicados — los 3 de la API
+PASA  CA2 calendario: eventos (/eventos) + actividades escolares (/actividades) — 2 eventos HU-19 + 1 actividad HU-18
+PASA  visitante no ve formulario ni inscripciones — solo lectura
+PASA  cuentas demo desde la API — Visitante (sin cuenta) | Dirección · Dirección | Personal del jardín · Educadora Demo | Apoderado · Apoderado Demo 1
+PASA  CA1 llamadas a la API — GET /sesion/cuentas-demo, GET /salas/cupos, GET /comunicados, GET /actividades?solo_publicadas=false, GET /categorias-actividad?solo_activas=true, GET /pagos, GET /actividades?solo_publicadas=false, GET /categorias-actividad?solo_activas=true, GET /organizadores?solo_activos=true, GET /organizadores, GET /categorias-actividad, GET /eventos?proximas=true, GET /actividades?solo_publicadas=true, GET /documentos?solo_vigentes=true, GET /sesion/cuentas-demo, GET /salas/cupos, GET /comunicados, GET /actividades?solo_publicadas=false, GET /categorias-actividad?solo_activas=true, GET /pagos, GET /actividades?solo_publicadas=false, GET /categorias-actividad?solo_activas=true, GET /organizadores?solo_activos=true, GET /organizadores, GET /categorias-actividad, GET /eventos?proximas=true, GET /actividades?solo_publicadas=true, GET /documentos?solo_vigentes=true
+PASA  sin errores JS (visitante) — ninguno
+PASA  CA3 400 → error junto al campo — Debe tener al menos 3 caracteres.
+PASA  al corregir se quita el error — error desaparece al escribir
+PASA  HU-21 CA5 publicar → la lista se actualiza sola — POST /comunicados [u1]; 4 comunicados, el nuevo arriba
+PASA  formulario se limpia tras publicar — título vacío
+PASA  eliminar (editor) → DELETE y lista actualizada — quedan 3
+PASA  sin errores JS (dirección) — ninguno
+PASA  CA3 403 → motivo de la API, la lista no cambia — Solo dirección o quien publicó el comunicado puede modificarlo o eliminarlo
+PASA  CA3 401 → vuelve a modo visitante — selector en "Visitante" y sin formulario
+PASA  apoderado ve solo comunicados pertinentes — General + Preescolar (sin Salas TEL)
+PASA  HU-19 inscribir → cupos actualizados — badge: 6 de 10 cupos
+PASA  CA3 409 → motivo de la API y cupos refrescados — No quedan cupos disponibles para esta actividad
+PASA  HU-19 cancelar → libera el cupo — badge: 7 de 10 cupos
+PASA  sin errores JS (apoderado) — ninguno
+PASA  estado cargando — spinner + "Cargando comunicados…"
+PASA  CA3 servidor apagado → sin conexión + Reintentar — No pudimos cargar los cupos.  No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.  Reintentar
+PASA  CA3 503 → servicio no disponible — mensaje de 503
+PASA  estado vacío — Por ahora no hay comunicados publicados. Cuando el jardín envíe uno, lo verá aquí.
+PASA  Reintentar recupera los datos — 8 salas tras reintentar
+PASA  CA3 offline → aviso sin conexión, sin perder lo escrito — No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.
+PASA  CA4 responsive 375 px sin scroll horizontal — desborde 0px
+PASA  sin errores JS (móvil) — ninguno
+
+28/28 PASA
