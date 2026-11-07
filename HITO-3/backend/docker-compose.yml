@@ -26,6 +26,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./sql/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+      # HU-19: tablas de eventos e inscripciones y datos demo (se ejecuta después de 001).
+      - ./sql/002_inscripciones.sql:/docker-entrypoint-initdb.d/002_inscripciones.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
       interval: 5s
