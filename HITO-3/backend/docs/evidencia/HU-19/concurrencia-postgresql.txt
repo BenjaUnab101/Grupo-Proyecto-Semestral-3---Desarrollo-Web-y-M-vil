@@ -1,0 +1,13 @@
+HU-19 · Evidencia de control de cupo con concurrencia (PostgreSQL 16, 2026-11-05 19:48 -03)
+6 sesiones simultáneas por ronda, actividad con cupo 2, pausa artificial de 0,3 s entre contar e insertar.
+
+con FOR UPDATE · ronda L1: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda L2: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda L3: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda L4: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+con FOR UPDATE · ronda L5: aceptadas=2 rechazadas=4 · inscritas en la base=2 (cupo 2)
+
+Control sin bloqueo (muestra el problema que evita FOR UPDATE):
+sin FOR UPDATE · ronda L1: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)
+sin FOR UPDATE · ronda L2: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)
+sin FOR UPDATE · ronda L3: aceptadas=6 rechazadas=0 · inscritas en la base=6 (cupo 2)

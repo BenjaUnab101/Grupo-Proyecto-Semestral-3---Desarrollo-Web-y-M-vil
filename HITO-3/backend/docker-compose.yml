@@ -25,7 +25,10 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./sql/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+      # TEC-16: migraciones versionadas. Con un volumen vacío se aplican solas al primer
+      # arranque; en un volumen existente: docker compose exec postgres sh /sql/migrar.sh
+      - ./sql:/sql:ro
+      - ./sql/initdb/00_migrar.sh:/docker-entrypoint-initdb.d/00_migrar.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
       interval: 5s

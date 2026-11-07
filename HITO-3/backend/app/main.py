@@ -1,34 +1,29 @@
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.db.postgres import Base, engine
-from app.db import models  # registra modelos SQLAlchemy
-from app.api import academico, comunicados, documentos, eventos
+from app.api import academico, catalogo, comunicados, inscripciones
 from app.core.errors import registrar_errores
 from fastapi.openapi.utils import get_openapi
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
-    yield
+# TEC-16: el esquema de PostgreSQL lo crean SOLO las migraciones de sql/migraciones
+# (sql/migrar.sh). Antes la API ejecutaba Base.metadata.create_all() al arrancar, lo que
+# podía crear tablas distintas a las de los scripts SQL; por eso se quitó.
 
 app = FastAPI(
     title="Pequeños Reyes API",
     version="1.0.0",
     description="API REST para la plataforma institucional Pequeños Reyes.",
-    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Rol"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 respuestas_error = {
     400: {"description": "Datos de entrada inválidos"},
-    403: {"description": "Operación no autorizada para el rol actual"},
+    403: {"description": "El apoderado no tiene permiso sobre ese alumno"},
     404: {"description": "Recurso no encontrado"},
     409: {"description": "Conflicto con datos existentes"},
     503: {"description": "Servicio de datos no disponible"},
@@ -47,13 +42,13 @@ app.include_router(
 )
 
 app.include_router(
-    eventos.router,
+    inscripciones.router,
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
 
 app.include_router(
-    documentos.router,
+    catalogo.router,
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
