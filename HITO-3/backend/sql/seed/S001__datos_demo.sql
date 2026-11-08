@@ -31,10 +31,10 @@ ON CONFLICT (email) DO NOTHING;
 
 -- ---------- Organizadores demo ----------
 -- Tabla de HU-17. La cuenta educadora.demo@ejemplo.cl se reconoce por el mismo correo.
-INSERT INTO organizadores (nombre, email, rol_perfil)
+INSERT INTO organizadores (nombre, email, rol_perfil, activo)
 VALUES
-    ('Educadora Demo', 'educadora.demo@ejemplo.cl', 'Educadora'),
-    ('Fonoaudióloga Demo', 'fono.demo@ejemplo.cl', 'Fonoaudióloga')
+    ('Educadora Demo', 'educadora.demo@ejemplo.cl', 'Educadora', TRUE),
+    ('Fonoaudióloga Demo', 'fono.demo@ejemplo.cl', 'Fonoaudióloga', TRUE)
 ON CONFLICT (email) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
