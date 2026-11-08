@@ -1,6 +1,6 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 
-# TEC-16: categorías, organizadores y datos institucionales del jardín.
+# TEC-16: categorías de eventos y datos institucionales del jardín. TEC-17: cupos por sala.
 # str_strip_whitespace: quita espacios al inicio y al final antes de validar los largos.
 
 
@@ -14,22 +14,6 @@ class CategoriaOut(BaseModel):
     id: int
     nombre: str
     descripcion: str | None
-    model_config = ConfigDict(from_attributes=True)
-
-
-class OrganizadorIn(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
-    nombre: str = Field(min_length=2, max_length=120)
-    cargo: str = Field(min_length=2, max_length=80)
-    email: EmailStr
-
-
-class OrganizadorOut(BaseModel):
-    id: int
-    nombre: str
-    cargo: str
-    email: str
-    activo: bool
     model_config = ConfigDict(from_attributes=True)
 
 

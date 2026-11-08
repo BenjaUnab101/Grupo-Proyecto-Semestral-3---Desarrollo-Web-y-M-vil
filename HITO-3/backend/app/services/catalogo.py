@@ -3,11 +3,11 @@ from sqlalchemy import extract, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.db.models import Categoria, Institucion, Matricula, Organizador, Sala
-from app.schemas.catalogo import CategoriaIn, OrganizadorIn
+from app.db.models import Categoria, Institucion, Matricula, Sala
+from app.schemas.catalogo import CategoriaIn
 
 
-# TEC-16: categorías, organizadores y datos institucionales del jardín.
+# TEC-16: categorías de eventos y datos institucionales del jardín. TEC-17: cupos por sala.
 
 
 def listar_categorias(db: Session):
@@ -24,26 +24,6 @@ def crear_categoria(db: Session, payload: CategoriaIn):
         raise HTTPException(status_code=409, detail="Ya existe una categoría con ese nombre")
     db.refresh(categoria)
     return categoria
-
-
-def listar_organizadores(db: Session, activos: bool):
-    consulta = select(Organizador)
-    if activos:
-        consulta = consulta.where(Organizador.activo.is_(True))
-    return db.scalars(consulta.order_by(Organizador.nombre)).all()
-
-
-def crear_organizador(db: Session, payload: OrganizadorIn):
-    # La base exige el correo en minúsculas.
-    organizador = Organizador(**payload.model_dump() | {"email": payload.email.lower()})
-    db.add(organizador)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Ya existe un organizador con ese correo")
-    db.refresh(organizador)
-    return organizador
 
 
 def obtener_institucion(db: Session):

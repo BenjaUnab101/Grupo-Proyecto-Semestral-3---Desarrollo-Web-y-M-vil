@@ -11,7 +11,9 @@ import '../styles/Comunicado.css'
 
 const ID_LISTA = 'muro-lista'
 
-function ComunicadosBoard({ comunicados = [] }) {
+// TEC-17: `onEliminar` es opcional; solo se entrega cuando la cuenta puede borrar
+// comunicados (dirección o personal). Para visitantes y apoderados no aparece el botón.
+function ComunicadosBoard({ comunicados = [], onEliminar }) {
   // HU-03: el filtro activo vive aquí; "Todos" es el valor por defecto.
   const [filtroActivo, setFiltroActivo] = useState(FILTRO_TODOS)
 
@@ -64,6 +66,7 @@ function ComunicadosBoard({ comunicados = [] }) {
                     alcance={comunicado.alcance}
                     categoria={comunicado.categoria}
                     esUrgente={comunicado.esUrgente === true}
+                    onEliminar={onEliminar ? () => onEliminar(comunicado) : undefined}
                   />
                 ))}
               </div>

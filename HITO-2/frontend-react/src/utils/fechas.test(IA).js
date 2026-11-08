@@ -17,7 +17,7 @@ import {
 } from './fechas.js'
 
 const leer = (ruta) => readFileSync(new URL(ruta, import.meta.url), 'utf8')
-const actividadesDemo = JSON.parse(leer('../data/actividades.json'))
+const actividadesDemo = JSON.parse(leer('../datos-prueba/actividades.json'))
 
 // Fecha base de prueba documentada en docs/HU-04-calendario.md.
 const HOY = '2026-10-09'

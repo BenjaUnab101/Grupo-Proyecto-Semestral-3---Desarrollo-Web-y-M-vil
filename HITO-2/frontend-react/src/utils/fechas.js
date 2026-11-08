@@ -99,3 +99,19 @@ export function actividadesVigentes(actividades, hoy) {
     .sort((a, b) => a.dias - b.dias || horaParaOrden(a.actividad).localeCompare(horaParaOrden(b.actividad)))
     .map(({ actividad, dias }) => ({ ...actividad, diasRestantes: dias }))
 }
+
+// HU-25: instante ISO de la API ("2026-11-07T14:43:00Z") → "7 de noviembre de 2026, 11:43"
+// en hora de Chile. Devuelve '' si no es una fecha válida.
+export function formatearFechaHora(iso, zonaHoraria = ZONA_HORARIA) {
+  const fecha = new Date(iso)
+  if (typeof iso !== 'string' || Number.isNaN(fecha.getTime())) return ''
+  return new Intl.DateTimeFormat('es-CL', {
+    timeZone: zonaHoraria,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).format(fecha)
+}

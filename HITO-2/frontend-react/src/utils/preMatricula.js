@@ -1,4 +1,5 @@
 // HU-11: configuración del formulario de pre-matrícula (campos, textos y reglas).
+// HU-25: se agrega el consentimiento obligatorio; desde HU-25 la solicitud se envía a la API.
 // Las reglas en sí (RUT, correo, teléfono, obligatorios, largos) viven en
 // utils/validaciones.js y se comparten con el formulario de contacto (HU-12).
 import {
@@ -27,7 +28,7 @@ export const LARGO_MAXIMO_NOMBRE = 80
 export const LARGO_MAXIMO_COMENTARIO = 300
 
 // Orden de los campos en pantalla: define también a cuál va el foco al confirmar.
-export const CAMPOS = ['nombreApoderado', 'rut', 'correo', 'telefono', 'nombreParvulo', 'nivel', 'comentario']
+export const CAMPOS = ['nombreApoderado', 'rut', 'correo', 'telefono', 'nombreParvulo', 'nivel', 'comentario', 'consentimiento']
 
 export const VALORES_INICIALES = {
   nombreApoderado: '',
@@ -37,6 +38,7 @@ export const VALORES_INICIALES = {
   nombreParvulo: '',
   nivel: '',
   comentario: '',
+  consentimiento: false,
 }
 
 const MENSAJES_OBLIGATORIO = {
@@ -48,7 +50,12 @@ const MENSAJES_OBLIGATORIO = {
   nivel: 'Selecciona el nivel al que postula.',
 }
 
+export const MENSAJE_CONSENTIMIENTO = 'Debes aceptar el uso de estos datos para gestionar la solicitud.'
+
 export function validarCampo(nombre, valor, niveles = []) {
+  // HU-25 CA1: casilla obligatoria (solo vale true; mismo mensaje que la API).
+  if (nombre === 'consentimiento') return valor === true ? null : MENSAJE_CONSENTIMIENTO
+
   // Campo opcional: solo se controla el largo.
   if (nombre === 'comentario') {
     return validarLargoMaximo(valor, LARGO_MAXIMO_COMENTARIO, 'El comentario')

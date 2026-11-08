@@ -168,8 +168,7 @@ class DocumentoInstitucional(Base):
 
 
 # ---------- HU-19: actividades con inscripción y cupos, y sus inscripciones ----------
-# El esquema REAL lo crean las migraciones de sql/migraciones; estos modelos solo lo
-# describen para SQLAlchemy y deben mantenerse iguales a ellas.
+# Esquema creado por las migraciones V002 (tablas) y V003 (categoría, organizador y costo).
 
 
 class Actividad(Base):

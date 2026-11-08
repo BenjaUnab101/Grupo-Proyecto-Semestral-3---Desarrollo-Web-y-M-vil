@@ -6,8 +6,9 @@ from sqlalchemy.orm import Session
 
 from app.db.models import Actividad, Alumno, Apoderado, ApoderadoAlumno, Categoria, Inscripcion, Organizador, Pago
 
-# HU-19: inscripciones a actividades, cupos y asistentes.
-# TEC-16: CRUD de actividades y pagos ficticios.
+# HU-19: inscripciones a eventos (salidas, talleres), cupos y asistentes.
+# TEC-16: CRUD de eventos y pagos ficticios.
+# TEC-17: inscripciones de los hijos de un apoderado.
 #
 # Cupos sin sobreventa: antes de contar los inscritos se bloquea la actividad con
 # SELECT ... FOR UPDATE. Si dos apoderados inscriben al mismo tiempo, PostgreSQL hace

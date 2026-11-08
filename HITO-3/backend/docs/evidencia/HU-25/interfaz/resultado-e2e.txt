@@ -1,0 +1,29 @@
+PASA  CA1 obligatorios + consentimiento — 7 errores; casilla: "Debes aceptar el uso de estos datos para gestionar la solicitud."
+PASA  CA1 no llama a la API con errores — 0 solicitudes POST
+PASA  CA1 foco en el primer error — foco en Nombre completo
+PASA  CA1 formatos (RUT, correo) validados en React — mensajes junto a cada campo, sin enviar
+PASA  casilla: marcarla quita el error — error desaparece al marcar
+PASA  CA2 POST /prematriculas con los datos (snake_case) y consentimiento — {"nombre_apoderado":"Familia Prueba Demo","rut":"12.345.678-5","correo":"familia.prueba@ejemplo.cl","telefono":"+56 9 1234 5678","nombre_parvulo":"Párvulo Prueba Demo","nivel":"medio-mayor","comentario":"Datos ficticios.","consentimiento":true}
+PASA  CA4 confirmación visible con el código — Solicitud recibida. Tu código de seguimiento es PM-7K3Q9X Guárdalo: con este código y tu correo puedes consultar el estado en «Consultar mi solicitud».
+PASA  formulario se limpia tras enviar — campos vacíos y casilla desmarcada
+PASA  el código pasa a «Consultar mi solicitud» — campo código precargado
+PASA  tras recargar: el código sigue ahí (solo el código, sin datos personales) — código precargado; correo vacío
+PASA  navegador: solo se guarda el código — {"pequenos-reyes:codigo-prematricula":"PM-7K3Q9X"}
+PASA  tras recargar: la API devuelve la solicitud y su estado — Solicitud PM-7K3Q9X | Recibida | 
+PASA  CP-02 404: código con otro correo — mensaje de la API; no se muestra la solicitud
+PASA  CP-02 consulta sin correo: aviso en React, sin llamar a la API — Escribe el código de seguimiento y el correo que usaste.
+PASA  CP-02 409 duplicada: motivo de la API y no se borra lo escrito — La solicitud no se envió. Ya existe una solicitud en curso para este párvulo y nivel. Consulta su estado con tu código de seguimiento.
+PASA  CP-02 400 de la API: el mensaje aparece junto al campo RUT y se enfoca — El dígito verificador no corresponde a este RUT. Revísalo.
+PASA  sin conexión: aviso y datos conservados — La solicitud no se envió. No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.
+PASA  visitante no ve el panel de dirección — sin panel
+PASA  educadora (personal) tampoco ve el panel — sin panel
+PASA  CA3 dirección ve las solicitudes desde la API — 3 tarjetas
+PASA  dirección ve RUT y teléfono con formato — RUT •••.678-5
+PASA  CA3 cambiar estado (PATCH con la cuenta de dirección) — {"estado":"en_revision","mensaje_familia":"Recibimos tus datos; te escribiremos esta semana."}
+PASA  CA4 estado vacío en el panel — No hay solicitudes en estado «Aceptada».
+PASA  error al guardar: aviso visible — PM-DEMBB3: No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.
+PASA  la familia ve el nuevo estado y el mensaje de dirección — Mensaje del jardín: Recibimos tus datos; te escribiremos esta semana.
+PASA  sin errores JS — ninguno
+PASA  responsive 375 px sin scroll horizontal (formulario, seguimiento y panel) — desborde 0px
+
+27/27 PASA

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api import academico, catalogo, comunicados, documentos, eventos, inscripciones
+from app.api import academico, catalogo, comunicados, documentos, eventos, inscripciones, prematricula, sesion
 from app.core.errors import registrar_errores
 from fastapi.openapi.utils import get_openapi
 
@@ -54,19 +54,30 @@ app.include_router(
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
-
+# HU-19: eventos con inscripción, cupos y asistentes (/eventos).
 app.include_router(
     inscripciones.router,
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
-
+# TEC-16: categorías de eventos y datos del jardín.
 app.include_router(
     catalogo.router,
     prefix=settings.api_prefix,
     responses=respuestas_error,
 )
-
+# TEC-17: cuentas demo y perfil de la cuenta elegida.
+app.include_router(
+    sesion.router,
+    prefix=settings.api_prefix,
+    responses=respuestas_error,
+)
+# HU-25: solicitudes de pre-matrícula con seguimiento.
+app.include_router(
+    prematricula.router,
+    prefix=settings.api_prefix,
+    responses=respuestas_error,
+)
 registrar_errores(app)
 
 @app.get("/health", tags=["sistema"])

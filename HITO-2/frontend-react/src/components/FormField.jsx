@@ -4,7 +4,7 @@ import '../styles/Formulario.css'
 // Props del contrato: label, name, type, value, error, onChange, onBlur.
 // Props opcionales: id (por defecto "campo-<name>"; si hay dos formularios en la misma
 // página, cada uno debe entregar ids distintos), required, ayuda (texto de apoyo),
-// opciones (para type="select"),
+// opciones (para type="select"), type="checkbox" (HU-25: value es true/false),
 // y cualquier atributo extra del input (autoComplete, inputMode, maxLength…).
 //
 // Accesibilidad: el <label> está asociado por htmlFor/id; si hay error, el input
@@ -40,6 +40,34 @@ export default function FormField({
     'aria-describedby': describedBy,
     className: `campo__control${error ? ' campo__control--error' : ''}`,
     ...atributos,
+  }
+
+  // HU-25: casilla (consentimiento). La etiqueta va al lado de la casilla y el valor es
+  // true/false (checked), no un texto.
+  if (type === 'checkbox') {
+    const propsCasilla = { ...propsComunes }
+    delete propsCasilla.value
+    return (
+      <div className="campo campo--casilla">
+        <div className="campo__casilla">
+          <input type="checkbox" {...propsCasilla} checked={value === true} className="campo__check" />
+          <label htmlFor={id} className="campo__etiqueta campo__etiqueta--casilla">
+            {label}
+            {required && <span className="campo__marca" aria-hidden="true"> *</span>}
+          </label>
+        </div>
+        {ayuda && (
+          <p id={idAyuda} className="campo__ayuda">
+            {ayuda}
+          </p>
+        )}
+        {error && (
+          <p id={idError} className="campo__error">
+            {error}
+          </p>
+        )}
+      </div>
+    )
   }
 
   let control
