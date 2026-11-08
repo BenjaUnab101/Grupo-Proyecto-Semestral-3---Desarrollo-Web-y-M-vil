@@ -101,7 +101,8 @@ test('CP-HU-18-02: rechazo HTTP 400/403/409 en actividades propaga mensaje claro
 });
 
 test('CA5: App.jsx integra GestionActividades y sincroniza Agenda con actividadesCalendario', () => {
-  const appCode = leer('../App.jsx');
+  // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
+  const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/GestionActividades.jsx');
   assert.match(appCode, /<GestionActividades onCambioActividades=\{cargarActividadesCalendario\} \/>/);
   assert.match(appCode, /<Agenda actividades=\{actividadesCalendario\}/);

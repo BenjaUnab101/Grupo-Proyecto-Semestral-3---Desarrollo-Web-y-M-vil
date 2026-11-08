@@ -3,12 +3,12 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-# HU-19 / TEC-16: datos que entran y salen de la API de actividades, inscripciones y pagos.
+# HU-19 / TEC-16 / TEC-17: datos que entran y salen de la API de eventos, inscripciones y pagos.
 
 EstadoInscripcion = Literal["inscrita", "cancelada"]
 
 
-# ---------- Actividades ----------
+# ---------- Eventos ----------
 
 
 class ActividadIn(BaseModel):

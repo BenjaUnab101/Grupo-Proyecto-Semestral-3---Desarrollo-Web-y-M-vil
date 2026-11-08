@@ -86,27 +86,5 @@ export function filtrarPorNivel(
   })
 }
 
-const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api/v1'
-
-// Obtiene los comunicados almacenados en MongoDB mediante FastAPI.
-export async function obtenerComunicados() {
-  const respuesta = await fetch(`${API_URL}/comunicados`)
-
-  if (!respuesta.ok) {
-    throw new Error(`Error al obtener comunicados: ${respuesta.status}`)
-  }
-
-  const datos = await respuesta.json()
-
-  return datos.map((comunicado) => ({
-    id: comunicado.id,
-    titulo: comunicado.titulo,
-    cuerpo: comunicado.cuerpo,
-    fecha: comunicado.fecha_publicacion?.slice(0, 10) ?? '',
-    emisor: comunicado.emisor_id === 1 ? 'Dirección' : `Usuario ${comunicado.emisor_id}`,
-    alcance: comunicado.alcance,
-    nivel: comunicado.nivel,
-    categoria: comunicado.categoria,
-    esUrgente: comunicado.es_urgente,
-  }))
-}
+// TEC-17: la carga desde la API se movió a services/comunicadosApi.js (usa el cliente
+// central services/http.js). Este archivo queda solo con utilidades puras de HU-02/HU-03.

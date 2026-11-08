@@ -3,6 +3,8 @@ import '../styles/Formulario.css'
 // Estructura visual común de los formularios demo (HU-11 y HU-12): título, aviso de
 // demostración, mensaje de confirmación, <form noValidate> y botón de envío.
 // Los campos (<FormField>) llegan como children.
+// HU-25: `enviando` desactiva el botón mientras responde la API y `errorEnvio` muestra
+// por qué no se pudo enviar (sin conexión, conflicto…) sin borrar lo escrito.
 export default function FormularioDemo({
   id,
   titulo,
@@ -11,6 +13,9 @@ export default function FormularioDemo({
   textoBoton,
   confirmado,
   refConfirmacion,
+  enviando = false,
+  errorEnvio = null,
+  textoEnviando = 'Enviando…',
   onSubmit,
   children,
 }) {
@@ -20,8 +25,14 @@ export default function FormularioDemo({
       <p className="form-demo__aviso">{aviso}</p>
 
       {confirmado && (
-        <p ref={refConfirmacion} tabIndex={-1} className="form-demo__confirmacion" role="status">
+        <div ref={refConfirmacion} tabIndex={-1} className="form-demo__confirmacion" role="status">
           {mensajeConfirmacion}
+        </div>
+      )}
+
+      {errorEnvio && (
+        <p className="form-demo__error-envio" role="alert">
+          {errorEnvio}
         </p>
       )}
 
@@ -38,8 +49,10 @@ export default function FormularioDemo({
           type="submit"
           className="btn-institucional-primary form-demo__boton"
           onMouseDown={(evento) => evento.preventDefault()}
+          disabled={enviando}
+          aria-busy={enviando}
         >
-          {textoBoton}
+          {enviando ? textoEnviando : textoBoton}
         </button>
       </form>
     </div>

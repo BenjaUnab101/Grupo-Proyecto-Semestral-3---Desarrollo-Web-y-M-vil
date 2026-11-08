@@ -13,7 +13,7 @@ import {
 } from './comunicados.js'
 
 const leer = (ruta) => readFileSync(new URL(ruta, import.meta.url), 'utf8')
-const datos = JSON.parse(leer('../data/comunicados.json'))
+const datos = JSON.parse(leer('../datos-prueba/comunicados.json'))
 
 // Fixture controlado con un comunicado de cada nivel.
 const muestra = [

@@ -20,6 +20,7 @@ from app.services import inscripciones as servicio
 
 # HU-19: eventos (actividades con inscripción), inscripciones, cupos y asistentes.
 # TEC-16: CRUD de eventos y pagos ficticios.
+# TEC-17: inscripciones de los hijos de un apoderado.
 # Las rutas usan /eventos porque /actividades es de las actividades escolares (HU-18).
 router = APIRouter(tags=["inscripciones"])
 

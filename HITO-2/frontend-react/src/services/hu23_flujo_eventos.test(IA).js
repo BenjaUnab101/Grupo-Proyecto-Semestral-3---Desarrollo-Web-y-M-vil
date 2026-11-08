@@ -72,7 +72,8 @@ test('CP-HU-23-02: maneja entradas inválidas en filtros, error de red 503 y est
   await assert.rejects(() => obtenerPagosInscripciones(), /503/);
 
   // CA4 y CA5: Verificar integración en App.jsx, acciones Confirmar/Cancelar y clases responsive
-  const appCode = leer('../App.jsx');
+  // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
+  const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/FlujoInscripcionEventos.jsx');
   assert.match(appCode, /<FlujoInscripcionEventos onCambioInscripcion=\{cargarActividadesCalendario\} \/>/);
   assert.match(compCode, /Confirmar/);

@@ -92,7 +92,8 @@ test('CP-HU-17-02: rechazo por permiso insuficiente (403) o duplicado (409) prop
 });
 
 test('CA4: GestionOrganizadores está integrado en App.jsx y expone formularios y alertas accesibles', () => {
-  const appCode = leer('../App.jsx');
+  // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
+  const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/GestionOrganizadores.jsx');
   assert.match(appCode, /<GestionOrganizadores\s*\/>/);
   assert.match(compCode, /role="alert"/);

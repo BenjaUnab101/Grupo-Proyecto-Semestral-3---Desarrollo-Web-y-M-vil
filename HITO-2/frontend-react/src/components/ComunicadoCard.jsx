@@ -8,6 +8,7 @@ function ComunicadoCard({
   alcance,
   categoria,
   esUrgente = false,
+  onEliminar,
 }) {
   // Prepara los datos calculados que se necesitan para mostrar la tarjeta.
   const fechaFormateada = formatearFecha(fecha)
@@ -35,6 +36,12 @@ function ComunicadoCard({
         )}
         {emisor && <span>{emisor}</span>}
         {alcance && <span>{alcance}</span>}
+        {/* TEC-17: solo para cuentas con permiso (el backend vuelve a verificarlo). */}
+        {onEliminar && (
+          <button type="button" className="comunicado__eliminar" onClick={onEliminar}>
+            Eliminar
+          </button>
+        )}
       </footer>
     </article>
   )

@@ -1,8 +1,8 @@
 import SectionTitle from './SectionTitle';
-import SalaCard from './SalaCard';
-import salasData from '../data/salas.json';
 
-export default function CuposSalas() {
+// HU-09: sección de cupos por sala. Desde TEC-17 las tarjetas llegan como children
+// (pages/CuposSeccion.jsx las arma con los datos de la API).
+export default function CuposSalas({ children }) {
   return (
     <section id="cupos-salas" className="container py-4">
       <SectionTitle
@@ -19,13 +19,7 @@ export default function CuposSalas() {
         </span>
       </div>
 
-      <div className="row g-3">
-        {salasData.map((sala) => (
-          <div key={sala.id} className="col-12 col-md-6 col-lg-3">
-            <SalaCard sala={sala} />
-          </div>
-        ))}
-      </div>
+      {children}
     </section>
   );
 }

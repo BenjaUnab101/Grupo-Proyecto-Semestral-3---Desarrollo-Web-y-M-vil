@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { parseFecha, formatearFecha, ordenarComunicados } from './comunicados.js'
 
 const datos = JSON.parse(
-  readFileSync(new URL('../data/comunicados.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('../datos-prueba/comunicados.json', import.meta.url), 'utf8'),
 )
 
 // Comprueba que los comunicados se muestran desde el más reciente al más antiguo.

@@ -10,37 +10,56 @@ import {
   normalizarCampo,
   validarCampo,
 } from '../utils/preMatricula.js'
-
-export const MENSAJE_DEMO = 'Demostración: solicitud validada, no enviada al jardín'
+import { enviarSolicitud, erroresDelFormulario } from '../services/prematriculaApi.js'
+import { mensajeDeError } from '../services/http.js'
 
 const validarConNiveles = (nombre, valor) => validarCampo(nombre, valor, niveles)
 
-// HU-11: formulario controlado de pre-matrícula (DEMO).
-// Estado y eventos: hooks/useFormularioDemo.js (valores, errores, onChange/onBlur/onSubmit).
-// Privacidad: los datos solo viven en ese estado mientras se escribe. No se envían
-// por red ni se guardan; al confirmar se borran.
-export default function FormPreMatricula() {
-  const { confirmado, refConfirmacion, manejarEnvio, propsCampo } = useFormularioDemo({
+// HU-11 + HU-25: formulario de pre-matrícula conectado a la API (POST /prematriculas).
+// Estado y eventos: hooks/useFormularioDemo.js. Este componente no guarda nada en el
+// navegador; al confirmar se borra lo escrito y se muestra el código de seguimiento.
+export default function FormPreMatricula({ onCreada }) {
+  const { confirmado, enviando, errorEnvio, resultado, refConfirmacion, manejarEnvio, propsCampo } = useFormularioDemo({
     idFormulario: 'pre-matricula',
     campos: CAMPOS,
     valoresIniciales: VALORES_INICIALES,
     validarCampo: validarConNiveles,
     normalizarCampo,
+    enviar: async (valores) => {
+      const creada = await enviarSolicitud(valores)
+      onCreada(creada.codigo)
+      return creada
+    },
+    erroresDeApi: erroresDelFormulario, // un 400 de la API se muestra junto a cada campo
   })
 
   return (
     <FormularioDemo
       id="pre-matricula"
-      titulo="Formulario de pre-matrícula (demo)"
+      titulo="Formulario de pre-matrícula"
       aviso={
         <>
-          Esta es una demostración: la información <strong>no se envía al jardín ni se guarda</strong>.
-          Para probarla, usa datos ficticios y no ingreses datos reales de niños o niñas.
+          Tu solicitud queda <strong>registrada en el jardín</strong> y recibirás un código para consultar su estado.
+          Este portal es una demostración: usa datos ficticios y no ingreses datos reales de niños o niñas.
         </>
       }
-      mensajeConfirmacion={MENSAJE_DEMO}
-      textoBoton="Confirmar pre-matrícula (demo)"
+      mensajeConfirmacion={
+        resultado && (
+          <>
+            Solicitud recibida. Tu código de seguimiento es{' '}
+            <span className="form-demo__codigo">{resultado.codigo}</span>
+            <br />
+            <span className="fw-normal">
+              Guárdalo: con este código y tu correo puedes consultar el estado en «Consultar mi solicitud».
+            </span>
+          </>
+        )
+      }
+      textoBoton="Enviar pre-matrícula"
+      textoEnviando="Enviando solicitud…"
       confirmado={confirmado}
+      enviando={enviando}
+      errorEnvio={errorEnvio && `La solicitud no se envió. ${mensajeDeError(errorEnvio)}`}
       refConfirmacion={refConfirmacion}
       onSubmit={manejarEnvio}
     >
@@ -65,6 +84,7 @@ export default function FormPreMatricula() {
           type="email"
           {...propsCampo('correo')}
           required
+          ayuda="Lo necesitarás junto al código para consultar el estado."
           autoComplete="email"
           inputMode="email"
         />
@@ -96,6 +116,13 @@ export default function FormPreMatricula() {
           maxLength={LARGO_MAXIMO_COMENTARIO}
         />
       </fieldset>
+
+      <FormField
+        label="Acepto que el jardín use estos datos solo para gestionar esta solicitud de pre-matrícula y contactarme sobre ella."
+        type="checkbox"
+        {...propsCampo('consentimiento')}
+        required
+      />
     </FormularioDemo>
   )
 }

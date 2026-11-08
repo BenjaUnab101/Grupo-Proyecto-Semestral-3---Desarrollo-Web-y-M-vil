@@ -29,13 +29,15 @@ const VALIDOS = {
   nombreParvulo: 'Párvulo Demo',
   nivel: 'medio-mayor',
   comentario: '',
+  consentimiento: true,
 }
 
 // ---------- CA1: obligatorios ----------
 
-test('CA1: formulario vacío marca los 6 obligatorios y no el comentario opcional', () => {
+// HU-25: el consentimiento pasó a ser el 7.º campo obligatorio.
+test('CA1: formulario vacío marca los 7 obligatorios (incluido el consentimiento) y no el comentario opcional', () => {
   const errores = validarFormulario(VALORES_INICIALES, niveles)
-  assert.deepEqual(Object.keys(errores), ['nombreApoderado', 'rut', 'correo', 'telefono', 'nombreParvulo', 'nivel'])
+  assert.deepEqual(Object.keys(errores), ['nombreApoderado', 'rut', 'correo', 'telefono', 'nombreParvulo', 'nivel', 'consentimiento'])
   assert.equal(errores.comentario, undefined)
   assert.equal(errores.rut, 'Ingresa el RUT del apoderado.')
 })
@@ -156,7 +158,10 @@ test('contrato: formulario controlado con valores/errores y FormField con aria',
   assert.match(form, /useFormularioDemo\(\{/)
   assert.match(form, /valoresIniciales: VALORES_INICIALES/)
   assert.match(form, /<FormField/)
-  assert.match(form, /Demostración: solicitud validada, no enviada al jardín/)
+  // HU-25: ya no es una demo; envía a la API mediante el servicio y muestra el código.
+  assert.match(form, /enviar: async \(valores\) =>/)
+  assert.match(form, /enviarSolicitud\(valores\)/)
+  assert.match(form, /resultado\.codigo/)
   assert.match(hook, /const \[valores, setValores\] = useState\(valoresIniciales\)/)
   assert.match(hook, /const \[errores, setErrores\] = useState\(\{\}\)/)
   assert.match(hook, /evento\.preventDefault\(\)/)
@@ -169,7 +174,9 @@ test('contrato: formulario controlado con valores/errores y FormField con aria',
   assert.match(campo, /key=\{opcion\.id\}/)
 })
 
-test('CA3 privacidad: el formulario no persiste ni envía datos', () => {
+// HU-25: desde que la solicitud se guarda en la API, la regla es: el formulario no guarda
+// datos en el navegador ni llama a la red por su cuenta (solo a través de services/).
+test('privacidad (HU-25): el formulario no guarda datos en el navegador ni hace fetch directo', () => {
   const codigo = [
     '../components/FormPreMatricula.jsx',
     '../components/FormularioDemo.jsx',

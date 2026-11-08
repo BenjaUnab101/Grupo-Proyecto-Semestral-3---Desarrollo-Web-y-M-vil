@@ -7,12 +7,11 @@ from app.schemas.catalogo import (
     CategoriaOut,
     CupoSalaOut,
     InstitucionOut,
-    OrganizadorIn,
-    OrganizadorOut,
 )
 from app.services import catalogo as servicio
 
-# TEC-16: categorías, organizadores y datos institucionales del jardín.
+# TEC-16: categorías de eventos y datos institucionales del jardín. TEC-17: cupos por sala.
+# (Los organizadores son de HU-17: app/api/eventos.py.)
 router = APIRouter(tags=["catalogo"])
 
 
@@ -34,21 +33,6 @@ def listar_categorias(db: Session = Depends(get_db)):
 )
 def crear_categoria(payload: CategoriaIn, db: Session = Depends(get_db)):
     return servicio.crear_categoria(db, payload)
-
-
-@router.get("/organizadores", response_model=list[OrganizadorOut], summary="Listar organizadores")
-def listar_organizadores(activos: bool = True, db: Session = Depends(get_db)):
-    return servicio.listar_organizadores(db, activos)
-
-
-@router.post(
-    "/organizadores",
-    response_model=OrganizadorOut,
-    status_code=status.HTTP_201_CREATED,
-    summary="Crear un organizador",
-)
-def crear_organizador(payload: OrganizadorIn, db: Session = Depends(get_db)):
-    return servicio.crear_organizador(db, payload)
 
 
 @router.get("/salas/cupos", response_model=list[CupoSalaOut], summary="Cupos por sala (matriculados calculados en SQL)")
