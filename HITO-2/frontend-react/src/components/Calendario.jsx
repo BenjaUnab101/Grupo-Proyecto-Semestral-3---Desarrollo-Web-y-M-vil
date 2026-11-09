@@ -1,7 +1,9 @@
 import ActividadItem from './ActividadItem.jsx'
+import { climaParaFecha } from '../utils/clima.js'
 
 // HU-04: muestra la lista ya filtrada y ordenada que recibe de Agenda.
-export default function Calendario({ actividades = [] }) {
+// HU-06: `pronostico` (opcional) viene de useClima; cada actividad recibe el día que le corresponde.
+export default function Calendario({ actividades = [], pronostico = [] }) {
   if (actividades.length === 0) {
     return (
       <p className="agenda__vacio" role="status">
@@ -21,6 +23,7 @@ export default function Calendario({ actividades = [] }) {
           lugar={actividad.lugar}
           preparar={actividad.preparar}
           diasRestantes={actividad.diasRestantes}
+          climaDelDia={climaParaFecha(pronostico, actividad.fecha)}
         />
       ))}
     </ol>

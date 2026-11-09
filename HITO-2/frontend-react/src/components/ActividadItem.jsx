@@ -1,4 +1,5 @@
 import { esProxima, formatearFecha, parseFechaISO } from '../utils/fechas.js'
+import { resumenClimaActividad } from '../utils/clima.js'
 
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
 
@@ -15,7 +16,9 @@ function textoRelativo(dias) {
 }
 
 // HU-04: una actividad del calendario. Recibe todo por props y no tiene estado.
-export default function ActividadItem({ titulo, fecha, hora, lugar, preparar, diasRestantes }) {
+// HU-06: `climaDelDia` (opcional) es el pronóstico de esa fecha; sin él la actividad se ve igual.
+export default function ActividadItem({ titulo, fecha, hora, lugar, preparar, diasRestantes, climaDelDia = null }) {
+  const clima = resumenClimaActividad(climaDelDia)
   const partes = parseFechaISO(fecha)
   const fechaLarga = capitalizar(formatearFecha(fecha))
   const proxima = esProxima(diasRestantes)
@@ -49,6 +52,25 @@ export default function ActividadItem({ titulo, fecha, hora, lugar, preparar, di
           <p className="actividad__detalle">
             <strong>Preparar:</strong> {preparar}
           </p>
+        )}
+
+        {/* HU-06: insignia de clima solo si hay pronóstico real para esa fecha. */}
+        {clima && (
+          <div className="actividad__clima" aria-label="Clima previsto para la actividad">
+            <span className="actividad__clima-insignia">
+              {clima.condicion}
+              {clima.maxima !== null && <> · máx. {clima.maxima} °C</>}
+            </span>
+            {clima.principal && <span className="actividad__clima-recomendacion">{clima.principal}</span>}
+            {clima.otras.length > 0 && (
+              <details className="actividad__clima-mas">
+                <summary>Ver {clima.otras.length} recomendación{clima.otras.length > 1 ? 'es' : ''} más</summary>
+                <ul>
+                  {clima.otras.map((texto) => <li key={texto}>{texto}</li>)}
+                </ul>
+              </details>
+            )}
+          </div>
         )}
       </div>
     </li>

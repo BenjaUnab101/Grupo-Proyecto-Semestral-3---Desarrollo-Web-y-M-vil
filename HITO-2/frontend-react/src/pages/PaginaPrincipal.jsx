@@ -66,7 +66,8 @@ export default function PaginaPrincipal() {
           <ComunicadosSeccion />
 
           {/* HU-04 + HU-19 + TEC-17: calendario e inscripciones desde la API */}
-          <CalendarioSeccion hoy={hoyDePrueba} />
+          {/* HU-06: si la API del clima falla, el calendario se muestra igual, sin insignias. */}
+          <CalendarioSeccion hoy={hoyDePrueba} pronostico={error ? [] : pronostico} />
 
           {seccionesPendientes.map((seccion) => (
             <SeccionPendiente key={seccion.id} {...seccion} />

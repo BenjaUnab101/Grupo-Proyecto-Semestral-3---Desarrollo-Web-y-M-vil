@@ -138,3 +138,10 @@
     padding: 12px;
   }
 }
+
+/* HU-06: insignia de clima en cada actividad */
+.actividad__clima { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; font-size: 0.85rem; }
+.actividad__clima-insignia { padding: 2px 10px; border-radius: 999px; background: #e3ecf5; color: #1d3a5a; font-weight: 600; }
+.actividad__clima-recomendacion { color: #56606d; }
+.actividad__clima-mas { flex-basis: 100%; color: #56606d; }
+.actividad__clima-mas summary { cursor: pointer; }

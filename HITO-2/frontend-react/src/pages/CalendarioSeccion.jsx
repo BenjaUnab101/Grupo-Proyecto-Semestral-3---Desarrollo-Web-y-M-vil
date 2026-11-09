@@ -27,7 +27,8 @@ async function cargarCalendario() {
   return { eventos, todas: [...eventos, ...deHu18] }
 }
 
-export default function CalendarioSeccion({ hoy }) {
+// HU-06: `pronostico` llega desde PaginaPrincipal (una sola llamada a useClima).
+export default function CalendarioSeccion({ hoy, pronostico = [] }) {
   const { perfil, usuarioId } = useSesion()
   const apoderadoId = perfil?.apoderadoId
 
@@ -46,7 +47,7 @@ export default function CalendarioSeccion({ hoy }) {
     <section id="calendario">
       <SectionTitle titulo="Calendario de Actividades" subtitulo="Próximas fechas importantes, reuniones y talleres" />
       <EstadoCarga recurso={calendario} textoCargando="Cargando actividades…" textoError="No pudimos cargar el calendario.">
-        <Agenda actividades={actividadesCalendario} hoy={hoy} />
+        <Agenda actividades={actividadesCalendario} hoy={hoy} pronostico={pronostico} />
 
         {apoderadoId && (
           <div className="mt-4 inscripciones-bloque">
