@@ -9,6 +9,7 @@ prefijo "Sonda H-02"). Un resultado "ABIERTA" significa que la ruta respondió a
 """
 
 import json
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -62,3 +63,5 @@ sonda("H02-11", "crear matrícula con ids inexistentes (llega a la lógica)", "P
 sonda("H02-12", "cancelar inscripción ajena con apoderado_id inventado (llega a la lógica)", "POST", "/inscripciones/999999/cancelar", {"apoderado_id": 1})
 
 print(f"\nRutas ABIERTAS sin autenticación: {len(abiertas)} de 12 sondeadas -> {', '.join(abiertas)}")
+# CI: cualquier ruta abierta hace fallar el gate de seguridad (H-02).
+sys.exit(1 if abiertas else 0)
