@@ -35,6 +35,16 @@ from tests_sesiones import preparar_sesiones  # noqa: E402
 SESION = preparar_sesiones(client, TestingSessionLocal)
 
 
+def setUpModule():
+    # Aislamiento: al correr varios módulos en un mismo proceso (unittest discover), cada uno
+    # vuelve a instalar SU base de datos y una bitácora nula antes de sus pruebas.
+    import tests_sesiones
+    from app.services import auditoria
+
+    app.dependency_overrides[get_db] = override_get_db
+    auditoria.coleccion = lambda: tests_sesiones._BitacoraNula()
+
+
 class TestHU17OrganizadoresCategorias(unittest.TestCase):
     def test_cp_hu_17_01_flujo_exitoso_crear_editar_listar(self):
         # 1. Crear categoría con rol dirección

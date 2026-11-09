@@ -118,6 +118,16 @@ app.dependency_overrides[get_db] = obtener_db
 cliente = TestClient(app)
 
 
+def setUpModule():
+    # Aislamiento: si otro módulo de pruebas se importó antes en el mismo proceso, se vuelven a
+    # instalar la base SQLite, la colección Mongo falsa y la identidad demo de este archivo.
+    from app.core.config import settings as _settings
+
+    app.dependency_overrides[get_db] = obtener_db
+    auditoria.coleccion = lambda: MONGO
+    _settings.app_env, _settings.permitir_identidad_demo = "test", True
+
+
 def crear_datos():
     """Datos ficticios: apoderado con 2 hijos, apoderado con 1 hijo, apoderado sin hijos,
     dirección y personal; dos actividades (una sin inscritos)."""

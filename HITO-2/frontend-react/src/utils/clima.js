@@ -9,18 +9,26 @@ export function obtenerCondicionClima(codigo) {
     51: 'Llovizna',
     53: 'Llovizna',
     55: 'Llovizna',
+    // TEC-06: códigos WMO documentados por Open-Meteo que faltaban en el mapa.
+    56: 'Llovizna engelante',
+    57: 'Llovizna engelante',
     61: 'Lluvia',
     63: 'Lluvia',
     65: 'Lluvia intensa',
+    66: 'Lluvia engelante',
+    67: 'Lluvia engelante',
     71: 'Nieve',
     73: 'Nieve',
     75: 'Nieve intensa',
+    77: 'Granos de nieve',
     80: 'Chubascos',
     81: 'Chubascos',
     82: 'Chubascos intensos',
+    85: 'Chubascos de nieve',
+    86: 'Chubascos de nieve',
     95: 'Tormenta',
-    96: 'Tormenta',
-    99: 'Tormenta',
+    96: 'Tormenta con granizo',
+    99: 'Tormenta con granizo',
   };
 
   return condiciones[codigo] || 'Condición no disponible';
