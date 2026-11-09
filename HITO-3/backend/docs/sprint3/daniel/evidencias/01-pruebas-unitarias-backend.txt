@@ -1,0 +1,53 @@
+# 2026-11-08T17:44:30-03:00 · docker run python:3.12-slim · python -m unittest tests_s3_daniel -v + tests_hu17/18/20/27
+test_demo_password_reemplaza_solo_el_marcador_de_cuentas_ficticias (tests_s3_daniel.TestCredencialesDemo.test_demo_password_reemplaza_solo_el_marcador_de_cuentas_ficticias) ... ok
+test_hash_pbkdf2_con_sal_y_verificacion (tests_s3_daniel.TestHU16Autenticacion.test_hash_pbkdf2_con_sal_y_verificacion) ... ok
+test_login_datos_invalidos_400 (tests_s3_daniel.TestHU16Autenticacion.test_login_datos_invalidos_400) ... ok
+test_login_invalido_401_generico (tests_s3_daniel.TestHU16Autenticacion.test_login_invalido_401_generico) ... ok
+test_login_queda_en_bitacora_sin_datos_sensibles (tests_s3_daniel.TestHU16Autenticacion.test_login_queda_en_bitacora_sin_datos_sensibles) ... ok
+test_login_valido_entrega_token_y_perfil_con_hijos_sql (tests_s3_daniel.TestHU16Autenticacion.test_login_valido_entrega_token_y_perfil_con_hijos_sql) ... ok
+test_logout_revoca_el_token_en_el_servidor (tests_s3_daniel.TestHU16Autenticacion.test_logout_revoca_el_token_en_el_servidor) ... ok
+test_portal_no_acepta_identidad_demo_x_usuario_id (tests_s3_daniel.TestHU16Autenticacion.test_portal_no_acepta_identidad_demo_x_usuario_id) ... ok
+test_token_expirado_401 (tests_s3_daniel.TestHU16Autenticacion.test_token_expirado_401) ... ok
+test_token_inventado_o_mal_formado_401 (tests_s3_daniel.TestHU16Autenticacion.test_token_inventado_o_mal_formado_401) ... ok
+test_acceso_cruzado_a_hijo_ajeno_403_y_queda_registrado (tests_s3_daniel.TestHU16Autorizacion.test_acceso_cruzado_a_hijo_ajeno_403_y_queda_registrado) ... ok
+test_alumno_inexistente_tambien_403_para_no_revelar_ids (tests_s3_daniel.TestHU16Autorizacion.test_alumno_inexistente_tambien_403_para_no_revelar_ids) ... ok
+test_ficha_de_hijo_propio_con_matricula_e_inscripciones (tests_s3_daniel.TestHU16Autorizacion.test_ficha_de_hijo_propio_con_matricula_e_inscripciones) ... ok
+test_roles_sin_portal_403 (tests_s3_daniel.TestHU16Autorizacion.test_roles_sin_portal_403) ... ok
+test_selector_hermanos_0_1_y_2_hijos_desde_sql (tests_s3_daniel.TestHU16Autorizacion.test_selector_hermanos_0_1_y_2_hijos_desde_sql) ... ok
+test_sin_sesion_401 (tests_s3_daniel.TestHU16Autorizacion.test_sin_sesion_401) ... ok
+test_token_tiene_prioridad_sobre_x_usuario_id (tests_s3_daniel.TestHU16Autorizacion.test_token_tiene_prioridad_sobre_x_usuario_id) ... ok
+test_datos_no_permitidos_se_descartan (tests_s3_daniel.TestHU22Auditoria.test_datos_no_permitidos_se_descartan) ... ok
+test_filtro_por_fecha_y_validaciones (tests_s3_daniel.TestHU22Auditoria.test_filtro_por_fecha_y_validaciones) ... ok
+test_filtros_y_paginacion (tests_s3_daniel.TestHU22Auditoria.test_filtros_y_paginacion) ... ok
+test_mongo_caido_lectura_503_y_escritura_no_rompe_el_negocio (tests_s3_daniel.TestHU22Auditoria.test_mongo_caido_lectura_503_y_escritura_no_rompe_el_negocio) ... Evento de auditoría acceso_login no guardado (MongoDB no disponible: ServerSelectionTimeoutError)
+ok
+test_solo_direccion_consulta_la_bitacora (tests_s3_daniel.TestHU22Auditoria.test_solo_direccion_consulta_la_bitacora) ... ok
+test_agregaciones_sql_incluyen_actividad_sin_inscritos (tests_s3_daniel.TestHU24Panel.test_agregaciones_sql_incluyen_actividad_sin_inscritos) ... ok
+test_filtros_actividad_y_periodo (tests_s3_daniel.TestHU24Panel.test_filtros_actividad_y_periodo) ... ok
+test_historial_desde_mongo_filtrado_por_actividad (tests_s3_daniel.TestHU24Panel.test_historial_desde_mongo_filtrado_por_actividad) ... ok
+test_permisos_por_rol (tests_s3_daniel.TestHU24Panel.test_permisos_por_rol) ... ok
+test_apoderado_ve_solo_sus_consultas (tests_s3_daniel.TestHU26Contacto.test_apoderado_ve_solo_sus_consultas) ... ok
+test_solo_direccion_lista_y_cambia_estado (tests_s3_daniel.TestHU26Contacto.test_solo_direccion_lista_y_cambia_estado) ... ok
+test_validaciones_400 (tests_s3_daniel.TestHU26Contacto.test_validaciones_400) ... ok
+test_visitante_crea_201_con_codigo_y_consulta_seguimiento (tests_s3_daniel.TestHU26Contacto.test_visitante_crea_201_con_codigo_y_consulta_seguimiento) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.972s
+
+OK
+== tests_hu17
+Ran 2 tests in 0.071s
+
+OK
+== tests_hu18
+Ran 2 tests in 0.083s
+
+OK
+== tests_hu20
+Ran 2 tests in 0.080s
+
+OK
+== tests_hu27
+Ran 2 tests in 0.059s
+
+OK

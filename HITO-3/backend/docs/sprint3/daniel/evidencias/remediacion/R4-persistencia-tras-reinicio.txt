@@ -1,0 +1,20 @@
+# 2026-11-09T10:42:19-03:00 · docker compose down (SIN -v) && up -d
+ Network pr_s3_daniel_pequenos_reyes Removed 
+pr_s3_daniel_mongo_data
+pr_s3_daniel_postgres_data
+ Container pr_s3_daniel-frontend-1 Started 
+mongo Up 26 seconds (healthy)
+api Up 20 seconds (healthy)
+frontend Up 14 seconds (healthy)
+postgres Up 26 seconds (healthy)
+== prueba_s3_daniel verificar
+[PASS] S3-P1 La consulta de contacto sigue en PostgreSQL con su estado  ->  CT-BUWRRN
+[PASS] S3-P2 Los eventos de MongoDB siguen ahí (más el login nuevo)  ->  111 >= 93
+[PASS] S3-P3 El panel responde con agregaciones SQL
+Resultado: 3/3 PASS
+== prueba_tec16 verificar
+Resultado: 4/4 PASS
+== prueba_hu25 verificar
+Resultado: 4/4 PASS
+== prueba_hu25 negativos
+Resultado: 13/13 PASS

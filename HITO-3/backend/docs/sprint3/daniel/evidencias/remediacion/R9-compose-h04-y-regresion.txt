@@ -1,0 +1,21 @@
+# 2026-11-09T11:11:14-03:00 · Segunda auditoría · compose con puertos en 127.0.0.1 y sin container_name fijo (modo dev)
+config OK
+ Container pr_s3_daniel-frontend-1 Starting 
+ Container pr_s3_daniel-frontend-1 Started 
+pr_s3_daniel-api-1 | Up 20 seconds (healthy) | 127.0.0.1:8000->8000/tcp
+pr_s3_daniel-frontend-1 | Up 15 seconds (healthy) | 127.0.0.1:5173->80/tcp
+pr_s3_daniel-mongo-1 | Up 26 seconds (healthy) | 127.0.0.1:27017->27017/tcp
+pr_s3_daniel-postgres-1 | Up 26 seconds (healthy) | 127.0.0.1:5432->5432/tcp
+
+datos conservados en el volumen: 7 consultas de contacto, 169 eventos Mongo
+
+prueba_remediacion_s3 dev: Resultado: 13/13 PASS
+prueba_s3_daniel crear: Resultado: 22/22 PASS
+prueba_tec17: Resultado: 10/10 PASS
+prueba_hu19: Resultado: 18/18 PASS
+prueba_hu21: Resultado: 23/23 PASS
+prueba_hu25 crear: Resultado: 3/3 PASS
+prueba_hu25 verificar: Resultado: 4/4 PASS
+prueba_hu25 negativos: Resultado: 13/13 PASS
+prueba_tec16 crear: Resultado: 20/20 PASS
+prueba_tec16 verificar: Resultado: 4/4 PASS

@@ -1,0 +1,12 @@
+# 2026-11-08T17:44:44-03:00 · docker compose config --quiet + ps
+config OK
+SERVICE    STATUS                        PORTS
+mongo      Up 10 minutes (healthy)       0.0.0.0:27017->27017/tcp, [::]:27017->27017/tcp
+api        Up 2 minutes (healthy)        0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+frontend   Up About a minute (healthy)   0.0.0.0:5173->80/tcp, [::]:5173->80/tcp
+postgres   Up 10 minutes (healthy)       0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+
+GET /health:
+{"status":"ok","service":"pequenos-reyes-api"}
+GET http://localhost:8000/docs -> 200
+GET http://localhost:5173/ -> 200

@@ -1,0 +1,79 @@
+# 2026-11-09T11:27:48-03:00 · R4 · pruebas unitarias backend (python:3.12-slim)
+== tests_s3_daniel (fija APP_ENV=test y PERMITIR_IDENTIDAD_DEMO=true dentro del archivo)
+Identidad demo ACTIVA (solo desarrollo): X-Usuario-Id y X-Rol sin sesión siguen aceptados
+test_demo_password_reemplaza_solo_el_marcador_de_cuentas_ficticias (tests_s3_daniel.TestCredencialesDemo.test_demo_password_reemplaza_solo_el_marcador_de_cuentas_ficticias) ... ok
+test_hash_pbkdf2_con_sal_y_verificacion (tests_s3_daniel.TestHU16Autenticacion.test_hash_pbkdf2_con_sal_y_verificacion) ... ok
+test_login_datos_invalidos_400 (tests_s3_daniel.TestHU16Autenticacion.test_login_datos_invalidos_400) ... ok
+test_login_invalido_401_generico (tests_s3_daniel.TestHU16Autenticacion.test_login_invalido_401_generico) ... ok
+test_login_queda_en_bitacora_sin_datos_sensibles (tests_s3_daniel.TestHU16Autenticacion.test_login_queda_en_bitacora_sin_datos_sensibles) ... ok
+test_login_valido_entrega_token_y_perfil_con_hijos_sql (tests_s3_daniel.TestHU16Autenticacion.test_login_valido_entrega_token_y_perfil_con_hijos_sql) ... ok
+test_logout_revoca_el_token_en_el_servidor (tests_s3_daniel.TestHU16Autenticacion.test_logout_revoca_el_token_en_el_servidor) ... ok
+test_portal_no_acepta_identidad_demo_x_usuario_id (tests_s3_daniel.TestHU16Autenticacion.test_portal_no_acepta_identidad_demo_x_usuario_id) ... ok
+test_token_expirado_401 (tests_s3_daniel.TestHU16Autenticacion.test_token_expirado_401) ... ok
+test_token_inventado_o_mal_formado_401 (tests_s3_daniel.TestHU16Autenticacion.test_token_inventado_o_mal_formado_401) ... ok
+test_acceso_cruzado_a_hijo_ajeno_403_y_queda_registrado (tests_s3_daniel.TestHU16Autorizacion.test_acceso_cruzado_a_hijo_ajeno_403_y_queda_registrado) ... ok
+test_alumno_inexistente_tambien_403_para_no_revelar_ids (tests_s3_daniel.TestHU16Autorizacion.test_alumno_inexistente_tambien_403_para_no_revelar_ids) ... ok
+test_ficha_de_hijo_propio_con_matricula_e_inscripciones (tests_s3_daniel.TestHU16Autorizacion.test_ficha_de_hijo_propio_con_matricula_e_inscripciones) ... ok
+test_roles_sin_portal_403 (tests_s3_daniel.TestHU16Autorizacion.test_roles_sin_portal_403) ... ok
+test_selector_hermanos_0_1_y_2_hijos_desde_sql (tests_s3_daniel.TestHU16Autorizacion.test_selector_hermanos_0_1_y_2_hijos_desde_sql) ... ok
+test_sin_sesion_401 (tests_s3_daniel.TestHU16Autorizacion.test_sin_sesion_401) ... ok
+test_token_tiene_prioridad_sobre_x_usuario_id (tests_s3_daniel.TestHU16Autorizacion.test_token_tiene_prioridad_sobre_x_usuario_id) ... ok
+test_datos_no_permitidos_se_descartan (tests_s3_daniel.TestHU22Auditoria.test_datos_no_permitidos_se_descartan) ... ok
+test_filtro_por_fecha_y_validaciones (tests_s3_daniel.TestHU22Auditoria.test_filtro_por_fecha_y_validaciones) ... ok
+test_filtros_y_paginacion (tests_s3_daniel.TestHU22Auditoria.test_filtros_y_paginacion) ... ok
+test_mongo_caido_lectura_503_y_escritura_no_rompe_el_negocio (tests_s3_daniel.TestHU22Auditoria.test_mongo_caido_lectura_503_y_escritura_no_rompe_el_negocio) ... Evento de auditoría acceso_login no guardado (MongoDB no disponible: ServerSelectionTimeoutError)
+ok
+test_solo_direccion_consulta_la_bitacora (tests_s3_daniel.TestHU22Auditoria.test_solo_direccion_consulta_la_bitacora) ... ok
+test_agregaciones_sql_incluyen_actividad_sin_inscritos (tests_s3_daniel.TestHU24Panel.test_agregaciones_sql_incluyen_actividad_sin_inscritos) ... ok
+test_filtros_actividad_y_periodo (tests_s3_daniel.TestHU24Panel.test_filtros_actividad_y_periodo) ... ok
+test_historial_desde_mongo_filtrado_por_actividad (tests_s3_daniel.TestHU24Panel.test_historial_desde_mongo_filtrado_por_actividad) ... ok
+test_permisos_por_rol (tests_s3_daniel.TestHU24Panel.test_permisos_por_rol) ... ok
+test_apoderado_ve_solo_sus_consultas (tests_s3_daniel.TestHU26Contacto.test_apoderado_ve_solo_sus_consultas) ... ok
+test_solo_direccion_lista_y_cambia_estado (tests_s3_daniel.TestHU26Contacto.test_solo_direccion_lista_y_cambia_estado) ... ok
+test_validaciones_400 (tests_s3_daniel.TestHU26Contacto.test_validaciones_400) ... ok
+test_visitante_crea_201_con_codigo_y_consulta_seguimiento (tests_s3_daniel.TestHU26Contacto.test_visitante_crea_201_con_codigo_y_consulta_seguimiento) ... ok
+test_identidad_demo_desactivada_por_defecto (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_identidad_demo_desactivada_por_defecto) ... ok
+test_la_aplicacion_no_inicia_sin_app_env (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_la_aplicacion_no_inicia_sin_app_env) ... ok
+test_sin_app_env_no_hay_valor_por_defecto_y_se_rechaza (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_sin_app_env_no_hay_valor_por_defecto_y_se_rechaza) ... ok
+test_staging_y_production_nunca_admiten_demo (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_staging_y_production_nunca_admiten_demo) ... ok
+test_valores_desconocidos_se_rechazan (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_valores_desconocidos_se_rechazan) ... ok
+test_valores_validos_explicitos (tests_s3_daniel.TestR4ConfiguracionObligatoria.test_valores_validos_explicitos) ... ok
+test_demo_reconocida_sin_importar_mayusculas (tests_s3_daniel.TestR4CuentasDemoFueraDeDesarrollo.test_demo_reconocida_sin_importar_mayusculas) ... ok
+test_login_demo_bloqueado_queda_en_bitacora_sin_datos_sensibles (tests_s3_daniel.TestR4CuentasDemoFueraDeDesarrollo.test_login_demo_bloqueado_queda_en_bitacora_sin_datos_sensibles) ... ok
+test_transicion_desarrollo_a_produccion_misma_base (tests_s3_daniel.TestR4CuentasDemoFueraDeDesarrollo.test_transicion_desarrollo_a_produccion_misma_base) ... ok
+test_app_env_solo_development_o_test_activan_la_identidad_demo (tests_s3_daniel.TestRemediacionIdentidad.test_app_env_solo_development_o_test_activan_la_identidad_demo) ... ok
+test_bearer_con_x_rol_coherente_201 (tests_s3_daniel.TestRemediacionIdentidad.test_bearer_con_x_rol_coherente_201) ... ok
+test_bearer_con_x_rol_falsificado_403 (tests_s3_daniel.TestRemediacionIdentidad.test_bearer_con_x_rol_falsificado_403) ... ok
+test_demo_password_se_ignora_fuera_de_development (tests_s3_daniel.TestRemediacionIdentidad.test_demo_password_se_ignora_fuera_de_development) ... DEMO_PASSWORD se ignora: APP_ENV no es development ni test
+ok
+test_dev_x_rol_sin_identidad_sigue_funcionando (tests_s3_daniel.TestRemediacionIdentidad.test_dev_x_rol_sin_identidad_sigue_funcionando) ... ok
+test_estricto_x_rol_sin_sesion_401_y_x_usuario_id_401 (tests_s3_daniel.TestRemediacionIdentidad.test_estricto_x_rol_sin_sesion_401_y_x_usuario_id_401) ... ok
+test_produccion_apaga_identidad_demo_aunque_el_flag_diga_true (tests_s3_daniel.TestRemediacionIdentidad.test_produccion_apaga_identidad_demo_aunque_el_flag_diga_true) ... ok
+test_rutas_sin_x_rol_no_se_ven_afectadas (tests_s3_daniel.TestRemediacionIdentidad.test_rutas_sin_x_rol_no_se_ven_afectadas) ... ok
+test_x_rol_no_aparece_como_parametro_global_en_swagger (tests_s3_daniel.TestRemediacionIdentidad.test_x_rol_no_aparece_como_parametro_global_en_swagger) ... ok
+test_x_usuario_id_demo_con_x_rol_falsificado_403 (tests_s3_daniel.TestRemediacionIdentidad.test_x_usuario_id_demo_con_x_rol_falsificado_403) ... ok
+test_x_usuario_id_mal_formado_401 (tests_s3_daniel.TestRemediacionIdentidad.test_x_usuario_id_mal_formado_401) ... ok
+test_x_usuario_id_no_suplanta_cuentas_fuera_de_ejemplo_cl (tests_s3_daniel.TestRemediacionIdentidad.test_x_usuario_id_no_suplanta_cuentas_fuera_de_ejemplo_cl) ... ok
+
+----------------------------------------------------------------------
+Ran 51 tests in 3.142s
+
+OK
+
+== Heredadas CON configuración explícita: APP_ENV=test PERMITIR_IDENTIDAD_DEMO=true
+tests_hu17: OK
+tests_hu18: OK
+tests_hu20: OK
+tests_hu27: OK
+
+== Heredadas SIN APP_ENV (informativo: la app debe negarse a iniciar)
+tests_hu17: ConfiguracionInvalida: APP_ENV es obligatorio y no está definido | app.core.config.ConfiguracionInvalida: APP_ENV es obligatorio y no está definido. Valores válidos: development, production, staging, test. Ver .env.example.
+tests_hu18: ConfiguracionInvalida: APP_ENV es obligatorio y no está definido | app.core.config.ConfiguracionInvalida: APP_ENV es obligatorio y no está definido. Valores válidos: development, production, staging, test. Ver .env.example.
+tests_hu20: ConfiguracionInvalida: APP_ENV es obligatorio y no está definido | app.core.config.ConfiguracionInvalida: APP_ENV es obligatorio y no está definido. Valores válidos: development, production, staging, test. Ver .env.example.
+tests_hu27: ConfiguracionInvalida: APP_ENV es obligatorio y no está definido | app.core.config.ConfiguracionInvalida: APP_ENV es obligatorio y no está definido. Valores válidos: development, production, staging, test. Ver .env.example.
+
+== Heredadas con APP_ENV=test pero identidad demo en su valor por defecto (false): informativo
+tests_hu17: FAILED (failures=2)
+tests_hu18: FAILED (errors=1)
+tests_hu20: FAILED (errors=1)
+tests_hu27: FAILED (failures=2)

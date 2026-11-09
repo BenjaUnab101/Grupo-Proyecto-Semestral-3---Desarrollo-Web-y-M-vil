@@ -1,0 +1,13 @@
+# 2026-11-09T10:47:14-03:00 · propuesta X-Rol aplicada SOLO en una copia desechable (no en el proyecto)
+patching file app/api/documentos.py
+patching file app/api/eventos.py
+X-Rol sin sesión -> 401 (esperado 401)
+Bearer apoderado -> 403 (esperado 403)
+Bearer dirección -> 201 (esperado 201)
+Bearer educadora en /actividades (pasa el permiso, falla validación) -> 400 (esperado 400)
+PROPUESTA: PASS
+-- tests heredados con la propuesta (envían X-Rol sin sesión; deben actualizarse):
+tests_hu17: FAILED (failures=2)
+tests_hu18: FAILED (errors=1)
+tests_hu20: FAILED (errors=1)
+tests_hu27: FAILED (failures=2)

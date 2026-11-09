@@ -157,8 +157,14 @@ test('regresión: al confirmar se quita el foco antes de limpiar (sin error fant
 
 // ---------- CA3: demo sin HTTP ni persistencia ----------
 
-test('CA3: mensaje de demostración exacto', () => {
-  assert.match(leer('../components/FormContacto.jsx'), /'Demostración: consulta validada, no enviada a la dirección'/)
+// HU-26 (Sprint 3 · Daniel): el contacto dejó de ser demo. En vez del mensaje "no enviada",
+// se verifica que el envío pase por el servicio de la API (nunca fetch directo en el componente).
+test('HU-26: FormContacto envía con services/contactoApi.js y muestra el código de seguimiento', () => {
+  const form = leer('../components/FormContacto.jsx')
+  assert.match(form, /from '\.\.\/services\/contactoApi\.js'/)
+  assert.match(form, /enviar: async/)
+  assert.match(form, /resultado\.codigo/)
+  assert.doesNotMatch(form, /no enviada a la dirección/)
 })
 
 test('CA3: sin solicitudes HTTP ni almacenamiento en el flujo de contacto', () => {

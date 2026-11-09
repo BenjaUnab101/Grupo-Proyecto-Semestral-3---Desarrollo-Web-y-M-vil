@@ -1,19 +1,66 @@
+# Pequeños Reyes · Hito 3: React + API (FastAPI) + PostgreSQL + MongoDB.
+#
+# TEC-19 (Sprint 3 · Daniel): se agregó el frontend React, healthcheck de la API, red propia,
+# reinicio automático y variables de login (HU-16). Se conservan los servicios, volúmenes y el
+# mecanismo de migraciones de TEC-16.
+#
+#   cp .env.example .env            # y cambia los valores marcados "cambiar"
+#   docker compose up --build -d
+#   docker compose ps               # los 4 servicios deben quedar "healthy"
+#
+# URLs: React http://localhost:5173 · API http://localhost:8000/health · Swagger http://localhost:8000/docs
+# NO usar "docker compose down -v": borra los volúmenes con los datos.
+#
+# Segunda auditoría (H-04): los puertos se publican SOLO en 127.0.0.1 (BIND_HOST) para que
+# PostgreSQL y MongoDB (sin autenticación) no queden expuestos en redes compartidas, y MongoDB
+# ya no usa container_name fijo (evita choques entre proyectos o clones).
 
 services:
+  frontend:
+    build:
+      context: ../../HITO-2/frontend-react
+      args:
+        # El navegador del usuario llama a la API por el puerto publicado en el equipo.
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api/v1}
+    ports:
+      - "${BIND_HOST:-127.0.0.1}:${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [pequenos_reyes]
+
   api:
     build: .
     ports:
-      - "8000:8000"
+      - "${BIND_HOST:-127.0.0.1}:${API_PORT:-8000}:8000"
     environment:
+      # R4 · Matiz A: APP_ENV obligatorio y explícito (development | test | staging | production).
+      APP_ENV: ${APP_ENV:?Falta APP_ENV en .env (development, test, staging o production)}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:?Falta POSTGRES_USER}:${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?Falta POSTGRES_DB}
       MONGODB_URL: mongodb://mongo:27017
       MONGODB_DATABASE: pequenos_reyes
-      CORS_ORIGINS: http://localhost:5173
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      # HU-16: DEMO_PASSWORD (solo development/test) da clave a las cuentas @ejemplo.cl.
+      # R4: con APP_ENV=staging/production la API se niega a iniciar si está definida.
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-}
+      SESION_MINUTOS: ${SESION_MINUTOS:-120}
+      # R4: desactivada por defecto; true solo se admite con APP_ENV=development/test.
+      PERMITIR_IDENTIDAD_DEMO: ${PERMITIR_IDENTIDAD_DEMO:-false}
+      AUDITORIA_RETENCION_DIAS: ${AUDITORIA_RETENCION_DIAS:-365}
     depends_on:
       postgres:
         condition: service_healthy
       mongo:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped
+    networks: [pequenos_reyes]
 
   postgres:
     image: postgres:16-alpine
@@ -22,7 +69,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${BIND_HOST:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # TEC-16: migraciones versionadas. Con un volumen vacío se aplican solas al primer
@@ -34,13 +81,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
+    networks: [pequenos_reyes]
 
   mongo:
     image: mongo:7
-    container_name: pequenos_reyes_mongo
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "${BIND_HOST:-127.0.0.1}:${MONGO_PORT:-27017}:27017"
     volumes:
       - mongo_data:/data/db
       - ./mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
@@ -50,6 +98,10 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    networks: [pequenos_reyes]
+
+networks:
+  pequenos_reyes:
 
 volumes:
   postgres_data:

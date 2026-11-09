@@ -1,0 +1,59 @@
+/* Sprint 3 · Daniel: panel de participación (HU-24), bitácora (HU-22) y estados de contacto (HU-26). */
+
+.panel-direccion { max-width: 960px; margin: 0 auto 32px; }
+
+.panel-direccion__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.panel-direccion__filtros label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; min-width: 150px; flex: 1 1 150px; }
+
+.panel-direccion__tarjetas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+.panel-direccion__tarjetas li {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  background: #fff;
+}
+.panel-direccion__valor { font-size: 24px; font-weight: 700; color: #1d3a5a; font-variant-numeric: tabular-nums; }
+.panel-direccion__etiqueta { font-size: 13px; color: #56606d; }
+
+.panel-direccion__tabla .progress { min-width: 90px; height: 18px; }
+.panel-direccion__estado,
+.panel-direccion__resultado { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.panel-direccion__estado--sin_inscritos { background: #eef0f3; color: #3c4450; }
+.panel-direccion__estado--con_cupos { background: #d1e7dd; color: #0f5132; }
+.panel-direccion__estado--completa { background: #ffe5d0; color: #7a3a00; }
+
+.panel-direccion__eventos { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.panel-direccion__eventos li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #eef0f3;
+  border-radius: 8px;
+  background: #fff;
+}
+.panel-direccion__resultado--exito { background: #d1e7dd; color: #0f5132; }
+.panel-direccion__resultado--fallido { background: #fff3cd; color: #664d03; }
+.panel-direccion__resultado--denegado { background: #f8d7da; color: #842029; }
+
+/* HU-26: estados de atención de las consultas de contacto */
+.contacto__estado--nuevo { background: #e3ecf5; color: #1d3a5a; }
+.contacto__estado--en_gestion { background: #fff3cd; color: #664d03; }
+.contacto__estado--cerrado { background: #d1e7dd; color: #0f5132; }
+.contacto__mensaje { white-space: pre-line; overflow-wrap: anywhere; }

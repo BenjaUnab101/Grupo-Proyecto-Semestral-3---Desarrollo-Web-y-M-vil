@@ -12,20 +12,26 @@ import {
   normalizarCampoContacto,
   validarCampoContacto,
 } from '../utils/contacto.js'
+import { enviarConsulta, erroresDelContacto } from '../services/contactoApi.js'
+import { mensajeDeError } from '../services/http.js'
 
-export const MENSAJE_DEMO_CONTACTO = 'Demostración: consulta validada, no enviada a la dirección'
-
-// HU-12: formulario de contacto con la dirección (DEMO).
-// Reutiliza FormField, FormularioDemo, useFormularioDemo y utils/validaciones.js
-// (los mismos de HU-11): aquí solo se definen los campos y sus textos.
-// No se hace ninguna solicitud HTTP ni se guarda nada; al confirmar se borra.
-export default function FormContacto() {
-  const { valores, confirmado, refConfirmacion, manejarEnvio, propsCampo } = useFormularioDemo({
+// HU-12 + HU-26 (Sprint 3 · Daniel): formulario de contacto con la dirección.
+// Reutiliza FormField, FormularioDemo, useFormularioDemo y utils/validaciones.js (Taller 2).
+// Desde HU-26 la consulta se ENVÍA a la API (POST /contacto) y queda en PostgreSQL con un
+// código de seguimiento. Si hay sesión iniciada, queda ligada a la cuenta ("Mis consultas").
+export default function FormContacto({ onCreada = () => {} }) {
+  const { valores, confirmado, enviando, errorEnvio, resultado, refConfirmacion, manejarEnvio, propsCampo } = useFormularioDemo({
     idFormulario: 'contacto',
     campos: CAMPOS_CONTACTO,
     valoresIniciales: VALORES_INICIALES_CONTACTO,
     validarCampo: validarCampoContacto,
     normalizarCampo: normalizarCampoContacto,
+    enviar: async (datos) => {
+      const creada = await enviarConsulta(datos)
+      onCreada(creada.codigo)
+      return creada
+    },
+    erroresDeApi: erroresDelContacto, // un 400 de la API se muestra junto a cada campo
   })
 
   const caracteres = contarCaracteres(valores.mensaje)
@@ -33,17 +39,28 @@ export default function FormContacto() {
   return (
     <FormularioDemo
       id="formulario-contacto"
-      titulo="Escribe a la dirección (demo)"
+      titulo="Escribe a la dirección"
       aviso={
         <>
-          Esta es una demostración del futuro canal de contacto: la consulta{' '}
-          <strong>no se envía a la dirección ni se guarda</strong>. Para probarla puedes usar datos
-          ficticios, como el correo demo@ejemplo.cl.
+          Tu consulta <strong>llega a la dirección del jardín</strong> y recibirás un código para revisar si fue
+          atendida. Este portal es una demostración: usa datos ficticios, como el correo demo@ejemplo.cl.
         </>
       }
-      mensajeConfirmacion={MENSAJE_DEMO_CONTACTO}
-      textoBoton="Enviar consulta (demo)"
+      mensajeConfirmacion={
+        resultado && (
+          <>
+            Consulta recibida. Tu código de seguimiento es{' '}
+            <span className="form-demo__codigo">{resultado.codigo}</span>
+            <br />
+            <span className="fw-normal">Guárdalo: con este código y tu correo puedes revisar su estado.</span>
+          </>
+        )
+      }
+      textoBoton="Enviar consulta"
+      textoEnviando="Enviando consulta…"
       confirmado={confirmado}
+      enviando={enviando}
+      errorEnvio={errorEnvio && `La consulta no se envió. ${mensajeDeError(errorEnvio)}`}
       refConfirmacion={refConfirmacion}
       onSubmit={manejarEnvio}
     >
@@ -59,7 +76,7 @@ export default function FormContacto() {
         type="email"
         {...propsCampo('correo')}
         required
-        ayuda="Solo se revisa el formato; puedes usar uno ficticio para probar."
+        ayuda="Lo necesitarás junto al código para revisar el estado."
         autoComplete="off"
         inputMode="email"
       />

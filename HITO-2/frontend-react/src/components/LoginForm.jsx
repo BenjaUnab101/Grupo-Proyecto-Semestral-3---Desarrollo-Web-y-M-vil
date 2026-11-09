@@ -1,43 +1,55 @@
 import { useState } from 'react'
-import { autenticar } from '../services/auth.js'
+import { useSesion } from '../context/sesionContexto.js'
+import { mensajeDeError } from '../services/http.js'
 
-// Formulario de acceso simulado del portal apoderados (sin backend real).
-export default function LoginForm({ onLoginExitoso }) {
-  const [identificador, setIdentificador] = useState('')
+// HU-16 (Sprint 3 · Daniel): formulario de acceso REAL. Envía email + contraseña a
+// POST /auth/login; la contraseña se compara en el servidor contra un hash (nunca aquí).
+// Reemplaza el acceso simulado del Taller 2 (SCRUM-62), conservando su diseño.
+export default function LoginForm() {
+  const { iniciarSesion } = useSesion()
+  const [email, setEmail] = useState('')
   const [clave, setClave] = useState('')
   const [error, setError] = useState(null)
+  const [enviando, setEnviando] = useState(false)
 
-  const manejarSubmit = (evento) => {
+  const manejarSubmit = async (evento) => {
     evento.preventDefault()
-
-    const apoderado = autenticar(identificador, clave)
-    if (!apoderado) {
-      // Mensaje genérico: no se revela si el dato incorrecto fue el identificador o la clave.
-      setError('Credenciales inválidas. Verifica tu RUT o correo y tu contraseña.')
+    if (!email.trim() || !clave) {
+      setError('Ingresa tu correo y tu contraseña.')
       return
     }
-
+    setEnviando(true)
     setError(null)
-    onLoginExitoso(apoderado)
+    try {
+      await iniciarSesion(email.trim(), clave)
+    } catch (errorApi) {
+      // Mensaje genérico: no se revela si el dato incorrecto fue el correo o la contraseña.
+      setError(errorApi?.estado === 401 || errorApi?.estado === 400
+        ? 'Credenciales inválidas. Verifica tu correo y tu contraseña.'
+        : mensajeDeError(errorApi))
+      setClave('')
+    }
+    setEnviando(false)
   }
 
   return (
-    <form onSubmit={manejarSubmit}>
+    <form onSubmit={manejarSubmit} noValidate>
       <p className="text-muted small mb-3">
-        Acceso simulado con credenciales demo (sin conexión a un sistema real).
+        Ingresa con la cuenta entregada por el jardín. En esta demostración las cuentas son ficticias (@ejemplo.cl).
       </p>
 
       <div className="mb-3">
         <label htmlFor="identificador" className="form-label">
-          RUT o correo
+          Correo
         </label>
         <input
           id="identificador"
-          type="text"
+          type="email"
           className="form-control"
-          value={identificador}
-          onChange={(evento) => setIdentificador(evento.target.value)}
+          value={email}
+          onChange={(evento) => setEmail(evento.target.value)}
           autoComplete="username"
+          inputMode="email"
           required
         />
       </div>
@@ -63,8 +75,8 @@ export default function LoginForm({ onLoginExitoso }) {
         </div>
       )}
 
-      <button type="submit" className="btn-institucional-primary w-100">
-        Ingresar
+      <button type="submit" className="btn-institucional-primary w-100" disabled={enviando} aria-busy={enviando}>
+        {enviando ? 'Ingresando…' : 'Ingresar'}
       </button>
     </form>
   )

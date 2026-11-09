@@ -1,0 +1,63 @@
+# 2026-11-09T10:43:08-03:00 · API recreada con PERMITIR_IDENTIDAD_DEMO=false (modo estricto)
+ Container pr_s3_daniel-api-1 Started 
+false
+
+# prueba_remediacion_s3 estricto
+== Rutas NUEVAS: X-Usuario-Id nunca vale, solo Bearer ==
+[PASS] R-01 GET /portal/alumnos con X-Usuario-Id de dirección -> 401
+[PASS] R-02 GET /auditoria/eventos con X-Usuario-Id de dirección -> 401
+[PASS] R-03 GET /panel/participacion con X-Usuario-Id de dirección -> 401
+[PASS] R-04 GET /contacto con X-Usuario-Id de dirección -> 401
+[PASS] R-05 GET /contacto con Bearer de apoderado + X-Rol direccion -> 403
+[PASS] R-06 Token inventado -> 401
+
+== Rutas HEREDADAS (HU-17): X-Rol contrastado con la sesión ==
+[PASS] R-07 Bearer apoderado + X-Rol direccion -> 403
+[PASS] R-08 Bearer educadora + X-Rol direccion -> 403
+[PASS] R-09 Bearer dirección + X-Rol direccion -> 201
+
+== Modo estricto (PERMITIR_IDENTIDAD_DEMO=false) ==
+[PASS] E-01 X-Rol direccion SIN sesión -> 401
+[PASS] E-02 X-Usuario-Id dirección + X-Rol direccion -> 401
+[PASS] E-03 GET /sesion/yo con X-Usuario-Id -> 401
+[PASS] E-04 GET /prematriculas (heredada) con X-Usuario-Id dirección -> 401
+[PASS] E-05 GET /prematriculas con Bearer dirección -> 200
+[PASS] E-06 GET /prematriculas con Bearer apoderado -> 403
+
+Resultado: 15/15 PASS
+
+# integración propia en modo estricto
+Resultado: 22/22 PASS
+
+# scripts de compañeros en modo estricto (informativo: usan X-Usuario-Id)
+== prueba_tec17
+== prueba_hu19
+Resultado: 18/18 PASS
+== prueba_hu21
+[FAIL] 01.1 Dirección publica -> 201  ->  HTTP 401
+[FAIL] 01.2 Quedó en la tabla comunicados de PostgreSQL
+[FAIL] 01.3 Se lee por id sin identificarse
+[FAIL] 01.4 Dirección lo modifica -> 200
+[FAIL] 01.5 La educadora publica su propio comunicado -> 201
+[FAIL] 02.4 Filtro por fecha (hoy) incluye los de la prueba
+[FAIL] 02.5 Pertinentes: el apoderado de Sala TEL ve el comunicado TEL; el de Preescolar no
+[FAIL] 02.6 vigentes=false: sin cuenta 403, dirección 200
+[FAIL] 03.2 Publicar como apoderado -> 403  ->  HTTP 401
+[FAIL] 03.3 La educadora edita uno de dirección -> 403  ->  HTTP 401
+[FAIL] 03.4 Dirección edita el de la educadora -> 200  ->  HTTP 401
+[FAIL] 03.5 Ver la bitácora como apoderado -> 403  ->  HTTP 401
+[FAIL] 04.1 Nivel inexistente -> 400  ->  HTTP 401
+[FAIL] 04.2 Título de 2 letras (con espacios) -> 400  ->  HTTP 401
+[FAIL] 04.3 Vigencia que termina antes de publicarse -> 400  ->  HTTP 401
+[FAIL] 05.1 Eliminar -> 204 y luego 404
+[FAIL] 05.2 La bitácora guarda crear -> editar -> eliminar
+Resultado: 6/23 PASS
+== prueba_hu25 crear
+[FAIL] C.3 Dirección la pasa a 'en_revision'
+== prueba_tec16 crear
+Resultado: 20/20 PASS
+
+# Nota: prueba_tec17 no imprimió resultado en modo estricto: el script termina con
+# KeyError: 'hijos' porque /sesion/yo responde 401 a X-Usuario-Id (comportamiento esperado del modo estricto).
+# prueba_hu25 crear: C.3 falla por la misma causa (usa X-Usuario-Id de dirección).
+# Después de esta corrida la API se volvió a modo dev (PERMITIR_IDENTIDAD_DEMO=true).

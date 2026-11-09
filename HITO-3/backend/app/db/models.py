@@ -293,3 +293,35 @@ class SolicitudPrematricula(Base):
     mensaje_familia: Mapped[str | None] = mapped_column(String(300), nullable=True)
     creada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
     actualizada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+# ---------- HU-16 (Sprint 3 · Daniel): sesiones de login real (migración V006) ----------
+
+
+class Sesion(Base):
+    __tablename__ = "sesiones"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    token_hash: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
+    creada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    expira_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    revocada_en: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+# ---------- HU-26 (Sprint 3 · Daniel): consultas de contacto con dirección (migración V007) ----------
+
+
+class ConsultaContacto(Base):
+    __tablename__ = "consultas_contacto"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    codigo: Mapped[str] = mapped_column(String(9), nullable=False, unique=True)
+    usuario_id: Mapped[int | None] = mapped_column(ForeignKey("usuarios.id", ondelete="SET NULL"), nullable=True)
+    nombre: Mapped[str] = mapped_column(String(80), nullable=False)
+    correo: Mapped[str] = mapped_column(String(254), nullable=False)
+    telefono: Mapped[str] = mapped_column(String(9), nullable=False)
+    asunto: Mapped[str] = mapped_column(String(100), nullable=False)
+    mensaje: Mapped[str] = mapped_column(String(1000), nullable=False)
+    estado: Mapped[str] = mapped_column(String(20), nullable=False, server_default="nuevo")
+    respuesta_direccion: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    creada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    actualizada_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())

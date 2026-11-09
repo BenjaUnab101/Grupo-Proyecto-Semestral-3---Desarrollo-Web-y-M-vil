@@ -1,0 +1,20 @@
+# 2026-11-09T11:09:43-03:00 · Segunda auditoría H-02 · sonda HTTP en MODO ESTRICTO (PERMITIR_IDENTIDAD_DEMO=false)
+ Container pr_s3_daniel-api-1 Started 
+PERMITIR_IDENTIDAD_DEMO=false
+== Lecturas con datos de alumnos/apoderados/pagos ==
+[ABIERTA] H02-01 GET /alumnos -> HTTP 200  lista de alumnos  · 107 alumnos (nombres incluidos)
+[ABIERTA] H02-02 GET /eventos/2/asistentes -> HTTP 200  asistentes de un evento  · 1 asistentes con nombre
+[ABIERTA] H02-03 GET /apoderados/1/inscripciones -> HTTP 200  inscripciones de un apoderado por id  · 4 inscripciones
+[ABIERTA] H02-04 GET /pagos -> HTTP 200  pagos HU-20 (RUT y nombre de párvulo)  · 0 pagos
+[ABIERTA] H02-05 GET /matriculas -> HTTP 200  matrículas  · 107 matrículas
+
+== Escrituras ==
+[ABIERTA] H02-06 POST /eventos -> HTTP 201  crear evento  · 
+[ABIERTA] H02-07 PATCH /eventos/39 -> HTTP 200  modificar evento  · 
+[ABIERTA] H02-08 DELETE /eventos/39 -> HTTP 204  eliminar evento (limpieza)  · 
+[ABIERTA] H02-09 POST /categorias -> HTTP 201  crear categoría (TEC-16)  · 
+[ABIERTA] H02-10 PATCH /pagos/999999/estado -> HTTP 404  cambiar estado de un pago inexistente (llega a la lógica: 404, no 401)
+[ABIERTA] H02-11 POST /matriculas -> HTTP 404  crear matrícula con ids inexistentes (llega a la lógica)
+[ABIERTA] H02-12 POST /inscripciones/999999/cancelar -> HTTP 404  cancelar inscripción ajena con apoderado_id inventado (llega a la lógica)
+
+Rutas ABIERTAS sin autenticación: 12 de 12 sondeadas -> H02-01, H02-02, H02-03, H02-04, H02-05, H02-06, H02-07, H02-08, H02-09, H02-10, H02-11, H02-12
