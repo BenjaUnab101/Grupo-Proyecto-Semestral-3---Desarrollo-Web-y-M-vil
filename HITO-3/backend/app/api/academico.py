@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.permisos import PERSONAL, requiere_roles
 from app.db.postgres import get_db
 from app.schemas.academico import (
     AlumnoOut,
@@ -16,6 +17,7 @@ router = APIRouter(tags=["academico"])
 @router.get("/alumnos", response_model=list[AlumnoOut])
 def listar_alumnos(
     activos: bool = True,
+    usuario=Depends(requiere_roles(*PERSONAL)),  # H-02: datos de alumnos solo para el personal
     db: Session = Depends(get_db),
 ):
     return servicio.listar_alumnos(db, activos)
@@ -32,6 +34,7 @@ def listar_salas(
 @router.get("/matriculas", response_model=list[MatriculaOut])
 def listar_matriculas(
     anio_escolar: int | None = Query(default=None, ge=2020, le=2100),
+    usuario=Depends(requiere_roles(*PERSONAL)),  # H-02
     db: Session = Depends(get_db),
 ):
     return servicio.listar_matriculas(db, anio_escolar)
@@ -44,6 +47,7 @@ def listar_matriculas(
 )
 def crear_matricula(
     payload: MatriculaIn,
+    usuario=Depends(requiere_roles("administrador")),  # H-02: solo dirección matricula
     db: Session = Depends(get_db),
 ):
     return servicio.crear_matricula(db, payload)

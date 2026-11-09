@@ -149,3 +149,61 @@ def direccion_requerida(usuario=Depends(usuario_opcional)):
 # docs/sprint3/daniel/remediacion/PROPUESTA_X_ROL_RUTAS_HEREDADAS.patch
 def rol_de_sesion(usuario=Depends(usuario_autenticado)) -> str:
     return {"administrador": "direccion"}.get(usuario.rol, usuario.rol)
+
+
+# ---------------------------------------------------------------------------
+# Cierre de H-01/H-02/H-03 (rutas heredadas HU-17/18/19/20/27, TEC-16, académico).
+# Identidad = token Bearer o, SOLO con la identidad demo activa (development/test), X-Usuario-Id
+# de una cuenta ficticia. En staging/production solo vale el token.
+# ---------------------------------------------------------------------------
+
+PERSONAL = ("administrador", "organizador")
+ROL_EN_SERVICIOS_HEREDADOS = {"administrador": "direccion", "organizador": "organizador", "apoderado": "apoderado"}
+
+
+def usuario_requerido(usuario=Depends(usuario_opcional)):
+    if usuario is None:
+        raise HTTPException(401, "Debes iniciar sesión", headers={"WWW-Authenticate": "Bearer"})
+    return usuario
+
+
+def requiere_roles(*roles: str):
+    """Como roles_requeridos, pero acepta también la identidad demo cuando está activa."""
+    def verificar(usuario=Depends(usuario_requerido)):
+        if usuario.rol not in roles:
+            raise HTTPException(403, "Tu cuenta no tiene permiso para esta acción")
+        return usuario
+    return verificar
+
+
+def rol_heredado(usuario=Depends(usuario_requerido)) -> str:
+    """H-01/H-03: el rol que esperan app/services/eventos.py y documentos.py sale de la sesión,
+    nunca del encabezado X-Rol que manda el navegador."""
+    return ROL_EN_SERVICIOS_HEREDADOS.get(usuario.rol, usuario.rol)
+
+
+def es_personal(usuario) -> bool:
+    return usuario is not None and usuario.rol in PERSONAL
+
+
+def apoderado_de_la_peticion(usuario, apoderado_id_enviado: int | None) -> int:
+    """H-02: el apoderado de una inscripción, cancelación o pago sale del token.
+    - Cuenta de apoderado: si el cuerpo trae otro apoderado_id -> 403.
+    - Personal del jardín: puede actuar por un apoderado, indicándolo explícitamente."""
+    if usuario.rol == "apoderado":
+        if apoderado_id_enviado is not None and apoderado_id_enviado != usuario.apoderado_id:
+            raise HTTPException(403, "No puedes actuar en nombre de otro apoderado")
+        return usuario.apoderado_id
+    if not es_personal(usuario):
+        raise HTTPException(403, "Tu cuenta no tiene permiso para esta acción")
+    if apoderado_id_enviado is None:
+        raise HTTPException(400, "Indica el apoderado (apoderado_id) para registrar en su nombre")
+    return apoderado_id_enviado
+
+
+def exigir_propietario_o_personal(usuario, apoderado_id: int):
+    if es_personal(usuario):
+        return
+    if usuario.rol == "apoderado" and usuario.apoderado_id == apoderado_id:
+        return
+    raise HTTPException(403, "No tienes acceso a la información de otro apoderado")

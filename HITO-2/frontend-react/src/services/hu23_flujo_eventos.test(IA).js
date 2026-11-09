@@ -69,7 +69,8 @@ test('CP-HU-23-02: maneja entradas inválidas en filtros, error de red 503 y est
     json: async () => ({ detail: 'Servicio no disponible' }),
   });
 
-  await assert.rejects(() => obtenerPagosInscripciones(), /503/);
+  // pedir() traduce cualquier 5xx a un mensaje para el usuario (TEC-17).
+  await assert.rejects(() => obtenerPagosInscripciones(), (e) => e.estado === 500 && /no está disponible/.test(e.message));
 
   // CA4 y CA5: Verificar integración en App.jsx, acciones Confirmar/Cancelar y clases responsive
   // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).

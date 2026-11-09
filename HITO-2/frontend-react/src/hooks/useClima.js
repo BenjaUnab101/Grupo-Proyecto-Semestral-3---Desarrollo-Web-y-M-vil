@@ -12,6 +12,10 @@ export function useClima() {
   const solicitudActual = useRef(0);
 
   const reintentar = useCallback(() => {
+    // El estado de carga se fija aquí (evento) y no en el cuerpo del efecto
+    // (react-hooks/set-state-in-effect). En la primera carga ya vale true por defecto.
+    setCargando(true);
+    setError(null);
     setReintento((actual) => actual + 1);
   }, []);
 
@@ -21,9 +25,6 @@ export function useClima() {
 
     let activo = true;
     let timeoutAlcanzado = false;
-
-    setCargando(true);
-    setError(null);
 
     const timeoutId = setTimeout(() => {
       timeoutAlcanzado = true;

@@ -1,5 +1,6 @@
 import os
 os.environ["DATABASE_URL"] = "sqlite://"
+os.environ.setdefault("APP_ENV", "test")  # obligatorio desde R4 (Matiz A)
 
 import unittest
 from sqlalchemy import create_engine
@@ -28,6 +29,11 @@ def override_get_db():
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
+# Cierre H-01/H-02: el rol ya no se declara con X-Rol; se inicia sesión con cuentas ficticias.
+from tests_sesiones import preparar_sesiones  # noqa: E402
+
+SESION = preparar_sesiones(client, TestingSessionLocal)
+
 
 class TestHU17OrganizadoresCategorias(unittest.TestCase):
     def test_cp_hu_17_01_flujo_exitoso_crear_editar_listar(self):
@@ -35,7 +41,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
         res_cat = client.post(
             "/api/v1/categorias-actividad",
             json={"nombre": "Taller Fonoaudiológico", "descripcion": "Sesiones grupales TEL"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_cat.status_code, 201)
         cat_id = res_cat.json()["id"]
@@ -44,7 +50,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
         res_edit_cat = client.patch(
             f"/api/v1/categorias-actividad/{cat_id}",
             json={"descripcion": "Sesiones actualizadas"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_edit_cat.status_code, 200)
         self.assertEqual(res_edit_cat.json()["descripcion"], "Sesiones actualizadas")
@@ -58,7 +64,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
                 "rol_perfil": "Educadora",
                 "telefono": "+56 9 1234 5678",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_org.status_code, 201)
         org_id = res_org.json()["id"]
@@ -67,7 +73,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
         res_edit_org = client.patch(
             f"/api/v1/organizadores/{org_id}",
             json={"rol_perfil": "Coordinación"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_edit_org.status_code, 200)
         self.assertEqual(res_edit_org.json()["rol_perfil"], "Coordinación")
@@ -89,7 +95,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
                 "email": "intruso@pequenosreyes.cl",
                 "rol_perfil": "Educadora",
             },
-            headers={"X-Rol": "apoderado"},
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_sin_permiso.status_code, 403)
 
@@ -101,7 +107,7 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
                 "email": "correo-invalido",
                 "rol_perfil": "RolInventado",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_invalido.status_code, 400)
 
@@ -109,15 +115,23 @@ class TestHU17OrganizadoresCategorias(unittest.TestCase):
         client.post(
             "/api/v1/categorias-actividad",
             json={"nombre": "Reunión Apoderados"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         res_duplicado = client.post(
             "/api/v1/categorias-actividad",
             json={"nombre": "Reunión Apoderados"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_duplicado.status_code, 409)
 
+
+    def test_cierre_h01_x_rol_ya_no_otorga_permisos(self):
+        # Sin sesión, aunque el navegador diga X-Rol: direccion -> 401 (H-01/H-03).
+        r = client.post("/api/v1/organizadores", json={}, headers={"X-Rol": "direccion"})
+        self.assertEqual(r.status_code, 401)
+        # Con sesión de apoderado y X-Rol falsificado -> 403.
+        r = client.post("/api/v1/organizadores", json={}, headers={**SESION["apoderado"], "X-Rol": "direccion"})
+        self.assertEqual(r.status_code, 403)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

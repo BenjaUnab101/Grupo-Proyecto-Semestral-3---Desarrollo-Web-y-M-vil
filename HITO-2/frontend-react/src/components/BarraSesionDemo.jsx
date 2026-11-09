@@ -8,6 +8,10 @@ export default function BarraSesionDemo() {
   const { perfil, error, elegirCuenta } = useSesion()
   const cuentas = useRecurso(listarCuentasDemo)
 
+  // Cierre H-02: sin identidad demo activa (modo estricto, staging, production) la API no
+  // ofrece cuentas demo (404); entonces no se muestra la barra y se usa el login real.
+  if (cuentas.error?.estado === 404) return null
+
   return (
     <div className="barra-sesion" role="region" aria-label="Cuenta de demostración">
       <div className="container d-flex flex-wrap align-items-center gap-2 py-2">

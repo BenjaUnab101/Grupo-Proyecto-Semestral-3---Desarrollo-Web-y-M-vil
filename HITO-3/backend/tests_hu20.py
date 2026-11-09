@@ -1,5 +1,6 @@
 import os
 os.environ["DATABASE_URL"] = "sqlite://"
+os.environ.setdefault("APP_ENV", "test")  # obligatorio desde R4 (Matiz A)
 
 import unittest
 from sqlalchemy import create_engine
@@ -28,6 +29,11 @@ def override_get_db():
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
+# Cierre H-01/H-02: el rol ya no se declara con X-Rol; se inicia sesión con cuentas ficticias.
+from tests_sesiones import preparar_sesiones  # noqa: E402
+
+SESION = preparar_sesiones(client, TestingSessionLocal)
+
 
 class TestHU20PagosYComprobantes(unittest.TestCase):
     @classmethod
@@ -35,7 +41,7 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
         res_cat = client.post(
             "/api/v1/categorias-actividad",
             json={"nombre": "Talleres Recreativos"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         cls.cat_id = res_cat.json()["id"]
 
@@ -46,7 +52,7 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
                 "email": "benjamin.concha@pequenosreyes.cl",
                 "rol_perfil": "Coordinación",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         cls.org_id = res_org.json()["id"]
 
@@ -62,7 +68,7 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
                 "organizador_id": cls.org_id,
                 "estado": "publicada",
             },
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         cls.act_id = res_act.json()["id"]
 
@@ -78,6 +84,7 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
                 "metodo_pago": "Transferencia Simulada",
                 "estado_pago": "pendiente",
             },
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_pago.status_code, 201)
         datos = res_pago.json()
@@ -90,6 +97,7 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
         res_pagado = client.patch(
             f"/api/v1/pagos/{pago_id}/estado",
             json={"estado_pago": "pagado"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_pagado.status_code, 200)
         self.assertEqual(res_pagado.json()["estado_pago"], "pagado")
@@ -97,12 +105,13 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
         res_conf = client.patch(
             f"/api/v1/pagos/{pago_id}/estado",
             json={"estado_pago": "confirmado"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_conf.status_code, 200)
         self.assertEqual(res_conf.json()["estado_pago"], "confirmado")
 
         # 3. CA2 y CA5: Consultar comprobante por código único verificable
-        res_comp = client.get(f"/api/v1/pagos/comprobante/{codigo}")
+        res_comp = client.get(f"/api/v1/pagos/comprobante/{codigo}", headers=SESION["apoderado"])
         self.assertEqual(res_comp.status_code, 200)
         self.assertEqual(res_comp.json()["nombre_parvulo"], "Sofía Pérez Soto")
         self.assertEqual(res_comp.json()["estado_pago"], "confirmado")
@@ -117,15 +126,17 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
                 "nombre_parvulo": "Martín Muñoz Díaz",
                 "monto": 3500,
             },
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_sin_cupo.status_code, 409)
 
         # 2. Rechazo 409 por transición de estado NO autorizada (confirmado -> pendiente)
-        lista = client.get(f"/api/v1/pagos?actividad_id={self.act_id}").json()
+        lista = client.get(f"/api/v1/pagos?actividad_id={self.act_id}", headers=SESION["direccion"]).json()
         pago_id = lista[0]["id"]
         res_trans_invalida = client.patch(
             f"/api/v1/pagos/{pago_id}/estado",
             json={"estado_pago": "pendiente"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_trans_invalida.status_code, 409)
 
@@ -138,8 +149,21 @@ class TestHU20PagosYComprobantes(unittest.TestCase):
                 "nombre_parvulo": "A",
                 "monto": -500,
             },
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_400.status_code, 400)
+
+    def test_cp_hu_20_03_pagos_exigen_sesion_y_rol(self):
+        # Cierre H-02: sin sesión -> 401; apoderado no lista pagos ni cambia estados -> 403.
+        self.assertEqual(client.get("/api/v1/pagos").status_code, 401)
+        self.assertEqual(client.post("/api/v1/pagos", json={"actividad_id": self.act_id}).status_code, 401)
+        self.assertEqual(client.get("/api/v1/pagos/comprobante/PR-COMP-X").status_code, 401)
+        self.assertEqual(client.patch("/api/v1/pagos/1/estado", json={"estado_pago": "pagado"}).status_code, 401)
+        self.assertEqual(client.get("/api/v1/pagos", headers=SESION["apoderado"]).status_code, 403)
+        self.assertEqual(client.patch("/api/v1/pagos/1/estado", json={"estado_pago": "pagado"}, headers=SESION["apoderado"]).status_code, 403)
+        self.assertEqual(client.patch("/api/v1/pagos/1/estado", json={"estado_pago": "pagado"}, headers=SESION["organizador"]).status_code, 403)
+        # Un X-Rol "direccion" enviado por el navegador ya no da permisos (H-01).
+        self.assertEqual(client.get("/api/v1/pagos", headers={"X-Rol": "direccion"}).status_code, 401)
 
 
 if __name__ == "__main__":

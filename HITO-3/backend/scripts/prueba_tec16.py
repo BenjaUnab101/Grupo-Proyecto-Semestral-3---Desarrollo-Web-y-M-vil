@@ -16,7 +16,7 @@ from sqlalchemy import delete, select, text
 
 from app.db.models import Actividad, Alumno, Apoderado, Categoria, Inscripcion, Organizador, Pago
 from app.db.postgres import SessionLocal
-from scripts.utilidades import esperar_api, llamar, terminar, verificar
+from scripts.utilidades import esperar_api, identidad_por_defecto, llamar, terminar, verificar
 
 CODIGO = "TEST-TEC16-REINICIO"
 TITULO = "Actividad de control para el reinicio (TEC-16)"
@@ -124,6 +124,8 @@ if len(sys.argv) != 2 or sys.argv[1] not in ("crear", "verificar"):
     print("Uso: python -m scripts.prueba_tec16 crear|verificar")
     sys.exit(2)
 esperar_api()
+# Cierre H-02: escrituras de eventos, inscripciones y pagos exigen sesión (dirección demo).
+identidad_por_defecto("direccion.demo@ejemplo.cl")
 with SessionLocal() as db:
     fase_crear(db) if sys.argv[1] == "crear" else fase_verificar(db)
 terminar()

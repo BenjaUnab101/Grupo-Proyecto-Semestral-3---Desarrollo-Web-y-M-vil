@@ -28,4 +28,13 @@ export default [
       ],
     },
   },
+  {
+    // Scripts de evidencia (Playwright): corren en Node y evalúan código en el navegador.
+    files: ['docs/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.node, ...globals.browser },
+    },
+  },
 ]

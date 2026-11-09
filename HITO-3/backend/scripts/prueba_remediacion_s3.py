@@ -43,8 +43,15 @@ def bearer(email):
 
 
 def id_demo(email):
-    with urllib.request.urlopen(URL + API + "/sesion/cuentas-demo", timeout=15) as r:
-        return str(next(c["usuario_id"] for c in json.loads(r.read()) if c["email"] == email))
+    # Desde el cierre de H-02, /sesion/cuentas-demo solo existe con la identidad demo activa;
+    # el id se lee directamente de la base (el script corre dentro del contenedor de la API).
+    from sqlalchemy import select
+
+    from app.db.models import Usuario
+    from app.db.postgres import SessionLocal
+
+    with SessionLocal() as db:
+        return str(db.scalar(select(Usuario.id).where(Usuario.email == email)))
 
 
 def categoria(cab):
@@ -76,7 +83,7 @@ def modo_dev():
     ap_id = id_demo("apoderado.demo1@ejemplo.cl")
     verificar("D-01", "X-Usuario-Id apoderado + X-Rol direccion -> 403", categoria({"X-Usuario-Id": ap_id, "X-Rol": "direccion"}) == 403)
     verificar("D-02", "X-Usuario-Id inexistente + X-Rol direccion -> 401", categoria({"X-Usuario-Id": "999999", "X-Rol": "direccion"}) == 401)
-    verificar("D-03", "X-Rol direccion SIN identidad -> 201 (riesgo residual aceptado en desarrollo)", categoria({"X-Rol": "direccion"}) == 201)
+    verificar("D-03", "X-Rol direccion SIN identidad -> 401 (H-01 cerrado: el rol sale de la sesión)", categoria({"X-Rol": "direccion"}) == 401)
     verificar("D-04", "GET /sesion/yo con X-Usuario-Id demo -> 200 (barra demo TEC-17)", llamar("GET", "/sesion/yo", cabeceras={"X-Usuario-Id": ap_id}) == 200)
 
 

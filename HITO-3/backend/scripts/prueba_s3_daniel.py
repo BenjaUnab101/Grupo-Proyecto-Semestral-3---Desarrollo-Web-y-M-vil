@@ -89,12 +89,12 @@ def crear():
     st, eventos = llamar("GET", "/eventos")
     taller = next(e for e in eventos if e["codigo"] == "DEMO-TALLER-RECICLAJE")
     hijo = hijos[-1]
-    st, inscripcion = llamar("POST", f"/eventos/{taller['id']}/inscripciones", {"alumno_id": hijo["id"], "apoderado_id": login["perfil"]["apoderado_id"]})
+    st, inscripcion = llamar("POST", f"/eventos/{taller['id']}/inscripciones", {"alumno_id": hijo["id"]}, token=ap1)
     if st == 409:  # ya estaba inscrito por una ejecución anterior: se cancela y se vuelve a inscribir
-        st, lista = llamar("GET", f"/apoderados/{login['perfil']['apoderado_id']}/inscripciones")
+        st, lista = llamar("GET", f"/apoderados/{login['perfil']['apoderado_id']}/inscripciones", token=ap1)
         previa = next(i for i in lista if i["actividad_id"] == taller["id"] and i["alumno_id"] == hijo["id"])
-        llamar("POST", f"/inscripciones/{previa['id']}/cancelar", {"apoderado_id": login["perfil"]["apoderado_id"]})
-        st, inscripcion = llamar("POST", f"/eventos/{taller['id']}/inscripciones", {"alumno_id": hijo["id"], "apoderado_id": login["perfil"]["apoderado_id"]})
+        llamar("POST", f"/inscripciones/{previa['id']}/cancelar", {}, token=ap1)
+        st, inscripcion = llamar("POST", f"/eventos/{taller['id']}/inscripciones", {"alumno_id": hijo["id"]}, token=ap1)
     verificar("S3-15", "Inscripción real a un evento -> 201", st == 201)
     st, historial = llamar("GET", f"/panel/participacion/historial?actividad_id={taller['id']}", token=direccion)
     verificar("S3-16", "El historial Mongo del evento muestra la inscripción",

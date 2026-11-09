@@ -13,9 +13,11 @@ from sqlalchemy import delete, func, select, text
 
 from app.db.models import Actividad, Alumno, Apoderado, Inscripcion
 from app.db.postgres import SessionLocal
-from scripts.utilidades import esperar_api, llamar, terminar, verificar
+from scripts.utilidades import esperar_api, identidad_por_defecto, llamar, terminar, verificar
 
 esperar_api()
+# Cierre H-02: las inscripciones exigen sesión; el script actúa como dirección demo en nombre del apoderado.
+identidad_por_defecto("direccion.demo@ejemplo.cl")
 db = SessionLocal()
 ap1 = db.scalar(select(Apoderado.id).where(Apoderado.email == "apoderado.demo1@ejemplo.cl"))  # A01 a A05
 ap2 = db.scalar(select(Apoderado.id).where(Apoderado.email == "apoderado.demo2@ejemplo.cl"))  # A06

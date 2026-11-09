@@ -517,9 +517,11 @@ class TestRemediacionIdentidad(unittest.TestCase):
 
     # --- Modo desarrollo (identidad demo activa): compatibilidad con pantallas heredadas ---
 
-    def test_dev_x_rol_sin_identidad_sigue_funcionando(self):
-        self.assertEqual(self.crear_categoria(**{"X-Rol": "direccion"}).status_code, 201)
-        self.assertEqual(self.crear_categoria(**{"X-Rol": "apoderado"}).status_code, 403)  # regla propia de HU-17
+    def test_x_rol_sin_identidad_ya_no_otorga_permisos(self):
+        # Cierre H-01/H-03: las rutas heredadas toman el rol de la sesión. X-Rol sin identidad
+        # responde 401 incluso con la identidad demo activa (antes devolvía 201).
+        self.assertEqual(self.crear_categoria(**{"X-Rol": "direccion"}).status_code, 401)
+        self.assertEqual(self.crear_categoria(**{"X-Rol": "apoderado"}).status_code, 401)
 
     def test_bearer_con_x_rol_falsificado_403(self):
         r = self.crear_categoria(**{**token("ap1@ejemplo.cl"), "X-Rol": "direccion"})

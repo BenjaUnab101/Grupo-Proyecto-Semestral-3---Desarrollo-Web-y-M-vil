@@ -8,6 +8,7 @@ import {
   actualizarDocumento,
   filtrarDocumentosPorCategoria,
 } from '../services/documentosApi.js';
+import { useSesion } from '../context/sesionContexto.js';
 
 export default function Documentos() {
   const [documentos, setDocumentos] = useState([]);
@@ -15,7 +16,8 @@ export default function Documentos() {
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
   const [categoriaActiva, setCategoriaActiva] = useState('Todos');
-  const [rolActivo, setRolActivo] = useState('apoderado');
+  // Cierre H-01: la vista de dirección depende de la sesión iniciada, no de un selector.
+  const { usuarioId, perfil } = useSesion() ?? {};
 
   // Formulario Dirección (HU-27 CA1, CA2)
   const [editId, setEditId] = useState(null);
@@ -25,40 +27,32 @@ export default function Documentos() {
   const [urlArchivo, setUrlArchivo] = useState('');
   const [vigente, setVigente] = useState(true);
 
-  const esDireccion = rolActivo === 'direccion';
+  const esDireccion = perfil?.rol === 'administrador';
 
-  const cargarDocumentos = async () => {
-    try {
-      setCargando(true);
-      setError('');
-      const remotos = await obtenerDocumentos({ soloVigentes: !esDireccion });
-      if (Array.isArray(remotos) && remotos.length > 0) {
-        setDocumentos(remotos);
-      } else {
-        setDocumentos(
-          documentosFallback.map((d) => ({
-            ...d,
-            vigente: true,
-            fecha_actualizacion: '2026-09-01',
-          }))
-        );
-      }
-    } catch {
-      setDocumentos(
-        documentosFallback.map((d) => ({
-          ...d,
-          vigente: true,
-          fecha_actualizacion: '2026-09-01',
-        }))
-      );
-    } finally {
-      setCargando(false);
-    }
-  };
-
+  // Carga de datos (patrón de hooks/useRecurso.js): el estado cambia solo dentro de las promesas.
+  const [version, setVersion] = useState(0);
   useEffect(() => {
-    cargarDocumentos();
-  }, [esDireccion]);
+    let vigente = true;
+    obtenerDocumentos({ soloVigentes: !esDireccion })
+      .then((remotos) => (Array.isArray(remotos) && remotos.length > 0 ? remotos : documentosFallback.map((d) => ({ ...d, vigente: true, fecha_actualizacion: '2026-09-01' }))))
+      .catch(() => documentosFallback.map((d) => ({ ...d, vigente: true, fecha_actualizacion: '2026-09-01' })))
+      .then((lista) => {
+        if (!vigente) return;
+        setDocumentos(lista);
+        setCargando(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [esDireccion, version]);
+
+  // Recarga tras una acción del usuario (patrón de hooks/useRecurso.js: el efecto vuelve a
+  // pedir los datos y el estado solo cambia dentro de las promesas).
+  const recargar = () => {
+    setCargando(true);
+    setError('');
+    setVersion((v) => v + 1);
+  };
 
   const visibles = useMemo(
     () => filtrarDocumentosPorCategoria(documentos, categoriaActiva, !esDireccion),
@@ -87,14 +81,14 @@ export default function Documentos() {
         vigente,
       };
       if (editId) {
-        await actualizarDocumento(editId, payload, rolActivo);
+        await actualizarDocumento(editId, payload, usuarioId);
         setMensajeExito('Documento institucional actualizado en PostgreSQL.');
       } else {
-        await crearDocumento(payload, rolActivo);
+        await crearDocumento(payload, usuarioId);
         setMensajeExito('Documento institucional publicado en PostgreSQL.');
       }
       limpiarFormulario();
-      await cargarDocumentos();
+      recargar();
     } catch (err) {
       setError(err.message);
     }
@@ -113,9 +107,9 @@ export default function Documentos() {
     setError('');
     setMensajeExito('');
     try {
-      await actualizarDocumento(doc.id, { vigente: !(doc.vigente !== false) }, rolActivo);
+      await actualizarDocumento(doc.id, { vigente: !(doc.vigente !== false) }, usuarioId);
       setMensajeExito('Estado de vigencia actualizado.');
-      await cargarDocumentos();
+      recargar();
     } catch (err) {
       setError(err.message);
     }
@@ -140,20 +134,13 @@ export default function Documentos() {
           ))}
         </div>
 
-        <div className="d-flex align-items-center gap-2">
-          <label htmlFor="selector-rol-hu27" className="small fw-semibold mb-0">
-            Vista:
-          </label>
-          <select
-            id="selector-rol-hu27"
-            className="form-select form-select-sm w-auto"
-            value={rolActivo}
-            onChange={(e) => setRolActivo(e.target.value)}
-          >
-            <option value="apoderado">Familias (Solo vigentes)</option>
-            <option value="direccion">Dirección (Administrar protocolos)</option>
-          </select>
-        </div>
+        {/* Cierre H-01/H-03: el perfil sale de la sesión iniciada, no de un selector. */}
+
+        <span className={`badge ${esDireccion ? 'bg-success' : 'bg-secondary'}`} role="status">
+
+          {esDireccion ? 'Vista de dirección (sesión iniciada)' : 'Solo lectura · inicia sesión con una cuenta autorizada para gestionar'}
+
+        </span>
       </div>
 
       {error && (

@@ -53,7 +53,8 @@ test('CP-HU-27-01: crear, editar, listar desde API y filtrar por categoría y vi
     descripcion: 'Zonas de seguridad.',
   });
   assert.equal(creado.id, 10);
-  assert.equal(llamadas[0].headers['X-Rol'], 'direccion');
+  // Cierre H-01: el rol ya no viaja en X-Rol; el servidor lo toma de la sesión.
+  assert.equal(llamadas[0].headers['X-Rol'], undefined);
 
   const editado = await actualizarDocumento(10, { vigente: false });
   assert.equal(editado.vigente, false);

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.permisos import requiere_roles
 from app.db.postgres import get_db
 from app.schemas.catalogo import (
     CategoriaIn,
@@ -31,7 +32,7 @@ def listar_categorias(db: Session = Depends(get_db)):
     status_code=status.HTTP_201_CREATED,
     summary="Crear una categoría",
 )
-def crear_categoria(payload: CategoriaIn, db: Session = Depends(get_db)):
+def crear_categoria(payload: CategoriaIn, usuario=Depends(requiere_roles("administrador")), db: Session = Depends(get_db)):  # H-02
     return servicio.crear_categoria(db, payload)
 
 

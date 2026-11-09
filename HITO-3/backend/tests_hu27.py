@@ -1,5 +1,6 @@
 import os
 os.environ["DATABASE_URL"] = "sqlite://"
+os.environ.setdefault("APP_ENV", "test")  # obligatorio desde R4 (Matiz A)
 
 import unittest
 from sqlalchemy import create_engine
@@ -28,6 +29,11 @@ def override_get_db():
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
+# Cierre H-01/H-02: el rol ya no se declara con X-Rol; se inicia sesión con cuentas ficticias.
+from tests_sesiones import preparar_sesiones  # noqa: E402
+
+SESION = preparar_sesiones(client, TestingSessionLocal)
+
 
 class TestHU27DocumentosProtocolos(unittest.TestCase):
     def test_cp_hu_27_01_crear_editar_filtrar_y_vigencia(self):
@@ -41,7 +47,7 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
                 "url_archivo": "/docs/reglamento-2026.pdf",
                 "vigente": True,
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_crear.status_code, 201)
         doc_id = res_crear.json()["id"]
@@ -55,7 +61,7 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
         res_edit = client.patch(
             f"/api/v1/documentos/{doc_id}",
             json={"vigente": False, "descripcion": "Versión archivada"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_edit.status_code, 200)
         self.assertFalse(res_edit.json()["vigente"])
@@ -73,7 +79,7 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
                 "categoria": "Protocolos",
                 "descripcion": "Intento sin rol dirección.",
             },
-            headers={"X-Rol": "apoderado"},
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_403.status_code, 403)
 
@@ -85,7 +91,7 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
                 "categoria": "CategoriaInventada",
                 "descripcion": "123",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_400.status_code, 400)
 
@@ -97,7 +103,7 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
                 "categoria": "Protocolos",
                 "descripcion": "Zonas seguras y evacuación.",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         res_409 = client.post(
             "/api/v1/documentos",
@@ -106,10 +112,18 @@ class TestHU27DocumentosProtocolos(unittest.TestCase):
                 "categoria": "Protocolos",
                 "descripcion": "Duplicado.",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         self.assertEqual(res_409.status_code, 409)
 
+
+    def test_cierre_h01_x_rol_ya_no_otorga_permisos(self):
+        # Sin sesión, aunque el navegador diga X-Rol: direccion -> 401 (H-01/H-03).
+        r = client.post("/api/v1/documentos", json={}, headers={"X-Rol": "direccion"})
+        self.assertEqual(r.status_code, 401)
+        # Con sesión de apoderado y X-Rol falsificado -> 403.
+        r = client.post("/api/v1/documentos", json={}, headers={**SESION["apoderado"], "X-Rol": "direccion"})
+        self.assertEqual(r.status_code, 403)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

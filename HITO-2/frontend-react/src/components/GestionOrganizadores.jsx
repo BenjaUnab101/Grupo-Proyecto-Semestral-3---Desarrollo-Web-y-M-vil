@@ -7,6 +7,7 @@ import {
   crearCategoriaActividad,
   actualizarCategoriaActividad,
 } from '../services/eventosApi';
+import { useSesion } from '../context/sesionContexto.js';
 
 export default function GestionOrganizadores() {
   const [organizadores, setOrganizadores] = useState([]);
@@ -14,7 +15,9 @@ export default function GestionOrganizadores() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
-  const [rolUsuario, setRolUsuario] = useState('direccion');
+  // Cierre H-01: los permisos los decide el servidor según la sesión (token o cuenta demo).
+  const { usuarioId, perfil } = useSesion() ?? {};
+  const puedeGestionar = perfil?.rol === 'administrador';
 
   // Formulario Organizador (Crear / Editar)
   const [editOrgId, setEditOrgId] = useState(null);
@@ -28,26 +31,34 @@ export default function GestionOrganizadores() {
   const [nombreCat, setNombreCat] = useState('');
   const [descCat, setDescCat] = useState('');
 
-  const cargarDatos = async () => {
-    try {
-      setCargando(true);
-      setError('');
-      const [orgs, cats] = await Promise.all([
-        obtenerOrganizadores(),
-        obtenerCategoriasActividad(),
-      ]);
-      setOrganizadores(orgs);
-      setCategorias(cats);
-    } catch (err) {
-      setError(err.message || 'Servicio de eventos no disponible.');
-    } finally {
-      setCargando(false);
-    }
-  };
-
+  // Carga de datos (patrón de hooks/useRecurso.js): el estado cambia solo dentro de las promesas.
+  const [version, setVersion] = useState(0);
   useEffect(() => {
-    cargarDatos();
-  }, []);
+    let vigente = true;
+    Promise.all([obtenerOrganizadores(), obtenerCategoriasActividad()])
+      .then(([orgs, cats]) => {
+        if (!vigente) return;
+        setOrganizadores(orgs);
+        setCategorias(cats);
+      })
+      .catch((err) => {
+        if (vigente) setError(err.message || 'Servicio de eventos no disponible.');
+      })
+      .finally(() => {
+        if (vigente) setCargando(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [version]);
+
+  // Recarga tras una acción del usuario (patrón de hooks/useRecurso.js: el efecto vuelve a
+  // pedir los datos y el estado solo cambia dentro de las promesas).
+  const recargar = () => {
+    setCargando(true);
+    setError('');
+    setVersion((v) => v + 1);
+  };
 
   const limpiarFormOrg = () => {
     setEditOrgId(null);
@@ -75,14 +86,14 @@ export default function GestionOrganizadores() {
         telefono: telefonoOrg || null,
       };
       if (editOrgId) {
-        await actualizarOrganizador(editOrgId, payload, rolUsuario);
+        await actualizarOrganizador(editOrgId, payload, usuarioId);
         setMensajeExito('Organizador actualizado correctamente.');
       } else {
-        await crearOrganizador(payload, rolUsuario);
+        await crearOrganizador(payload, usuarioId);
         setMensajeExito('Organizador registrado correctamente.');
       }
       limpiarFormOrg();
-      await cargarDatos();
+      recargar();
     } catch (err) {
       setError(err.message);
     }
@@ -98,14 +109,14 @@ export default function GestionOrganizadores() {
         descripcion: descCat || null,
       };
       if (editCatId) {
-        await actualizarCategoriaActividad(editCatId, payload, rolUsuario);
+        await actualizarCategoriaActividad(editCatId, payload, usuarioId);
         setMensajeExito('Categoría actualizada correctamente.');
       } else {
-        await crearCategoriaActividad(payload, rolUsuario);
+        await crearCategoriaActividad(payload, usuarioId);
         setMensajeExito('Categoría registrada correctamente.');
       }
       limpiarFormCat();
-      await cargarDatos();
+      recargar();
     } catch (err) {
       setError(err.message);
     }
@@ -131,20 +142,10 @@ export default function GestionOrganizadores() {
         <h3 className="h5 fw-bold mb-0" style={{ color: 'var(--pr-blue)' }}>
           Administración de Organizadores y Categorías (Dirección)
         </h3>
-        <div className="d-flex align-items-center gap-2">
-          <label htmlFor="selector-rol-hu17" className="small fw-semibold mb-0">
-            Simular perfil:
-          </label>
-          <select
-            id="selector-rol-hu17"
-            className="form-select form-select-sm w-auto"
-            value={rolUsuario}
-            onChange={(e) => setRolUsuario(e.target.value)}
-          >
-            <option value="direccion">Dirección (Autorizado)</option>
-            <option value="apoderado">Apoderado (Solo lectura)</option>
-          </select>
-        </div>
+        {/* Cierre H-01/H-03: el perfil sale de la sesión iniciada, no de un selector. */}
+        <span className={`badge ${puedeGestionar ? 'bg-success' : 'bg-secondary'}`} role="status">
+          {puedeGestionar ? 'Sesión de dirección: puedes administrar' : 'Solo lectura · inicia sesión con una cuenta autorizada para gestionar'}
+        </span>
       </div>
 
       {error && (

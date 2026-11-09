@@ -35,12 +35,14 @@ export default function LightboxModal({ imagen, onCerrar, disparadorRef }) {
       }
     };
 
+    // El disparador se captura al montar: en la limpieza disparadorRef.current podría haber cambiado.
+    const disparador = disparadorRef?.current;
     window.addEventListener('keydown', manejarKeyDown);
     return () => {
       window.removeEventListener('keydown', manejarKeyDown);
       // Retorno de foco al disparador al desmontarse (CA2 / CA4)
-      if (disparadorRef && disparadorRef.current) {
-        disparadorRef.current.focus();
+      if (disparador) {
+        disparador.focus();
       }
     };
   }, [onCerrar, disparadorRef]);
