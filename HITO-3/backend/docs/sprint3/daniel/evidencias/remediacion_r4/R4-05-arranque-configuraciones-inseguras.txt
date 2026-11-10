@@ -1,0 +1,11 @@
+# 2026-11-09T11:30:50-03:00 · R4 · Matiz A · arranque rechazado con configuraciones inseguras (contenedor desechable: compose run --rm --no-deps)
+[APP_ENV=production PERMITIR_IDENTIDAD_DEMO=true] código=1 -> ConfiguracionInvalida: APP_ENV=production no admite PERMITIR_IDENTIDAD_DEMO=true (identidad demo).
+[APP_ENV=production DEMO_PASSWORD=valor-ficticio-de-prueba] código=1 -> ConfiguracionInvalida: APP_ENV=production no admite DEMO_PASSWORD: las credenciales demo son solo para development/test.
+[APP_ENV=staging PERMITIR_IDENTIDAD_DEMO=true] código=1 -> ConfiguracionInvalida: APP_ENV=staging no admite PERMITIR_IDENTIDAD_DEMO=true (identidad demo).
+[APP_ENV=prod] código=1 -> ConfiguracionInvalida: APP_ENV='prod' no es válido.
+[APP_ENV=desarrollo] código=1 -> ConfiguracionInvalida: APP_ENV='desarrollo' no es válido.
+[APP_ENV=production] código=0 -> INICIA
+[APP_ENV=staging] código=0 -> INICIA
+
+# Arranque con APP_ENV vacío explícito (APP_ENV=""): docker compose lo rechaza antes de crear el contenedor:
+error while interpolating services.api.environment.APP_ENV: required variable APP_ENV is missing a value: Falta APP_ENV en .env (development, test, staging o production)

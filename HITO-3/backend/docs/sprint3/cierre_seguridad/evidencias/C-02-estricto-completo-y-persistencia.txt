@@ -1,0 +1,23 @@
+# 2026-11-09T15:44:59-03:00 · MODO ESTRICTO (PERMITIR_IDENTIDAD_DEMO=false) · API reconstruida con el código final
+ Container pr_cierre-api-1 Started 
+API: APP_ENV=development PERMITIR_IDENTIDAD_DEMO=false
+== sonda H-02: Rutas ABIERTAS sin autenticación: 0 de 12 sondeadas -> 
+prueba_cierre_h02: Resultado: 29/29 PASS 
+prueba_remediacion_s3 estricto: Resultado: 15/15 PASS 
+prueba_s3_daniel crear: Resultado: 22/22 PASS 
+prueba_tec17: Resultado: 12/12 PASS 
+prueba_hu19: Resultado: 18/18 PASS 
+prueba_hu21: Resultado: 23/23 PASS 
+prueba_hu25 crear: Resultado: 3/3 PASS 
+prueba_tec16 crear: Resultado: 20/20 PASS 
+
+# persistencia: docker compose down (SIN -v) y up
+ Network pr_cierre_pequenos_reyes Removed 
+pr_cierre_mongo_data
+pr_cierre_postgres_data
+ Container pr_cierre-frontend-1 Started 
+api | Up 20 seconds (healthy) frontend | Up 15 seconds (healthy) mongo | Up 26 seconds (healthy) postgres | Up 26 seconds (healthy) 
+prueba_s3_daniel verificar: Resultado: 3/3 PASS 
+prueba_tec16 verificar: Resultado: 4/4 PASS 
+prueba_hu25 verificar: Resultado: 4/4 PASS 
+prueba_hu25 negativos: Resultado: 13/13 PASS 

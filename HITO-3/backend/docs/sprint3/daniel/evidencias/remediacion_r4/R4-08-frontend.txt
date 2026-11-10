@@ -1,0 +1,6 @@
+# 2026-11-09T11:33:19-03:00 · R4 · frontend (sin cambios en R4): npm test / npx eslint . / npm run build
+ℹ tests 132
+ℹ pass 132
+ℹ fail 0
+✖ 26 problems (21 errors, 5 warnings)
+[32m✓ built in 628ms[39m

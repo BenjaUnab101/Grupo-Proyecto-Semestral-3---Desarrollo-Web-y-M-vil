@@ -61,11 +61,12 @@ class ActividadOut(BaseModel):
 
 class InscripcionIn(BaseModel):
     alumno_id: int = Field(gt=0)
-    apoderado_id: int = Field(gt=0)
+    # H-02: opcional. Para un apoderado se toma del token; el personal lo indica para actuar en su nombre.
+    apoderado_id: int | None = Field(default=None, gt=0)
 
 
 class CancelacionIn(BaseModel):
-    apoderado_id: int = Field(gt=0)
+    apoderado_id: int | None = Field(default=None, gt=0)  # H-02: ver InscripcionIn
 
 
 class InscripcionOut(BaseModel):
@@ -111,7 +112,7 @@ class AsistentesOut(BaseModel):
 
 
 class PagoIn(BaseModel):
-    apoderado_id: int = Field(gt=0)
+    apoderado_id: int | None = Field(default=None, gt=0)  # H-02: ver InscripcionIn
 
 
 class PagoOut(BaseModel):

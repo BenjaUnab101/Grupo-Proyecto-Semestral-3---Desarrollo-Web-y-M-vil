@@ -5,6 +5,7 @@ from sqlalchemy import func, select, text, update
 from sqlalchemy.orm import Session
 
 from app.db.models import Actividad, Alumno, Apoderado, ApoderadoAlumno, Categoria, Inscripcion, Organizador, Pago
+from app.services import auditoria  # HU-22 (Sprint 3 · Daniel)
 
 # HU-19: inscripciones a eventos (salidas, talleres), cupos y asistentes.
 # TEC-16: CRUD de eventos y pagos ficticios.
@@ -176,7 +177,11 @@ def crear_inscripcion(db: Session, actividad_id: int, datos):
         db.add(inscripcion)
     db.commit()
     db.refresh(inscripcion)
-    return inscripcion_a_dict(inscripcion, actividad.cupo_maximo - contar_inscritos(db, actividad_id))
+    cupos = actividad.cupo_maximo - contar_inscritos(db, actividad_id)
+    # HU-22 (Sprint 3 · Daniel): evento en la bitácora MongoDB, después del commit SQL.
+    auditoria.registrar("inscripcion_creada", recurso_tipo="actividad", recurso_id=actividad_id,
+                        datos={"apoderado_id": datos.apoderado_id, "alumno_id": datos.alumno_id, "cupos_disponibles": cupos})
+    return inscripcion_a_dict(inscripcion, cupos)
 
 
 def cancelar_inscripcion(db: Session, inscripcion_id: int, datos):
@@ -199,7 +204,12 @@ def cancelar_inscripcion(db: Session, inscripcion_id: int, datos):
     )
     db.commit()
     db.refresh(inscripcion)
-    return inscripcion_a_dict(inscripcion, actividad.cupo_maximo - contar_inscritos(db, actividad.id))
+    cupos = actividad.cupo_maximo - contar_inscritos(db, actividad.id)
+    # HU-22 (Sprint 3 · Daniel): cambio de estado de la inscripción en la bitácora MongoDB.
+    auditoria.registrar("inscripcion_cancelada", recurso_tipo="actividad", recurso_id=actividad.id,
+                        datos={"apoderado_id": datos.apoderado_id, "alumno_id": inscripcion.alumno_id,
+                               "estado_anterior": "inscrita", "estado_nuevo": "cancelada", "cupos_disponibles": cupos})
+    return inscripcion_a_dict(inscripcion, cupos)
 
 
 # ---------- TEC-16: CRUD de actividades ----------

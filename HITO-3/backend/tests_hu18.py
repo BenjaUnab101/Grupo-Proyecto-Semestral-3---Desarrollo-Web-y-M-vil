@@ -1,5 +1,6 @@
 import os
 os.environ["DATABASE_URL"] = "sqlite://"
+os.environ.setdefault("APP_ENV", "test")  # obligatorio desde R4 (Matiz A)
 
 import unittest
 from sqlalchemy import create_engine
@@ -28,6 +29,21 @@ def override_get_db():
 app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
+# Cierre H-01/H-02: el rol ya no se declara con X-Rol; se inicia sesión con cuentas ficticias.
+from tests_sesiones import preparar_sesiones  # noqa: E402
+
+SESION = preparar_sesiones(client, TestingSessionLocal)
+
+
+def setUpModule():
+    # Aislamiento: al correr varios módulos en un mismo proceso (unittest discover), cada uno
+    # vuelve a instalar SU base de datos y una bitácora nula antes de sus pruebas.
+    import tests_sesiones
+    from app.services import auditoria
+
+    app.dependency_overrides[get_db] = override_get_db
+    auditoria.coleccion = lambda: tests_sesiones._BitacoraNula()
+
 
 class TestHU18ActividadesEscolares(unittest.TestCase):
     @classmethod
@@ -35,7 +51,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
         res_cat = client.post(
             "/api/v1/categorias-actividad",
             json={"nombre": "Salidas Pedagógicas", "descripcion": "Visitas guiadas"},
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         cls.cat_id = res_cat.json()["id"]
 
@@ -46,7 +62,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
                 "email": "paula.reyes@pequenosreyes.cl",
                 "rol_perfil": "Educadora",
             },
-            headers={"X-Rol": "direccion"},
+            headers=SESION["direccion"],
         )
         cls.org_id = res_org.json()["id"]
 
@@ -65,7 +81,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
                 "organizador_id": self.org_id,
                 "estado": "borrador",
             },
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_crear.status_code, 201)
         act_id = res_crear.json()["id"]
@@ -79,7 +95,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
         res_editar = client.patch(
             f"/api/v1/actividades/{act_id}",
             json={"lugar": "Granja Educativa Quilpué", "capacidad": 20},
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_editar.status_code, 200)
         self.assertEqual(res_editar.json()["lugar"], "Granja Educativa Quilpué")
@@ -88,7 +104,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
         # 4. CA1 / CA3: Publicar actividad y verificar que ahora SÍ es visible a familias
         res_pub = client.post(
             f"/api/v1/actividades/{act_id}/publicar",
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_pub.status_code, 200)
         self.assertEqual(res_pub.json()["estado"], "publicada")
@@ -99,7 +115,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
         # 5. CA1 / CA3: Cancelar actividad y verificar que deja de mostrarse a familias
         res_canc = client.post(
             f"/api/v1/actividades/{act_id}/cancelar",
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_canc.status_code, 200)
         self.assertEqual(res_canc.json()["estado"], "cancelada")
@@ -119,7 +135,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
                 "categoria_id": self.cat_id,
                 "organizador_id": self.org_id,
             },
-            headers={"X-Rol": "apoderado"},
+            headers=SESION["apoderado"],
         )
         self.assertEqual(res_403.status_code, 403)
 
@@ -135,7 +151,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
                 "categoria_id": self.cat_id,
                 "organizador_id": self.org_id,
             },
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_400.status_code, 400)
 
@@ -150,7 +166,7 @@ class TestHU18ActividadesEscolares(unittest.TestCase):
                 "categoria_id": 9999,
                 "organizador_id": self.org_id,
             },
-            headers={"X-Rol": "organizador"},
+            headers=SESION["organizador"],
         )
         self.assertEqual(res_404.status_code, 404)
 

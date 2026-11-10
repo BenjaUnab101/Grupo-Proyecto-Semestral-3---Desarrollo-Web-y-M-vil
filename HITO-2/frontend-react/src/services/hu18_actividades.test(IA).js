@@ -47,7 +47,8 @@ test('CP-HU-18-01: ciclo completo crear, editar, publicar, cancelar y filtrar so
     organizador_id: 1,
   });
   assert.equal(creada.id, 10);
-  assert.equal(llamadas[0].headers['X-Rol'], 'organizador');
+  // Cierre H-01: el rol ya no viaja en X-Rol; el servidor lo toma de la sesión.
+  assert.equal(llamadas[0].headers['X-Rol'], undefined);
 
   const editada = await actualizarActividad(10, { lugar: 'Patio Central', capacidad: 20 });
   assert.equal(editada.lugar, 'Patio Central');

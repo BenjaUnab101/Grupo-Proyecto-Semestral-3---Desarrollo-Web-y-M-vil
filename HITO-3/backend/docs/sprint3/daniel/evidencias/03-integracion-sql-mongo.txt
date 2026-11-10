@@ -1,0 +1,36 @@
+# 2026-11-08T17:44:56-03:00 · docker compose exec api python -m scripts.prueba_s3_daniel crear
+== HU-16 · Login real, sesión y logout ==
+[PASS] S3-01 Login con contraseña incorrecta -> 401
+[PASS] S3-02 Login válido -> 200 con token Bearer
+[PASS] S3-03 Sin token -> 401
+
+== HU-16 · Portal: hijos desde SQL y acceso cruzado ==
+[PASS] S3-04 Apoderado Demo Uno ve sus 5 hijos (relación SQL)  ->  5 hijos
+[PASS] S3-05 Apoderado Demo Dos ve 1 hijo
+[PASS] S3-06 Apoderade Demo Tres (sin hijos) -> lista vacía
+[PASS] S3-07 Ficha de un hijo AJENO -> 403 (IDOR bloqueado)
+[PASS] S3-08 Ficha de un hijo propio -> 200
+[PASS] S3-09 Dirección no usa el portal de familias -> 403
+
+== HU-26 · Contacto con dirección en PostgreSQL ==
+[PASS] S3-10 Mensaje muy corto -> 400
+[PASS] S3-11 Consulta creada -> 201 con código CT-  ->  CT-5EGQY4
+[PASS] S3-12 Apoderado intenta cambiar el estado -> 403
+[PASS] S3-13 Dirección pasa la consulta a en_gestion -> 200
+[PASS] S3-14 Otro apoderado no ve esa consulta
+
+== HU-22 / HU-24 · Inscripción -> evento Mongo -> panel ==
+[PASS] S3-15 Inscripción real a un evento -> 201
+[PASS] S3-16 El historial Mongo del evento muestra la inscripción
+[PASS] S3-17 Panel: inscritos y cupos coinciden con el conteo de HU-19  ->  inscritos=1 ocupación=10.0%
+[PASS] S3-18 Apoderado no ve el panel -> 403
+[PASS] S3-19 Bitácora registra el intento de acceso cruzado
+[PASS] S3-20 Apoderado no consulta la bitácora -> 403
+
+== HU-16 · Logout real ==
+[PASS] S3-21 Logout -> 204
+[PASS] S3-22 El token cerrado ya no sirve -> 401
+
+Guardado /tmp/prueba_s3_daniel.json: consulta CT-5EGQY4, 61 eventos en MongoDB
+
+Resultado: 22/22 PASS

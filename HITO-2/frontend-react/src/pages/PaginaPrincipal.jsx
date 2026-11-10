@@ -9,7 +9,8 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal.jsx';
 import PortalApoderados from '../components/PortalApoderados.jsx';
 import Documentos from '../components/Documentos.jsx';
-import FormContacto from '../components/FormContacto.jsx';
+import ContactoSeccion from './ContactoSeccion.jsx';
+import PanelDireccionSeccion from './PanelDireccionSeccion.jsx';
 import seccionesPendientes from '../data/secciones.js';
 import ClimaWidget from '../components/ClimaWidget';
 import InfoJardin from '../components/InfoJardin.jsx';
@@ -65,7 +66,8 @@ export default function PaginaPrincipal() {
           <ComunicadosSeccion />
 
           {/* HU-04 + HU-19 + TEC-17: calendario e inscripciones desde la API */}
-          <CalendarioSeccion hoy={hoyDePrueba} />
+          {/* HU-06: si la API del clima falla, el calendario se muestra igual, sin insignias. */}
+          <CalendarioSeccion hoy={hoyDePrueba} pronostico={error ? [] : pronostico} />
 
           {seccionesPendientes.map((seccion) => (
             <SeccionPendiente key={seccion.id} {...seccion} />
@@ -82,13 +84,11 @@ export default function PaginaPrincipal() {
           {/* HU-11 + HU-25: pre-matrícula guardada en la API y seguimiento */}
           <MatriculaSeccion />
 
-          <section id="contacto">
-            <SectionTitle
-              titulo="Contacto con la Dirección"
-              subtitulo="Canal propuesto para consultas de las familias (demo)"
-            />
-            <FormContacto />
-          </section>
+          {/* HU-12 + HU-26 (Sprint 3 · Daniel): contacto guardado en la API con seguimiento */}
+          <ContactoSeccion />
+
+          {/* HU-24 + HU-22 (Sprint 3 · Daniel): panel interno, solo con sesión real del personal */}
+          <PanelDireccionSeccion />
         </section>
 
         <ClimaWidget

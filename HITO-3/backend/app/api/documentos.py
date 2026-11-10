@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Header, Query, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.core.permisos import rol_heredado
 from app.db.postgres import get_db
 from app.schemas.documento import DocumentoIn, DocumentoOut, DocumentoUpdate
 from app.services import documentos as servicio
@@ -24,7 +25,7 @@ def listar_documentos(
 )
 def crear_documento(
     payload: DocumentoIn,
-    x_rol: str | None = Header(default=None),
+    x_rol: str = Depends(rol_heredado),  # H-01/H-03: rol desde la sesión, no del navegador
     db: Session = Depends(get_db),
 ):
     return servicio.crear_documento(db, payload, x_rol)
@@ -37,7 +38,7 @@ def crear_documento(
 def actualizar_documento(
     documento_id: int,
     payload: DocumentoUpdate,
-    x_rol: str | None = Header(default=None),
+    x_rol: str = Depends(rol_heredado),  # H-01/H-03: rol desde la sesión, no del navegador
     db: Session = Depends(get_db),
 ):
     return servicio.actualizar_documento(db, documento_id, payload, x_rol)

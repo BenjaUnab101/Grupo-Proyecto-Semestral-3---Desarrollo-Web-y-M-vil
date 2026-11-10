@@ -26,6 +26,14 @@ export class ErrorApi extends Error {
   }
 }
 
+// HU-16 (Sprint 3 · Daniel): token de la sesión REAL (POST /auth/login). Vive solo en memoria
+// (no en localStorage): al recargar la página la sesión del navegador se pierde. Lo fija
+// SesionProvider; si existe, viaja en Authorization y el backend ignora X-Usuario-Id.
+let tokenSesion = null
+export function establecerToken(token) {
+  tokenSesion = token || null
+}
+
 /**
  * Llama a la API. Devuelve la respuesta en JSON o lanza un ErrorApi.
  * @param {string} ruta ej. '/comunicados'
@@ -34,7 +42,8 @@ export class ErrorApi extends Error {
 export async function pedir(ruta, { metodo = 'GET', cuerpo, usuarioId, parametros } = {}) {
   const encabezados = {}
   if (cuerpo !== undefined) encabezados['Content-Type'] = 'application/json'
-  if (usuarioId) encabezados['X-Usuario-Id'] = String(usuarioId) // cuenta demo elegida
+  if (tokenSesion) encabezados.Authorization = `Bearer ${tokenSesion}` // sesión real (HU-16)
+  else if (usuarioId) encabezados['X-Usuario-Id'] = String(usuarioId) // cuenta demo elegida
 
   // Parámetros de consulta (?estado=recibida). Los vacíos no se envían.
   const consulta = new URLSearchParams(Object.entries(parametros ?? {}).filter(([, valor]) => valor)).toString()

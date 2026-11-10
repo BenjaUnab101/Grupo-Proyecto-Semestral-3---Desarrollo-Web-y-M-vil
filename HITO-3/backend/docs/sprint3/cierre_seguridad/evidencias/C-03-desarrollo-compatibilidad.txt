@@ -1,0 +1,21 @@
+# 2026-11-09T15:46:27-03:00 · MODO DESARROLLO con identidad demo (PERMITIR_IDENTIDAD_DEMO=true): compatibilidad con la barra demo de TEC-17
+ Container pr_cierre-api-1 Started 
+API: APP_ENV=development PERMITIR_IDENTIDAD_DEMO=true
+== sonda H-02: Rutas ABIERTAS sin autenticación: 0 de 12 sondeadas -> 
+prueba_cierre_h02: Resultado: 29/29 PASS 
+prueba_remediacion_s3 dev: Resultado: 13/13 PASS 
+prueba_s3_daniel crear: Resultado: 22/22 PASS 
+prueba_tec17: Resultado: 12/12 PASS 
+prueba_hu19: Resultado: 18/18 PASS 
+prueba_hu21: Resultado: 23/23 PASS 
+prueba_hu25 crear: Resultado: 3/3 PASS 
+prueba_hu25 negativos: Resultado: 13/13 PASS 
+prueba_tec16 crear: Resultado: 20/20 PASS 
+prueba_tec16 verificar: Resultado: 4/4 PASS 
+
+# producción: transición con el mismo volumen (R4 · Matiz B) con el código final
+Resultado: 4/4 PASS
+# 2026-11-09T15:47:17-03:00 · API recreada en PRODUCCIÓN (mismo volumen), sin DEMO_PASSWORD ni identidad demo
+ Container pr_cierre-api-1 Started 
+Resultado: 14/14 PASS
+== sonda H-02 en producción: Rutas ABIERTAS sin autenticación: 0 de 12 sondeadas -> 

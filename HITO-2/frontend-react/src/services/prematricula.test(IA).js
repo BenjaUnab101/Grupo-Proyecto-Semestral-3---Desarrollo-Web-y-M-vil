@@ -118,7 +118,8 @@ test('privacidad: en el navegador solo se guarda el código; el formulario no us
   assert.deepEqual(leer('../utils/codigoSeguimiento.js').match(/localStorage\.setItem\([^)]*\)/g), ['localStorage.setItem(CLAVE, codigo)'])
   const formulario = leer('../components/FormPreMatricula.jsx') + leer('../hooks/useFormularioDemo.js')
   assert.doesNotMatch(formulario.replace(/\/\/.*$/gm, ''), /fetch\(|localStorage|sessionStorage/)
-  assert.doesNotMatch(leer('../components/FormContacto.jsx'), /enviar:/) // contacto (HU-12) sigue siendo demo
+  // HU-26 (Sprint 3 · Daniel): el contacto ahora se envía, pero igual solo mediante services/ (sin fetch ni almacenamiento).
+  assert.doesNotMatch(leer('../components/FormContacto.jsx').replace(/\/\/.*$/gm, ''), /fetch\(|localStorage|sessionStorage/)
 })
 
 test('solo dirección revisa las solicitudes (esDireccion)', () => {

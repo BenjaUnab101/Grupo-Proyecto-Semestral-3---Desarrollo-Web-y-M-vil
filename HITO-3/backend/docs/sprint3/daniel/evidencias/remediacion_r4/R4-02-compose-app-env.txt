@@ -1,0 +1,21 @@
+# 2026-11-09T11:28:52-03:00 · R4 · Docker Compose y APP_ENV
+== docker compose config SIN APP_ENV (debe fallar):
+error while interpolating services.api.environment.APP_ENV: required variable APP_ENV is missing a value: Falta APP_ENV en .env (development, test, staging o production)
+código de salida: 1
+== docker compose config con APP_ENV=development:
+config OK
+== valores efectivos (sin secretos) con solo APP_ENV=development:
+      APP_ENV: development
+      DEMO_PASSWORD: <definida (exportada en el shell de la prueba)>
+      PERMITIR_IDENTIDAD_DEMO: "false"
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',
+        host_ip: 127.0.0.1
+        host_ip: 127.0.0.1
+        host_ip: 127.0.0.1
+        host_ip: 127.0.0.1
+== valores por defecto sin variables de sesión en el shell (solo APP_ENV=development; el .env local no define DEMO_PASSWORD ni PERMITIR_IDENTIDAD_DEMO):
+      APP_ENV: development
+      DEMO_PASSWORD: ""   (vacía)
+      PERMITIR_IDENTIDAD_DEMO: "false"
+
+# Nota: la versión anterior de esta línea marcaba "<definida>" por un error del filtro sed (reemplazaba también el valor vacío ""); corregido tras verificarlo.

@@ -1,53 +1,84 @@
-import alumnos from '../data/alumnos.json'
-import useSesionApoderado from '../hooks/useSesionApoderado.js'
+import { useCallback, useState } from 'react'
+import { useSesion } from '../context/sesionContexto.js'
+import { useRecurso } from '../hooks/useRecurso.js'
+import { listarMisAlumnos, obtenerFicha } from '../services/authApi.js'
+import { ETIQUETA_ROL } from '../services/sesionApi.js'
+import EstadoCarga from './EstadosApi.jsx'
 import LoginForm from './LoginForm.jsx'
 import SelectorHermanos from './SelectorHermanos.jsx'
 import FichaAlumno from './FichaAlumno.jsx'
 import AvisoPrivacidad from './AvisoPrivacidad.jsx'
 
-// Orquesta el flujo completo del portal apoderados: login simulado, selección de
-// hermanos y ficha del alumno. Todo el estado vive en useSesionApoderado (solo memoria).
+// HU-16 (Sprint 3 · Daniel): portal de familias con login REAL.
+// - Sin sesión real: formulario de acceso (POST /auth/login).
+// - Con sesión de apoderado: hijos desde la relación SQL (GET /portal/alumnos) y ficha del
+//   elegido (GET /portal/alumnos/{id}). El backend responde 403 si el alumno no es suyo.
+// - "Cerrar sesión" revoca el token en el servidor (POST /auth/logout).
 export default function PortalApoderados({ onCerrar }) {
-  const { apoderado, alumnoSeleccionadoId, iniciarSesion, cerrarSesion, seleccionarAlumno } = useSesionApoderado()
+  const { perfil, conToken, cerrarSesion } = useSesion()
 
-  const manejarLogout = () => {
-    cerrarSesion()
+  const manejarLogout = async () => {
+    await cerrarSesion()
     onCerrar()
   }
 
-  if (!apoderado) {
-    return <LoginForm onLoginExitoso={iniciarSesion} />
+  if (!conToken || !perfil) {
+    return <LoginForm />
   }
-
-  const alumnosDelApoderado = alumnos.filter((alumno) => apoderado.alumnoIds.includes(alumno.id))
-  const alumnoSeleccionado = alumnosDelApoderado.find((alumno) => alumno.id === alumnoSeleccionadoId) ?? null
 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-start mb-3">
         <p className="mb-0">
-          Hola, <strong>{apoderado.nombre}</strong>
+          Hola, <strong>{perfil.nombre}</strong>
+          <span className="d-block small text-muted">{ETIQUETA_ROL[perfil.rol]}</span>
         </p>
         <button type="button" className="btn btn-outline-secondary btn-sm" onClick={manejarLogout}>
           Cerrar sesión
         </button>
       </div>
 
-      {alumnosDelApoderado.length === 0 ? (
-        <p className="text-muted">Esta cuenta demo no tiene alumnos asociados.</p>
+      {perfil.rol === 'apoderado' ? (
+        <HijosDelApoderado />
       ) : (
-        <>
-          <SelectorHermanos
-            alumnos={alumnosDelApoderado}
-            alumnoSeleccionadoId={alumnoSeleccionadoId}
-            onSeleccionar={seleccionarAlumno}
-          />
-          <FichaAlumno alumno={alumnoSeleccionado} />
-        </>
+        <p className="text-muted">
+          Iniciaste sesión con una cuenta del jardín. Las fichas de alumnos son solo para apoderados; tus paneles
+          aparecen en la página principal.
+        </p>
       )}
 
       <hr />
       <AvisoPrivacidad />
     </div>
+  )
+}
+
+function HijosDelApoderado() {
+  const alumnos = useRecurso(listarMisAlumnos)
+  const [elegidoId, setElegidoId] = useState(null)
+  const lista = alumnos.datos ?? []
+  // Sin elección (o si el elegido ya no está), se muestra el primer hijo.
+  const seleccionadoId = lista.some((a) => a.id === elegidoId) ? elegidoId : lista[0]?.id ?? null
+
+  return (
+    <EstadoCarga
+      recurso={alumnos}
+      textoCargando="Cargando a tus hijos…"
+      textoError="No pudimos cargar a tus hijos."
+      textoVacio="Tu cuenta no tiene alumnos asociados. Si es un error, contacta a la dirección."
+    >
+      <SelectorHermanos alumnos={lista} alumnoSeleccionadoId={seleccionadoId} onSeleccionar={setElegidoId} />
+      {seleccionadoId && <FichaDelAlumno key={seleccionadoId} alumnoId={seleccionadoId} />}
+    </EstadoCarga>
+  )
+}
+
+function FichaDelAlumno({ alumnoId }) {
+  const cargar = useCallback(() => obtenerFicha(alumnoId), [alumnoId])
+  const ficha = useRecurso(cargar)
+  return (
+    <EstadoCarga recurso={ficha} textoCargando="Cargando ficha…" textoError="No pudimos cargar la ficha.">
+      <FichaAlumno alumno={ficha.datos} />
+    </EstadoCarga>
   )
 }

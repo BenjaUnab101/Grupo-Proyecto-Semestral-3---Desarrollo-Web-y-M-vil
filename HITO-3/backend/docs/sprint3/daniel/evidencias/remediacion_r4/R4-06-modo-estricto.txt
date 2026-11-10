@@ -1,0 +1,15 @@
+# 2026-11-09T11:31:22-03:00 · R4 · MODO ESTRICTO: APP_ENV=development, PERMITIR_IDENTIDAD_DEMO=false
+ Container pr_s3_daniel-api-1 Started 
+API: APP_ENV=development PERMITIR_IDENTIDAD_DEMO=false
+== negativas estrictas
+Resultado: 15/15 PASS
+== integración propia
+Resultado: 22/22 PASS
+== regresiones de compañeros en modo estricto (se registran los fallos esperados: usan X-Usuario-Id o X-Rol sin sesión)
+prueba_tec17:  0 FAIL Traceback
+prueba_hu19: Resultado: 18/18 PASS 0 FAIL 
+prueba_hu21: Resultado: 6/23 PASS 17 FAIL 
+prueba_hu25 crear:  1 FAIL Traceback
+prueba_tec16 crear: Resultado: 20/20 PASS 0 FAIL 
+== sonda H-02 (sigue abierta: no es de Daniel)
+Rutas ABIERTAS sin autenticación: 12 de 12 sondeadas -> H02-01, H02-02, H02-03, H02-04, H02-05, H02-06, H02-07, H02-08, H02-09, H02-10, H02-11, H02-12

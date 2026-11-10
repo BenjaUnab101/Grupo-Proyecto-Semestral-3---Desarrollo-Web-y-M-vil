@@ -57,8 +57,8 @@ st, lista = llamar("GET", "/api/v1/comunicados?urgente=true")
 verificar("02.3", "Filtro urgente=true", st == 200 and all(c["es_urgente"] for c in lista))
 st, lista = llamar("GET", f"/api/v1/comunicados?desde={hoy}&hasta={hoy}")
 verificar("02.4", "Filtro por fecha (hoy) incluye los de la prueba", PREFIJO + "Taller TEL (editado)" in titulos(lista))
-_, c1 = llamar("GET", f"/api/v1/apoderados/{ap1}/comunicados")
-_, c2 = llamar("GET", f"/api/v1/apoderados/{ap2}/comunicados")
+_, c1 = llamar("GET", f"/api/v1/apoderados/{ap1}/comunicados", usuario=direccion)  # H-02: exige sesión
+_, c2 = llamar("GET", f"/api/v1/apoderados/{ap2}/comunicados", usuario=direccion)
 verificar("02.5", "Pertinentes: el apoderado de Sala TEL ve el comunicado TEL; el de Preescolar no",
           c1["niveles"] == ["General", "Preescolar"] and c2["niveles"] == ["General", "Salas TEL"]
           and PREFIJO + "Taller TEL (editado)" in titulos(c2["comunicados"]) and PREFIJO + "Taller TEL (editado)" not in titulos(c1["comunicados"]))

@@ -164,7 +164,8 @@ test('contrato: Agenda → Calendario → ActividadItem, derivado en render y si
     assert.equal(usaHook(codigo, 'useEffect'), false)
     assert.equal(usaHook(codigo, 'useState'), false)
   }
-  assert.match(agenda, /<Calendario actividades=\{proximas\} \/>/)
+  // HU-06: Agenda también pasa el pronóstico a Calendario (sigue sin estado ni efectos).
+  assert.match(agenda, /<Calendario actividades=\{proximas\} pronostico=\{pronostico\} \/>/)
   assert.match(agenda, /const proximas = actividadesVigentes\(actividades, fechaBase\)/)
   assert.match(calendario, /<ActividadItem/)
   assert.match(calendario, /No hay actividades programadas/)

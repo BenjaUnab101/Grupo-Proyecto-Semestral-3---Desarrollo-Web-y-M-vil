@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.permisos import usuario_opcional
 from app.db.models import Alumno, Apoderado, ApoderadoAlumno, Organizador, Usuario
 from app.db.postgres import get_db
@@ -23,6 +24,9 @@ def nombre_de(db: Session, usuario: Usuario) -> str:
 
 @router.get("/cuentas-demo", summary="Cuentas ficticias para probar la demo")
 def cuentas_demo(db: Session = Depends(get_db)):
+    # H-02: la lista de cuentas demo solo existe con la identidad demo activa (development/test).
+    if not settings.identidad_demo_activa:
+        raise HTTPException(404, "No disponible")
     usuarios = db.scalars(
         select(Usuario).where(Usuario.activo.is_(True), Usuario.email.like("%@ejemplo.cl")).order_by(Usuario.rol, Usuario.email)
     )

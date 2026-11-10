@@ -35,7 +35,8 @@ test('CP-HU-17-01: flujo exitoso crear, editar y listar organizadores y categor�
     rol_perfil: 'Educadora',
   });
   assert.equal(orgCreado.id, 1);
-  assert.equal(llamadas[0].headers['X-Rol'], 'direccion');
+  // Cierre H-01: el rol ya no viaja en X-Rol; el servidor lo toma de la sesión.
+  assert.equal(llamadas[0].headers['X-Rol'], undefined);
 
   const orgEditado = await actualizarOrganizador(1, { rol_perfil: 'Coordinación' });
   assert.equal(orgEditado.rol_perfil, 'Coordinación');

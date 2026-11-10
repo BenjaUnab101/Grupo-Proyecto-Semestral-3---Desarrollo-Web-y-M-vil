@@ -12,8 +12,14 @@ import {
   filtrarActividadesPortal,
 } from '../services/eventosApi';
 import { normalizarRut, validarRutCampo } from '../utils/validaciones';
+import { useSesion } from '../context/sesionContexto.js';
 
 export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
+  // Cierre H-02: inscribir, pagar y ver pagos exige sesión. El apoderado se toma de la sesión;
+  // solo el personal ve todos los pagos y la lista completa de alumnos.
+  const { usuarioId, perfil } = useSesion() ?? {};
+  const esPersonal = ['administrador', 'organizador'].includes(perfil?.rol);
+  const esDireccion = perfil?.rol === 'administrador';
   const [actividades, setActividades] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [pagos, setPagos] = useState([]);
@@ -39,41 +45,52 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
   const [comprobanteActivo, setComprobanteActivo] = useState(null);
   const [codigoBusqueda, setCodigoBusqueda] = useState('');
 
-  const cargarTodo = async () => {
-    try {
-      setCargando(true);
-      setError('');
+  // Carga de datos (patrón de hooks/useRecurso.js): el estado cambia solo dentro de las promesas.
+  const [version, setVersion] = useState(0);
+  const hijosDeLaSesion = perfil?.hijos;
+  useEffect(() => {
+    let vigente = true;
+    const obtener = async () => {
       const [actividadesAntiguas, cats, listaPagos] = await Promise.all([
         obtenerActividades(false),
         obtenerCategoriasActividad(true),
-        obtenerPagosInscripciones(),
+        esPersonal ? obtenerPagosInscripciones({}, usuarioId) : Promise.resolve([]),
       ]);
-      const acts = actividadesAntiguas.length > 0
-        ? actividadesAntiguas
-        : await obtenerEventosHU19();
-      setActividades(acts);
-      setCategorias(cats);
-      setPagos(listaPagos);
-      if (acts.some((actividad) => actividad.fuente === 'hu19')) {
-        setAlumnos(await obtenerAlumnos());
-      }
+      const acts = actividadesAntiguas.length > 0 ? actividadesAntiguas : await obtenerEventosHU19();
+      // Apoderado: solo sus hijos (vienen en la sesión). Personal: lista completa desde la API.
+      const listaAlumnos = acts.some((a) => a.fuente === 'hu19')
+        ? esPersonal ? await obtenerAlumnos(usuarioId) : hijosDeLaSesion ?? []
+        : null;
+      return { acts, cats, listaPagos, listaAlumnos };
+    };
+    obtener()
+      .then(({ acts, cats, listaPagos, listaAlumnos }) => {
+        if (!vigente) return;
+        setActividades(acts);
+        setCategorias(cats);
+        setPagos(listaPagos);
+        if (listaAlumnos) setAlumnos(listaAlumnos);
+        const primeraConCupo = acts.find((a) => a.estado === 'publicada' && a.cupos_disponibles > 0);
+        if (primeraConCupo) setActividadSeleccionadaId((actual) => actual || String(primeraConCupo.id));
+      })
+      .catch((err) => {
+        if (vigente) setError(err.message || 'No se pudo conectar con el servicio de inscripciones.');
+      })
+      .finally(() => {
+        if (vigente) setCargando(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [esPersonal, usuarioId, hijosDeLaSesion, version]);
 
-      const publicadasConCupo = acts.filter(
-        (a) => a.estado === 'publicada' && a.cupos_disponibles > 0
-      );
-      if (publicadasConCupo.length > 0 && !actividadSeleccionadaId) {
-        setActividadSeleccionadaId(String(publicadasConCupo[0].id));
-      }
-    } catch (err) {
-      setError(err.message || 'No se pudo conectar con el servicio de inscripciones.');
-    } finally {
-      setCargando(false);
-    }
+  // Recarga tras una acción del usuario (patrón de hooks/useRecurso.js: el efecto vuelve a
+  // pedir los datos y el estado solo cambia dentro de las promesas).
+  const recargar = () => {
+    setCargando(true);
+    setError('');
+    setVersion((v) => v + 1);
   };
-
-  useEffect(() => {
-    cargarTodo();
-  }, []);
 
   const actividadesFiltradas = useMemo(
     () =>
@@ -89,6 +106,11 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
     e.preventDefault();
     setError('');
     setMensajeExito('');
+
+    if (!perfil) {
+      setError('Inicia sesión para inscribir y registrar pagos.');
+      return;
+    }
 
     if (!actividadSeleccionadaId) {
       setError('Selecciona una actividad escolar para inscribir.');
@@ -110,12 +132,12 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
           setError('Para HU-19 usa el nombre exacto de un alumno demo, por ejemplo: Alumno Demo 01.');
           return;
         }
-        const inscripcion = await inscribirEnEvento(actividad.id, alumno.id, apoderadoId);
+        const inscripcion = await inscribirEnEvento(actividad.id, alumno.id, esPersonal ? apoderadoId : null, usuarioId);
         setNombreParvulo('');
         setMensajeExito(
           `Inscripción registrada. Cupos disponibles: ${inscripcion.cupos_disponibles}.`
         );
-        await cargarTodo();
+        recargar();
         if (onCambioInscripcion) await onCambioInscripcion();
         return;
       }
@@ -134,14 +156,14 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
         monto: Number(montoSimulado) || 0,
         metodo_pago: metodoPago,
         estado_pago: 'pagado',
-      });
+      }, usuarioId);
 
       setComprobanteActivo(nuevoComprobante);
       setNombreParvulo('');
       setMensajeExito(
         `Inscripción registrada. Comprobante emitido: ${nuevoComprobante.codigo_comprobante}`
       );
-      await cargarTodo();
+      recargar();
       if (onCambioInscripcion) await onCambioInscripcion();
     } catch (err) {
       setError(err.message);
@@ -153,7 +175,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
     setError('');
     setMensajeExito('');
     try {
-      const encontrado = await consultarComprobantePago(codigoBusqueda);
+      const encontrado = await consultarComprobantePago(codigoBusqueda, usuarioId);
       setComprobanteActivo(encontrado);
       setMensajeExito(`Comprobante ${encontrado.codigo_comprobante} verificado en SQL.`);
     } catch (err) {
@@ -165,12 +187,12 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
     setError('');
     setMensajeExito('');
     try {
-      const actualizado = await actualizarEstadoPago(pagoId, nuevoEstado);
+      const actualizado = await actualizarEstadoPago(pagoId, nuevoEstado, usuarioId);
       setComprobanteActivo(actualizado);
       setMensajeExito(
         `Estado de inscripción actualizado a "${actualizado.estado_pago}".`
       );
-      await cargarTodo();
+      recargar();
       if (onCambioInscripcion) await onCambioInscripcion();
     } catch (err) {
       setError(err.message);
@@ -312,7 +334,11 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
             <h4 className="h6 fw-bold mb-2">
               Mis Inscripciones y Pagos Simulados ({pagos.length})
             </h4>
-            {pagos.length === 0 ? (
+            {!esPersonal ? (
+              <p className="text-muted small">
+                La lista de pagos (con RUT y nombre del párvulo) es solo para el personal del jardín. Guarda tu código de comprobante para consultarlo.
+              </p>
+            ) : pagos.length === 0 ? (
               <p className="text-muted small">Aún no se registran inscripciones.</p>
             ) : (
               <div className="list-group shadow-sm">
@@ -347,7 +373,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
                       >
                         Ver comprobante
                       </button>
-                      {p.estado_pago !== 'confirmado' && p.estado_pago !== 'cancelado' && (
+                      {esDireccion && p.estado_pago !== 'confirmado' && p.estado_pago !== 'cancelado' && (
                         <button
                           type="button"
                           className="btn btn-outline-success btn-sm"
@@ -356,7 +382,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion }) {
                           Confirmar
                         </button>
                       )}
-                      {p.estado_pago !== 'cancelado' && (
+                      {esDireccion && p.estado_pago !== 'cancelado' && (
                         <button
                           type="button"
                           className="btn btn-outline-danger btn-sm"

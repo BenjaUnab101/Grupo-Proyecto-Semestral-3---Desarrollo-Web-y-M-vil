@@ -1,0 +1,35 @@
+# 2026-11-09T11:30:18-03:00 · R4 · Matiz B · PRUEBA OBLIGATORIA de transición desarrollo -> producción (mismo volumen PostgreSQL)
+== FASE 1: API en desarrollo
+API: APP_ENV=development PERMITIR_IDENTIDAD_DEMO=true
+== PREPARAR en APP_ENV=development ==
+[PASS] T-00 La API corre en desarrollo/test  ->  development
+[PASS] T-01 Login demo de dirección y apoderado en desarrollo -> 200
+[PASS] T-02 Login de la cuenta legítima (no demo) en desarrollo -> 200
+[PASS] T-03 Token demo válido en desarrollo -> 200
+Base antes del cambio: 6 usuarios (5 demo), 57 sesiones
+
+Resultado: 4/4 PASS
+
+== Volumen PostgreSQL (no se toca): pr_s3_daniel_postgres_data
+== Se recrea SOLO la API con APP_ENV=production, PERMITIR_IDENTIDAD_DEMO=false y sin DEMO_PASSWORD
+ Container pr_s3_daniel-api-1 Started 
+API: APP_ENV=production PERMITIR_IDENTIDAD_DEMO=false DEMO_PASSWORD=vacía
+
+== FASE 2: API en producción
+== VERIFICAR en APP_ENV=production (mismo volumen PostgreSQL) ==
+[PASS] P-00 La API corre en producción y sin identidad demo
+[PASS] P-01 Login demo dirección con su contraseña válida -> 401
+[PASS] P-02 Login demo apoderado con su contraseña válida -> 401
+[PASS] P-03 Token demo de dirección emitido en desarrollo: /auth/yo -> 401
+[PASS] P-04 Token demo de dirección: /auditoria/eventos -> 401
+[PASS] P-05 Token demo de dirección: /contacto (gestión) -> 401
+[PASS] P-06 Token demo de dirección: /prematriculas (ruta heredada con Bearer) -> 401
+[PASS] P-07 Token demo de apoderado: /portal/alumnos -> 401
+[PASS] P-08 Token LEGÍTIMO emitido en desarrollo sigue válido -> 200
+[PASS] P-09 Token legítimo: /auditoria/eventos -> 200
+[PASS] P-10 Login legítimo nuevo en producción -> 200
+[PASS] P-11 No se borraron usuarios  ->  6 -> 6
+[PASS] P-12 El hash de la cuenta demo de dirección no se modificó
+[PASS] P-13 Sesiones: no se borraron; solo +1 por el login legítimo  ->  57 -> 58
+
+Resultado: 14/14 PASS

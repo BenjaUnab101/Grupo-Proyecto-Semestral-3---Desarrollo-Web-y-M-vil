@@ -1,0 +1,42 @@
+# 2026-11-09T10:41:50-03:00 · migraciones registradas en el volumen del stack
+V001__esquema_base
+V002__inscripciones
+V003__usuarios_eventos_pagos_institucion
+V004__comunicados
+V005__solicitudes_prematricula
+V006__sesiones_autenticacion
+V007__consultas_contacto
+
+# docker compose ps
+mongo Up 39 seconds (healthy)
+api Up 33 seconds (healthy)
+frontend Up 27 seconds (healthy)
+postgres Up 39 seconds (healthy)
+
+# prueba_remediacion_s3 dev (PERMITIR_IDENTIDAD_DEMO=true)
+== Rutas NUEVAS: X-Usuario-Id nunca vale, solo Bearer ==
+[PASS] R-01 GET /portal/alumnos con X-Usuario-Id de dirección -> 401
+[PASS] R-02 GET /auditoria/eventos con X-Usuario-Id de dirección -> 401
+[PASS] R-03 GET /panel/participacion con X-Usuario-Id de dirección -> 401
+[PASS] R-04 GET /contacto con X-Usuario-Id de dirección -> 401
+[PASS] R-05 GET /contacto con Bearer de apoderado + X-Rol direccion -> 403
+[PASS] R-06 Token inventado -> 401
+
+== Rutas HEREDADAS (HU-17): X-Rol contrastado con la sesión ==
+[PASS] R-07 Bearer apoderado + X-Rol direccion -> 403
+[PASS] R-08 Bearer educadora + X-Rol direccion -> 403
+[PASS] R-09 Bearer dirección + X-Rol direccion -> 201
+
+== Modo desarrollo (identidad demo activa, transitorio) ==
+[PASS] D-01 X-Usuario-Id apoderado + X-Rol direccion -> 403
+[PASS] D-02 X-Usuario-Id inexistente + X-Rol direccion -> 401
+[PASS] D-03 X-Rol direccion SIN identidad -> 201 (riesgo residual aceptado en desarrollo)
+[PASS] D-04 GET /sesion/yo con X-Usuario-Id demo -> 200 (barra demo TEC-17)
+
+Resultado: 13/13 PASS
+# 2026-11-09T10:47:41-03:00 · re-ejecución con la API recompilada (código final, modo dev)
+Resultado: 13/13 PASS
+Resultado: 22/22 PASS
+prueba_tec17: Resultado: 10/10 PASS
+prueba_hu19: Resultado: 18/18 PASS
+prueba_hu21: Resultado: 23/23 PASS

@@ -4,7 +4,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, Path, Query, Response
 from sqlalchemy.orm import Session
 
-from app.core.permisos import editor_requerido, usuario_opcional
+from app.core.permisos import editor_requerido, exigir_propietario_o_personal, usuario_opcional, usuario_requerido
 from app.db.postgres import get_db
 from app.schemas.comunicado import (
     ComunicadoIn,
@@ -44,7 +44,8 @@ def obtener_comunicado(comunicado_id: int = Path(gt=0), usuario=Depends(usuario_
     response_model=ComunicadosPertinentesOut,
     summary="Comunicados vigentes de un apoderado (General + niveles de sus hijos)",
 )
-def comunicados_pertinentes(apoderado_id: int = Path(gt=0), urgente: bool | None = None, db: Session = Depends(get_db)):
+def comunicados_pertinentes(apoderado_id: int = Path(gt=0), urgente: bool | None = None, usuario=Depends(usuario_requerido), db: Session = Depends(get_db)):
+    exigir_propietario_o_personal(usuario, apoderado_id)  # H-02: solo el propio apoderado o el personal
     return servicio.comunicados_pertinentes(db, apoderado_id, urgente)
 
 

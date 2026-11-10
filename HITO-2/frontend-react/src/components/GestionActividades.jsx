@@ -8,6 +8,7 @@ import {
   obtenerCategoriasActividad,
   obtenerOrganizadores,
 } from '../services/eventosApi';
+import { useSesion } from '../context/sesionContexto.js';
 
 export default function GestionActividades({ onCambioActividades }) {
   const [actividades, setActividades] = useState([]);
@@ -16,7 +17,9 @@ export default function GestionActividades({ onCambioActividades }) {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
-  const [rolActivo, setRolActivo] = useState('organizador');
+  // Cierre H-01: los permisos los decide el servidor según la sesión (token o cuenta demo).
+  const { usuarioId, perfil } = useSesion() ?? {};
+  const puedeGestionar = ['administrador', 'organizador'].includes(perfil?.rol);
 
   const [editId, setEditId] = useState(null);
   const [titulo, setTitulo] = useState('');
@@ -29,30 +32,37 @@ export default function GestionActividades({ onCambioActividades }) {
   const [organizadorId, setOrganizadorId] = useState('');
   const [estadoInicial, setEstadoInicial] = useState('borrador');
 
-  const cargarPanel = async () => {
-    try {
-      setCargando(true);
-      setError('');
-      const [acts, cats, orgs] = await Promise.all([
-        obtenerActividades(false),
-        obtenerCategoriasActividad(true),
-        obtenerOrganizadores(true),
-      ]);
-      setActividades(acts);
-      setCategorias(cats);
-      setOrganizadores(orgs);
-      if (cats.length > 0 && !categoriaId) setCategoriaId(String(cats[0].id));
-      if (orgs.length > 0 && !organizadorId) setOrganizadorId(String(orgs[0].id));
-    } catch (err) {
-      setError(err.message || 'No fue posible cargar el panel de actividades.');
-    } finally {
-      setCargando(false);
-    }
-  };
-
+  // Carga de datos (patrón de hooks/useRecurso.js): el estado cambia solo dentro de las promesas.
+  const [version, setVersion] = useState(0);
   useEffect(() => {
-    cargarPanel();
-  }, []);
+    let vigente = true;
+    Promise.all([obtenerActividades(false), obtenerCategoriasActividad(true), obtenerOrganizadores(true)])
+      .then(([acts, cats, orgs]) => {
+        if (!vigente) return;
+        setActividades(acts);
+        setCategorias(cats);
+        setOrganizadores(orgs);
+        if (cats.length > 0) setCategoriaId((actual) => actual || String(cats[0].id));
+        if (orgs.length > 0) setOrganizadorId((actual) => actual || String(orgs[0].id));
+      })
+      .catch((err) => {
+        if (vigente) setError(err.message || 'No fue posible cargar el panel de actividades.');
+      })
+      .finally(() => {
+        if (vigente) setCargando(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [version]);
+
+  // Recarga tras una acción del usuario (patrón de hooks/useRecurso.js: el efecto vuelve a
+  // pedir los datos y el estado solo cambia dentro de las promesas).
+  const recargar = () => {
+    setCargando(true);
+    setError('');
+    setVersion((v) => v + 1);
+  };
 
   const limpiarFormulario = () => {
     setEditId(null);
@@ -66,7 +76,7 @@ export default function GestionActividades({ onCambioActividades }) {
   };
 
   const notificarActualizacion = async () => {
-    await cargarPanel();
+    recargar();
     if (onCambioActividades) {
       await onCambioActividades();
     }
@@ -90,10 +100,10 @@ export default function GestionActividades({ onCambioActividades }) {
       };
 
       if (editId) {
-        await actualizarActividad(editId, payload, rolActivo);
+        await actualizarActividad(editId, payload, usuarioId);
         setMensajeExito('Actividad escolar actualizada correctamente.');
       } else {
-        await crearActividad(payload, rolActivo);
+        await crearActividad(payload, usuarioId);
         setMensajeExito('Actividad escolar creada correctamente.');
       }
       limpiarFormulario();
@@ -107,7 +117,7 @@ export default function GestionActividades({ onCambioActividades }) {
     try {
       setError('');
       setMensajeExito('');
-      await publicarActividad(id, rolActivo);
+      await publicarActividad(id, usuarioId);
       setMensajeExito('Actividad publicada y visible en el calendario de familias.');
       await notificarActualizacion();
     } catch (err) {
@@ -119,7 +129,7 @@ export default function GestionActividades({ onCambioActividades }) {
     try {
       setError('');
       setMensajeExito('');
-      await cancelarActividad(id, rolActivo);
+      await cancelarActividad(id, usuarioId);
       setMensajeExito('Actividad cancelada y retirada del calendario familiar.');
       await notificarActualizacion();
     } catch (err) {
@@ -146,21 +156,10 @@ export default function GestionActividades({ onCambioActividades }) {
         <h3 className="h5 fw-bold mb-0" style={{ color: 'var(--pr-blue)' }}>
           Gestión y Publicación de Actividades Escolares (Organizador)
         </h3>
-        <div className="d-flex align-items-center gap-2">
-          <label htmlFor="selector-rol-hu18" className="small fw-semibold mb-0">
-            Rol activo:
-          </label>
-          <select
-            id="selector-rol-hu18"
-            className="form-select form-select-sm w-auto"
-            value={rolActivo}
-            onChange={(e) => setRolActivo(e.target.value)}
-          >
-            <option value="organizador">Organizador (Autorizado)</option>
-            <option value="direccion">Dirección (Autorizado)</option>
-            <option value="apoderado">Apoderado (Solo lectura)</option>
-          </select>
-        </div>
+        {/* Cierre H-01/H-03: el perfil sale de la sesión iniciada, no de un selector. */}
+        <span className={`badge ${puedeGestionar ? 'bg-success' : 'bg-secondary'}`} role="status">
+          {puedeGestionar ? 'Sesión de personal del jardín: puedes gestionar' : 'Solo lectura · inicia sesión con una cuenta autorizada para gestionar'}
+        </span>
       </div>
 
       {error && (
