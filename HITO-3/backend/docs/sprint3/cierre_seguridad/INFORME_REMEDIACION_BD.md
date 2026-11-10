@@ -96,4 +96,16 @@ Resultados de GitHub Actions: sección 7.
 
 ## 7. GitHub Actions
 
-Se completa tras publicar los cambios (ver el commit siguiente).
+| Commit | Contenido | Checks |
+|---|---|---|
+| `7f8f15f` | Remediación BD (Compose, scripts, CI) | Sin run propio: se publicó junto con `be7b3f7` |
+| `be7b3f7` | Fases de CI 8 y 9 e informe | 5/6: integración del run *push* fallida; la del run *pull_request* pasó |
+| `c75004c` | Anotación `::error` por gate fallido | 5/6: la anotación identificó el gate `documentos conservados (25)` |
+| `2c104cc` | Escrituras *journaled* y parada ordenada en la fase de MongoDB heredado | **6/6 PASS** (runs 42731151086 *push* y 42731158072 *pull_request*) |
+
+**Causa del fallo intermitente:** la prueba eliminaba con `docker rm -f` el MongoDB temporal justo
+después de insertar los documentos. Una escritura reciente del journal podía no llegar al disco.
+El fallo estaba en el montaje de la prueba, no en `habilitar_auth_mongo.sh`. En los volúmenes
+reales, el script nunca mata MongoDB: Compose lo detiene de forma ordenada.
+
+Este informe se publica en un commit posterior; sus checks se verifican sobre ese nuevo SHA.
