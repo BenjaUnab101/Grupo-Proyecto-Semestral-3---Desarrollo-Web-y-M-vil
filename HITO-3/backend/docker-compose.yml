@@ -12,7 +12,7 @@
 # NO usar "docker compose down -v": borra los volúmenes con los datos.
 #
 # Segunda auditoría (H-04): los puertos se publican SOLO en 127.0.0.1 (BIND_HOST) para que
-# PostgreSQL y MongoDB (sin autenticación) no queden expuestos en redes compartidas, y MongoDB
+# PostgreSQL y MongoDB no queden expuestos en redes compartidas, y MongoDB
 # ya no usa container_name fijo (evita choques entre proyectos o clones).
 
 services:
@@ -38,7 +38,9 @@ services:
       # R4 · Matiz A: APP_ENV obligatorio y explícito (development | test | staging | production).
       APP_ENV: ${APP_ENV:?Falta APP_ENV en .env (development, test, staging o production)}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:?Falta POSTGRES_USER}:${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?Falta POSTGRES_DB}
-      MONGODB_URL: mongodb://mongo:27017
+      # Remediación BD: MongoDB exige autenticación. La API usa una cuenta con privilegios
+      # mínimos (readWrite solo en la base pequenos_reyes), nunca la cuenta root.
+      MONGODB_URL: mongodb://${MONGO_APP_USER:?Falta MONGO_APP_USER}:${MONGO_APP_PASSWORD:?Falta MONGO_APP_PASSWORD}@mongo:27017/pequenos_reyes?authSource=pequenos_reyes
       MONGODB_DATABASE: pequenos_reyes
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
       # HU-16: DEMO_PASSWORD (solo development/test) da clave a las cuentas @ejemplo.cl.
@@ -87,11 +89,22 @@ services:
   mongo:
     image: mongo:7
     restart: unless-stopped
+    # Remediación BD: autenticación obligatoria. Con un volumen VACÍO la imagen crea la cuenta
+    # root (MONGO_INITDB_ROOT_*) y mongo/01_usuario_app.js crea la cuenta de la API. Con un
+    # volumen EXISTENTE estas variables no crean nada: usar scripts/habilitar_auth_mongo.sh.
+    command: ["mongod", "--auth", "--bind_ip_all"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:?Falta MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Falta MONGO_ROOT_PASSWORD}
+      MONGO_APP_USER: ${MONGO_APP_USER:?Falta MONGO_APP_USER}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Falta MONGO_APP_PASSWORD}
     ports:
       - "${BIND_HOST:-127.0.0.1}:${MONGO_PORT:-27017}:27017"
     volumes:
       - mongo_data:/data/db
       - ./mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ./mongo/01_usuario_app.js:/docker-entrypoint-initdb.d/01_usuario_app.js:ro
+      - ./mongo/usuario_app.js:/mongo/usuario_app.js:ro
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 5s

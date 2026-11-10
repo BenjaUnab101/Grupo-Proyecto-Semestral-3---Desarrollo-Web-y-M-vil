@@ -76,6 +76,7 @@ jobs:
         env:
           COMPOSE_PROJECT_NAME: pr_ci
           CI_LIMPIAR_VOLUMENES: si
+          CI_REMEDIACION_BD: si
         run: bash scripts/ci_integracion.sh
       - name: Logs de los servicios si algo falla
         if: failure()
