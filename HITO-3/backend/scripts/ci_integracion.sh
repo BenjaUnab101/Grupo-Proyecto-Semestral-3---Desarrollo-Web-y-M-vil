@@ -132,8 +132,9 @@ if [ "${CI_REMEDIACION_BD:-no}" = "si" ]; then
   docker volume create ${COMPOSE_PROJECT_NAME}_mongo_data >/dev/null
   docker run -d --name ${COMPOSE_PROJECT_NAME}_sin_auth -v ${COMPOSE_PROJECT_NAME}_mongo_data:/data/db mongo:7 >/dev/null
   for _ in $(seq 1 30); do docker exec ${COMPOSE_PROJECT_NAME}_sin_auth mongosh --quiet --eval 'db.adminCommand("ping").ok' >/dev/null 2>&1 && break; sleep 2; done
-  docker exec ${COMPOSE_PROJECT_NAME}_sin_auth mongosh --quiet --eval 'const d=db.getSiblingDB("pequenos_reyes"); for (let i=0;i<25;i++) d.auditoria_eventos.insertOne({tipo:"legado",i:i,fecha:new Date()})' >/dev/null
-  docker rm -f ${COMPOSE_PROJECT_NAME}_sin_auth >/dev/null
+  docker exec ${COMPOSE_PROJECT_NAME}_sin_auth mongosh --quiet --eval 'const d=db.getSiblingDB("pequenos_reyes"); for (let i=0;i<25;i++) d.auditoria_eventos.insertOne({tipo:"legado",i:i,fecha:new Date()},{writeConcern:{w:1,j:true}})' >/dev/null
+  # Parada ordenada (no rm -f): garantiza que el journal quede en disco antes de reutilizar el volumen.
+  docker stop -t 30 ${COMPOSE_PROJECT_NAME}_sin_auth >/dev/null; docker rm ${COMPOSE_PROJECT_NAME}_sin_auth >/dev/null
   cat > docker-compose.legado.yml <<'YML'
 volumes:
   mongo_data:
