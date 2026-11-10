@@ -38,7 +38,11 @@ FALLAS=0
 paso() { echo; echo "=================== $* ==================="; }
 corre() {  # corre <descripción> <comando...>
   local d="$1"; shift
-  if "$@"; then echo "[GATE PASS] $d"; else echo "[GATE FAIL] $d"; FALLAS=$((FALLAS + 1)); fi
+  if "$@"; then echo "[GATE PASS] $d"; else
+    echo "[GATE FAIL] $d"; FALLAS=$((FALLAS + 1))
+    # En GitHub Actions, la anotación muestra el gate fallido sin abrir los registros.
+    [ -n "${GITHUB_ACTIONS:-}" ] && echo "::error title=GATE FAIL::$d"
+  fi
 }
 dc() { docker compose "$@"; }
 api() { dc exec -T api python -m "scripts.$1" "${@:2}"; }
