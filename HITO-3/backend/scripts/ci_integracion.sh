@@ -115,9 +115,11 @@ if [ "${CI_REMEDIACION_BD:-no}" = "si" ]; then
   # Solo en GitHub Actions (cambia credenciales del .env ficticio de CI).
   paso "8. Rotación de PostgreSQL en el volumen existente"
   APP_ENV=development docker compose up -d >/dev/null 2>&1
+  conteo() { APP_ENV=development docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -A -t -c "SELECT (SELECT count(*) FROM usuarios)||'"'"'/'"'"'||(SELECT count(*) FROM actividades)||'"'"'/'"'"'||(SELECT count(*) FROM schema_migraciones)"' | tr -d '\r'; }
+  ANTES="$(conteo)"
   corre "rotación con clave generada (anterior rechazada, nueva aceptada)" env APP_ENV=development ROTAR_GENERAR=si bash scripts/rotar_clave_postgres.sh
   corre "autenticación tras la rotación" env APP_ENV=development bash scripts/verificar_auth_bd.sh
-  corre "datos conservados tras la rotación (TEC-16 verificar)" env APP_ENV=development docker compose exec -T api python -m scripts.prueba_tec16 verificar
+  corre "datos conservados tras la rotación (usuarios/actividades/migraciones)" test "$(conteo)" = "$ANTES"
 
   paso "9. MongoDB existente sin autenticación -> habilitar sin perder documentos"
   APP_ENV=development docker compose stop >/dev/null 2>&1   # libera los puertos de pr_ci
@@ -135,7 +137,7 @@ volumes:
     name: ${COMPOSE_PROJECT_NAME}_mongo_data
 YML
   dcl() { APP_ENV=development docker compose -f docker-compose.yml -f docker-compose.legado.yml "$@"; }
-  corre "habilitar_auth_mongo.sh sobre el volumen existente" env APP_ENV=development COMPOSE_FILE=docker-compose.yml:docker-compose.legado.yml bash scripts/habilitar_auth_mongo.sh
+  corre "habilitar_auth_mongo.sh sobre el volumen existente" env APP_ENV=development COMPOSE_PATH_SEPARATOR=: COMPOSE_FILE=docker-compose.yml:docker-compose.legado.yml bash scripts/habilitar_auth_mongo.sh
   corre "documentos conservados (25)" test "$(dcl exec -T mongo mongosh --quiet --eval 'const d=db.getSiblingDB("pequenos_reyes"); d.auth(process.env.MONGO_APP_USER,process.env.MONGO_APP_PASSWORD); print(d.auditoria_eventos.countDocuments({tipo:"legado"}))' | tr -d '\r' | tail -n 1)" = 25
   corre "sin credenciales no se consultan datos" test "$(dcl exec -T mongo mongosh --quiet --eval 'try{db.getSiblingDB("pequenos_reyes").auditoria_eventos.findOne();print("LEE")}catch(e){print("DENEGADO")}' | tr -d '\r' | tail -n 1)" = DENEGADO
   dcl down >/dev/null 2>&1; docker volume rm -f ${COMPOSE_PROJECT_NAME}_mongo_data >/dev/null 2>&1; rm -f docker-compose.legado.yml
