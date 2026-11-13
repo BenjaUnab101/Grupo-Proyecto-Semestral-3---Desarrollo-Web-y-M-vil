@@ -1,0 +1,12 @@
+[PASS] datos válidos -> aceptado: rut=12345678-5 correo=familia.demo@ejemplo.cl telefono=912345678
+[PASS] RUT con K -> aceptado: rut=10000013-K correo=familia.demo@ejemplo.cl telefono=912345678
+[PASS] teléfono fijo 32 212 3456 -> aceptado: rut=12345678-5 correo=familia.demo@ejemplo.cl telefono=322123456
+[PASS] RUT con dígito verificador incorrecto -> rechazado: {'rut': 'Value error, El dígito verificador no corresponde a este RUT. Revísalo.'}
+[PASS] correo sin extensión -> rechazado: {'correo': "String should match pattern '^[^\\s@]+@[^\\s@]+\\.[A-Za-z]{2,}$'"}
+[PASS] teléfono de 8 dígitos -> rechazado: {'telefono': 'Value error, El teléfono debe ser chileno de 9 dígitos, por ejemplo +56 9 1234 5678.'}
+[PASS] nivel inexistente -> rechazado: {'nivel': "Input should be 'medio-menor', 'medio-mayor', 'transicion-1', 'transicion-2' or 'sala-tel'"}
+[PASS] sin consentimiento -> rechazado: {'consentimiento': 'Value error, Debes aceptar el uso de estos datos para gestionar la solicitud.'}
+[PASS] nombre del párvulo solo espacios -> rechazado: {'nombre_parvulo': 'String should have at least 1 character'}
+[PASS] comentario de 301 caracteres -> rechazado: {'comentario': 'String should have at most 300 characters'}
+
+Resultado: 10/10 PASS

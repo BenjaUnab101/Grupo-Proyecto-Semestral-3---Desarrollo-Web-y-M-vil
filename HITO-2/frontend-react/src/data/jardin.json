@@ -1,0 +1,12 @@
+{
+  "nombre": "Escuela de Lenguaje Pequeños Reyes",
+  "historia": "Somos una institución educativa dedicada al desarrollo integral de párvulos, especializada en el tratamiento fonoaudiológico del lenguaje y en brindar una transición armónica hacia la educación básica.",
+  "mision": "Potenciar las habilidades comunicativas y cognitivas de niños y niñas en un entorno acogedor, inclusivo y estimulante.",
+  "contacto": {
+    "telefono": "+56912345678",
+    "telefonoTexto": "+56 9 1234 5678 (Demo)",
+    "correo": "contacto@pequenosreyes.demo",
+    "correoTexto": "contacto@pequenosreyes.demo",
+    "direccion": "Calle Central 123, Quilpué, Valparaíso"
+  }
+}

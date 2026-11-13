@@ -1,0 +1,65 @@
+### migrar.sh sobre una base vacía (PostgreSQL 16)
+== Migraciones ==
+  + V001__esquema_base aplicada
+  + V002__inscripciones aplicada
+  + V003__usuarios_eventos_pagos_institucion aplicada
+  + V004__comunicados aplicada
+  + V005__solicitudes_prematricula aplicada
+== Datos de demostración ==
+  + S001__datos_demo.sql cargado
+  + S002__comunicados_demo.sql cargado
+  + S003__salas_cupos_demo.sql cargado
+  + S004__prematriculas_demo.sql cargado
+Listo.
+
+### pruebas-postgresql.sql
+== Solicitudes demo (S004) ==
+  codigo   |    estado    |    nivel     |          correo          
+-----------+--------------+--------------+--------------------------
+ PM-DEMAA2 | en_revision  | medio-mayor  | familia.demo1@ejemplo.cl
+ PM-DEMBB3 | recibida     | sala-tel     | familia.demo2@ejemplo.cl
+ PM-DEMCC4 | lista_espera | transicion-1 | familia.demo3@ejemplo.cl
+(3 rows)
+
+BEGIN
+== 1. Solicitud válida (se guarda) ==
+INSERT 0 1
+SAVEPOINT
+== 2. Otra solicitud en curso para el mismo párvulo y nivel -> rechazada ==
+ERROR:  duplicate key value violates unique constraint "uq_prematricula_en_curso"
+ROLLBACK
+== 3. Nivel que no existe -> rechazado ==
+ERROR:  new row for relation "solicitudes_prematricula" violates check constraint "ck_prematricula_nivel"
+ROLLBACK
+== 4. Estado que no existe -> rechazado ==
+ERROR:  new row for relation "solicitudes_prematricula" violates check constraint "ck_prematricula_estado"
+ROLLBACK
+== 5. Código repetido -> rechazado ==
+ERROR:  duplicate key value violates unique constraint "solicitudes_prematricula_codigo_key"
+ROLLBACK
+== 6. Si la anterior fue rechazada, la familia puede volver a postular ==
+UPDATE 1
+INSERT 0 1
+ROLLBACK
+== Fin (ROLLBACK: no quedó ningún dato de prueba) ==
+ solicitudes_test 
+------------------
+                0
+(1 row)
+
+
+### Persistencia tras reiniciar PostgreSQL
+ id |  codigo   |  estado  
+----+-----------+----------
+  9 | PM-RESTA2 | recibida
+(1 row)
+
+INSERT 0 1
+$ pg_ctl restart
+server started
+ id |  codigo   |  estado  
+----+-----------+----------
+  9 | PM-RESTA2 | recibida
+(1 row)
+
+DELETE 1

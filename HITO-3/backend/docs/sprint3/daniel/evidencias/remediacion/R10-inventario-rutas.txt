@@ -1,0 +1,66 @@
+# 2026-11-09T11:12:22-03:00 · Inventario automático de rutas (recorre app.routes y sus dependencias; excluye la validación global de X-Rol)
+# Formato: módulo | método | ruta | protección
+academico | GET | /api/v1/alumnos | NINGUNA
+academico | GET | /api/v1/matriculas | NINGUNA
+academico | GET | /api/v1/salas | NINGUNA
+academico | POST | /api/v1/matriculas | NINGUNA
+auditoria | GET | /api/v1/auditoria/eventos | Bearer, Bearer + rol
+auth | GET | /api/v1/auth/yo | Bearer
+auth | GET | /api/v1/portal/alumnos | Bearer
+auth | GET | /api/v1/portal/alumnos/{alumno_id} | Bearer
+auth | POST | /api/v1/auth/login | NINGUNA
+auth | POST | /api/v1/auth/logout | Bearer
+catalogo | GET | /api/v1/categorias | NINGUNA
+catalogo | GET | /api/v1/institucion | NINGUNA
+catalogo | GET | /api/v1/salas/cupos | NINGUNA
+catalogo | POST | /api/v1/categorias | NINGUNA
+comunicados | DELETE | /api/v1/comunicados/{comunicado_id} | Bearer|X-Usuario-Id + rol, Bearer|X-Usuario-Id(opc)
+comunicados | GET | /api/v1/apoderados/{apoderado_id}/comunicados | NINGUNA
+comunicados | GET | /api/v1/comunicados | Bearer|X-Usuario-Id(opc)
+comunicados | GET | /api/v1/comunicados/{comunicado_id} | Bearer|X-Usuario-Id(opc)
+comunicados | GET | /api/v1/comunicados/{comunicado_id}/bitacora | Bearer|X-Usuario-Id + rol, Bearer|X-Usuario-Id(opc)
+comunicados | PATCH | /api/v1/comunicados/{comunicado_id} | Bearer|X-Usuario-Id + rol, Bearer|X-Usuario-Id(opc)
+comunicados | POST | /api/v1/comunicados | Bearer|X-Usuario-Id + rol, Bearer|X-Usuario-Id(opc)
+contacto | GET | /api/v1/contacto | Bearer, Bearer + rol
+contacto | GET | /api/v1/contacto/mias | Bearer
+contacto | PATCH | /api/v1/contacto/{consulta_id}/estado | Bearer, Bearer + rol
+contacto | POST | /api/v1/contacto | Bearer-opc
+contacto | POST | /api/v1/contacto/seguimiento | NINGUNA
+documentos | GET | /api/v1/documentos | NINGUNA
+documentos | PATCH | /api/v1/documentos/{documento_id} | X-Rol (cliente)
+documentos | POST | /api/v1/documentos | X-Rol (cliente)
+eventos | GET | /api/v1/actividades | NINGUNA
+eventos | GET | /api/v1/categorias-actividad | NINGUNA
+eventos | GET | /api/v1/organizadores | NINGUNA
+eventos | GET | /api/v1/pagos | NINGUNA
+eventos | GET | /api/v1/pagos/comprobante/{codigo} | NINGUNA
+eventos | PATCH | /api/v1/actividades/{actividad_id} | X-Rol (cliente)
+eventos | PATCH | /api/v1/categorias-actividad/{categoria_id} | X-Rol (cliente)
+eventos | PATCH | /api/v1/organizadores/{organizador_id} | X-Rol (cliente)
+eventos | PATCH | /api/v1/pagos/{pago_id}/estado | NINGUNA
+eventos | POST | /api/v1/actividades | X-Rol (cliente)
+eventos | POST | /api/v1/actividades/{actividad_id}/cancelar | X-Rol (cliente)
+eventos | POST | /api/v1/actividades/{actividad_id}/publicar | X-Rol (cliente)
+eventos | POST | /api/v1/categorias-actividad | X-Rol (cliente)
+eventos | POST | /api/v1/organizadores | X-Rol (cliente)
+eventos | POST | /api/v1/pagos | NINGUNA
+inscripciones | DELETE | /api/v1/eventos/{actividad_id} | NINGUNA
+inscripciones | GET | /api/v1/apoderados/{apoderado_id}/inscripciones | NINGUNA
+inscripciones | GET | /api/v1/eventos | NINGUNA
+inscripciones | GET | /api/v1/eventos/{actividad_id} | NINGUNA
+inscripciones | GET | /api/v1/eventos/{actividad_id}/asistentes | NINGUNA
+inscripciones | GET | /api/v1/inscripciones/{inscripcion_id}/pagos | NINGUNA
+inscripciones | PATCH | /api/v1/eventos/{actividad_id} | NINGUNA
+inscripciones | POST | /api/v1/eventos | NINGUNA
+inscripciones | POST | /api/v1/eventos/{actividad_id}/inscripciones | NINGUNA
+inscripciones | POST | /api/v1/inscripciones/{inscripcion_id}/cancelar | NINGUNA
+inscripciones | POST | /api/v1/inscripciones/{inscripcion_id}/pagos | NINGUNA
+main | GET | /health | NINGUNA
+panel | GET | /api/v1/panel/participacion | Bearer, Bearer + rol
+panel | GET | /api/v1/panel/participacion/historial | Bearer, Bearer + rol
+prematricula | GET | /api/v1/prematriculas | Bearer|X-Usuario-Id + dirección, Bearer|X-Usuario-Id(opc)
+prematricula | PATCH | /api/v1/prematriculas/{solicitud_id}/estado | Bearer|X-Usuario-Id + dirección, Bearer|X-Usuario-Id(opc)
+prematricula | POST | /api/v1/prematriculas | NINGUNA
+prematricula | POST | /api/v1/prematriculas/seguimiento | NINGUNA
+sesion | GET | /api/v1/sesion/cuentas-demo | NINGUNA
+sesion | GET | /api/v1/sesion/yo | Bearer|X-Usuario-Id(opc)

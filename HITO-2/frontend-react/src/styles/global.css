@@ -1,0 +1,175 @@
+@import './variables.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--pr-bg);
+  color: var(--pr-text-main);
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* Accesibilidad: Foco visible universal (CA-C-TEC-02) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--pr-blue) !important;
+  outline-offset: 2px !important;
+}
+
+/* Clases utilitarias institucionales reutilizables */
+.pill-badge {
+  display: inline-block;
+  background-color: var(--pr-blue-light);
+  color: var(--pr-blue-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 102, 146, 0.15);
+}
+
+.btn-institucional-primary {
+  background-color: var(--pr-blue);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 102, 146, 0.25);
+  transition: all 0.25s ease;
+}
+
+.btn-institucional-primary:hover {
+  background-color: var(--pr-blue-dark);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* CSS para la API de Clima */
+
+.clima-widget {
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.clima-header {
+  margin-bottom: 1.5rem;
+}
+
+.clima-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+.clima-header p {
+  margin: 0;
+}
+
+.clima-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.clima-dia {
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.clima-dia h3 {
+  margin-bottom: 0.75rem;
+  text-transform: capitalize;
+}
+
+.clima-condicion {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.clima-temperaturas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.clima-dia p {
+  margin-bottom: 0.5rem;
+}
+
+.clima-recomendaciones {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.clima-recomendaciones ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.clima-atribucion {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.clima-loader {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.clima-loader .spinner-border {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+  .clima-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .clima-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* HU-08: tarjetas de la galería (botones que abren el lightbox) */
+.btn-galeria:hover,
+.btn-galeria:focus-visible {
+  transform: translateY(-3px);
+}
+
+.btn-galeria:focus-visible {
+  outline: 3px solid var(--pr-blue);
+  outline-offset: 2px;
+}

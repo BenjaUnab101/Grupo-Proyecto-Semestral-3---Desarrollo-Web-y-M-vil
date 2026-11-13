@@ -1,0 +1,112 @@
+diff -ru a/app/api/documentos.py b/app/api/documentos.py
+--- a/app/api/documentos.py
++++ b/app/api/documentos.py
+@@ -1,6 +1,7 @@
+ from fastapi import APIRouter, Depends, Header, Query, status
+ from sqlalchemy.orm import Session
+ 
++from app.core.permisos import rol_de_sesion
+ from app.db.postgres import get_db
+ from app.schemas.documento import DocumentoIn, DocumentoOut, DocumentoUpdate
+ from app.services import documentos as servicio
+@@ -24,7 +25,7 @@
+ )
+ def crear_documento(
+     payload: DocumentoIn,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.crear_documento(db, payload, x_rol)
+@@ -37,7 +38,7 @@
+ def actualizar_documento(
+     documento_id: int,
+     payload: DocumentoUpdate,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.actualizar_documento(db, documento_id, payload, x_rol)
+diff -ru a/app/api/eventos.py b/app/api/eventos.py
+--- a/app/api/eventos.py
++++ b/app/api/eventos.py
+@@ -1,6 +1,7 @@
+ from fastapi import APIRouter, Depends, Header, Query, status
+ from sqlalchemy.orm import Session
+ 
++from app.core.permisos import rol_de_sesion
+ from app.db.postgres import get_db
+ from app.schemas.eventos import (
+     ActividadEscolarIn,
+@@ -36,7 +37,7 @@
+ )
+ def crear_categoria(
+     payload: CategoriaActividadIn,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.crear_categoria(db, payload, x_rol)
+@@ -49,7 +50,7 @@
+ def actualizar_categoria(
+     categoria_id: int,
+     payload: CategoriaActividadUpdate,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.actualizar_categoria(db, categoria_id, payload, x_rol)
+@@ -70,7 +71,7 @@
+ )
+ def crear_organizador(
+     payload: OrganizadorIn,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.crear_organizador(db, payload, x_rol)
+@@ -83,7 +84,7 @@
+ def actualizar_organizador(
+     organizador_id: int,
+     payload: OrganizadorUpdate,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.actualizar_organizador(db, organizador_id, payload, x_rol)
+@@ -105,7 +106,7 @@
+ )
+ def crear_actividad(
+     payload: ActividadEscolarIn,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.crear_actividad(db, payload, x_rol)
+@@ -118,7 +119,7 @@
+ def actualizar_actividad(
+     actividad_id: int,
+     payload: ActividadEscolarUpdate,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.actualizar_actividad(db, actividad_id, payload, x_rol)
+@@ -130,7 +131,7 @@
+ )
+ def publicar_actividad(
+     actividad_id: int,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.publicar_actividad(db, actividad_id, x_rol)
+@@ -142,7 +143,7 @@
+ )
+ def cancelar_actividad(
+     actividad_id: int,
+-    x_rol: str | None = Header(default=None),
++    x_rol: str = Depends(rol_de_sesion),  # antes: X-Rol enviado por el navegador
+     db: Session = Depends(get_db),
+ ):
+     return servicio.cancelar_actividad(db, actividad_id, x_rol)

@@ -1,0 +1,20 @@
+# 2026-11-09T11:29:25-03:00 · R4 · stack en DESARROLLO explícito (APP_ENV=development, PERMITIR_IDENTIDAD_DEMO=true, DEMO_PASSWORD definida; mismos volúmenes)
+ Container pr_s3_daniel-api-1 Healthy 
+api | Up 7 seconds (healthy) | 127.0.0.1:8000->8000/tcp
+frontend | Up 18 minutes (healthy) | 127.0.0.1:5173->80/tcp
+mongo | Up 18 minutes (healthy) | 127.0.0.1:27017->27017/tcp
+postgres | Up 18 minutes (healthy) | 127.0.0.1:5432->5432/tcp
+API: APP_ENV=development PERMITIR_IDENTIDAD_DEMO=true
+
+prueba_remediacion_s3 dev: Resultado: 13/13 PASS 
+prueba_s3_daniel crear: Resultado: 22/22 PASS 
+prueba_tec17: Resultado: 10/10 PASS 
+prueba_hu19: Resultado: 18/18 PASS 
+prueba_hu21: Resultado: 23/23 PASS 
+prueba_hu25 crear: Resultado: 3/3 PASS 
+prueba_hu25 negativos: Resultado: 13/13 PASS 
+prueba_tec16 crear: Resultado: 20/20 PASS 
+prueba_tec16 verificar: Resultado: 4/4 PASS 
+
+== sonda H-02 en desarrollo (informativo)
+Rutas ABIERTAS sin autenticación: 12 de 12 sondeadas -> H02-01, H02-02, H02-03, H02-04, H02-05, H02-06, H02-07, H02-08, H02-09, H02-10, H02-11, H02-12

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "medio-mayor",
+    "nombre": "Medio Mayor",
+    "edad": "3 años cumplidos al 31 de marzo",
+    "descripcion": "Enfoque en desarrollo fonológico inicial, vocabulario funcional y juego colaborativo en aula especializada."
+  },
+  {
+    "id": "pre-kinder",
+    "nombre": "Pre-Kínder",
+    "edad": "4 años cumplidos al 31 de marzo",
+    "descripcion": "Fortalecimiento de la estructuración de oraciones, habilidades semánticas y apresto a la lectoescritura."
+  },
+  {
+    "id": "kinder",
+    "nombre": "Kínder",
+    "edad": "5 años cumplidos al 31 de marzo",
+    "descripcion": "Consolidación del lenguaje comprensivo y expresivo, autonomía y preparación integral para primer año básico."
+  }
+]

@@ -1,0 +1,17 @@
+# 2026-11-08T17:45:55-03:00 · regresión: scripts de integración de compañeros
+== prueba_tec17
+Resultado: 10/10 PASS
+== prueba_hu19
+Resultado: 18/18 PASS
+== prueba_hu21
+Resultado: 23/23 PASS
+== prueba_hu25 crear
+Resultado: 3/3 PASS
+== prueba_hu25 verificar
+Resultado: 4/4 PASS
+== prueba_hu25 negativos
+Resultado: 13/13 PASS
+== prueba_tec16 crear
+Resultado: 20/20 PASS
+== prueba_tec16 verificar
+Resultado: 4/4 PASS

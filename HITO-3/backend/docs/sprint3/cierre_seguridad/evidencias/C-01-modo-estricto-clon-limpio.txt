@@ -1,0 +1,33 @@
+# 2026-11-09T15:43:30-03:00 · CIERRE H-01/H-02/H-03 · clon del repo oficial (rama sprint3/daniel-cierre-seguridad), volúmenes NUEVOS, MODO ESTRICTO (APP_ENV=development, PERMITIR_IDENTIDAD_DEMO=false)
+api | Up 32 seconds (healthy) | 127.0.0.1:8000->8000/tcp
+frontend | Up 27 seconds (healthy) | 127.0.0.1:5173->80/tcp
+mongo | Up 38 seconds (healthy) | 127.0.0.1:27017->27017/tcp
+postgres | Up 38 seconds (healthy) | 127.0.0.1:5432->5432/tcp
+
+== sonda H-02 (sin token, sin X-Usuario-Id, sin X-Rol)
+== Lecturas con datos de alumnos/apoderados/pagos ==
+[PROTEGIDA] H02-01 GET /alumnos -> HTTP 401  lista de alumnos
+[PROTEGIDA] H02-02 GET /eventos/2/asistentes -> HTTP 401  asistentes de un evento
+[PROTEGIDA] H02-03 GET /apoderados/1/inscripciones -> HTTP 401  inscripciones de un apoderado por id
+[PROTEGIDA] H02-04 GET /pagos -> HTTP 401  pagos HU-20 (RUT y nombre de párvulo)
+[PROTEGIDA] H02-05 GET /matriculas -> HTTP 401  matrículas
+
+== Escrituras ==
+[PROTEGIDA] H02-06 POST /eventos -> HTTP 401  crear evento
+[PROTEGIDA] H02-09 POST /categorias -> HTTP 401  crear categoría (TEC-16)
+[PROTEGIDA] H02-10 PATCH /pagos/999999/estado -> HTTP 401  cambiar estado de un pago inexistente (llega a la lógica: 404, no 401)
+[PROTEGIDA] H02-11 POST /matriculas -> HTTP 401  crear matrícula con ids inexistentes (llega a la lógica)
+[PROTEGIDA] H02-12 POST /inscripciones/999999/cancelar -> HTTP 401  cancelar inscripción ajena con apoderado_id inventado (llega a la lógica)
+
+Rutas ABIERTAS sin autenticación: 0 de 12 sondeadas -> 
+
+== negativas de identidad (modo estricto)
+    {"dev": modo_dev, "estricto": modo_estricto}[sys.argv[1] if len(sys.argv) > 1 else "dev"]()
+
+== integración propia y regresiones del equipo (modo estricto)
+prueba_s3_daniel crear: Resultado: 22/22 PASS 
+prueba_tec17: Resultado: 12/12 PASS 
+prueba_hu19: Resultado: 18/18 PASS 
+prueba_hu21: Resultado: 23/23 PASS 
+prueba_hu25 crear: Resultado: 3/3 PASS 
+prueba_tec16 crear: Resultado: 20/20 PASS 

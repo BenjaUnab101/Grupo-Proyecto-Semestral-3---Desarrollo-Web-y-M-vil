@@ -1,0 +1,50 @@
+HU-21 · Pruebas de PostgreSQL 16 (2026-11-07 13:18 -0300)
+
+=== Todos los comunicados demo y si son vigentes ===
+   nivel    | urgente | publicado | publicacion | vigente_hasta | vigente |                      titulo                       
+------------+---------+-----------+-------------+---------------+---------+---------------------------------------------------
+ General    | f       | t         | 2026-11-10  |               | f       | Nuevo horario de verano
+ General    | f       | f         | 2026-11-06  |               | f       | Borrador: fiesta de fin de año
+ General    | t       | t         | 2026-11-05  | 2026-11-09    | t       | Suspensión de clases por alerta meteorológica
+ Salas TEL  | f       | t         | 2026-11-04  |               | t       | Taller de estimulación del lenguaje para familias
+ Preescolar | f       | t         | 2026-11-02  |               | t       | Reunión de apoderados nivel medio mayor
+ General    | t       | t         | 2026-10-28  | 2026-11-22    | t       | Campaña de vacunación escolar
+ Preescolar | f       | t         | 2026-10-18  |               | t       | Material para la semana de la lectura
+ General    | f       | t         | 2026-09-08  | 2026-11-06    | f       | Horario de invierno vigente
+(8 rows)
+
+=== Pertinentes y vigentes para apoderado.demo1@ejemplo.cl ===
+       niveles       
+---------------------
+ General, Preescolar
+(1 row)
+
+   nivel    |                    titulo                     
+------------+-----------------------------------------------
+ General    | Suspensión de clases por alerta meteorológica
+ Preescolar | Reunión de apoderados nivel medio mayor
+ General    | Campaña de vacunación escolar
+ Preescolar | Material para la semana de la lectura
+(4 rows)
+
+=== Pertinentes y vigentes para apoderado.demo2@ejemplo.cl ===
+      niveles       
+--------------------
+ General, Salas TEL
+(1 row)
+
+   nivel   |                      titulo                       
+-----------+---------------------------------------------------
+ General   | Suspensión de clases por alerta meteorológica
+ Salas TEL | Taller de estimulación del lenguaje para familias
+ General   | Campaña de vacunación escolar
+(3 rows)
+
+=== Restricciones (cada intento debe ser RECHAZADO; nada se guarda) ===
+RECHAZA  nivel inexistente (violates check constraint "ck_comunicados_nivel")
+RECHAZA  título de 2 letras con espacios (violates check constraint "ck_comunicados_titulo")
+RECHAZA  cuerpo vacío (violates check constraint "ck_comunicados_cuerpo")
+RECHAZA  vigencia antes de la publicación (violates check constraint "ck_comunicados_vigencia")
+RECHAZA  autor inexistente (violates foreign key constraint "comunicados_autor_usuario_id_fkey")
+RECHAZA  borrar un usuario que publicó comunicados (violates foreign key constraint "comunicados_autor_usuario_id_fkey")
+RECHAZA  sala con grupo de comunicados inválido (violates check constraint "ck_salas_grupo_comunicados")
