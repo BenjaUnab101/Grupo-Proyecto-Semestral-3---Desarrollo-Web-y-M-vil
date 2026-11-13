@@ -60,11 +60,11 @@ export async function consultarSeguimiento(codigo, correo) {
   return aSolicitud(await pedir('/prematriculas/seguimiento', { metodo: 'POST', cuerpo: { codigo, correo } }))
 }
 
-export async function listarSolicitudes(estado, usuarioId) {
-  return (await pedir('/prematriculas', { parametros: { estado }, usuarioId })).map(aSolicitud)
+export async function listarSolicitudes(estado) {
+  return (await pedir('/prematriculas', { parametros: { estado } })).map(aSolicitud)
 }
 
-export async function cambiarEstado(id, estado, mensajeFamilia, usuarioId) {
+export async function cambiarEstado(id, estado, mensajeFamilia) {
   const cuerpo = { estado, mensaje_familia: mensajeFamilia || null }
-  return aSolicitud(await pedir(`/prematriculas/${id}/estado`, { metodo: 'PATCH', cuerpo, usuarioId }))
+  return aSolicitud(await pedir(`/prematriculas/${id}/estado`, { metodo: 'PATCH', cuerpo }))
 }

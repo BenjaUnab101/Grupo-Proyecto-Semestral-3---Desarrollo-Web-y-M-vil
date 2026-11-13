@@ -11,17 +11,17 @@ import { formatearFechaHora } from '../utils/fechas.js'
 // HU-25: dirección revisa las solicitudes de pre-matrícula y cambia su estado.
 // La API solo lo permite a dirección (401/403 para el resto).
 export default function PanelSolicitudes() {
-  const { usuarioId, revisarError } = useSesion()
+  const { revisarError } = useSesion()
   const [filtro, setFiltro] = useState('')
   const [aviso, setAviso] = useState(null) // { exito: true|false, texto }
 
-  const cargar = useCallback(() => listarSolicitudes(filtro, usuarioId), [filtro, usuarioId])
+  const cargar = useCallback(() => listarSolicitudes(filtro), [filtro])
   const solicitudes = useRecurso(cargar)
 
   const guardar = async (solicitud, estado, mensaje) => {
     setAviso(null)
     try {
-      await cambiarEstado(solicitud.id, estado, mensaje, usuarioId)
+      await cambiarEstado(solicitud.id, estado, mensaje)
       setAviso({ exito: true, texto: `${solicitud.codigo}: estado actualizado a «${ESTADOS[estado]}».` })
     } catch (error) {
       revisarError(error)

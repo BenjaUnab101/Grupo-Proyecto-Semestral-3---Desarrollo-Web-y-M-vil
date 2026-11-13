@@ -22,7 +22,7 @@ export default function ContactoSeccion() {
       {/* key: al enviar otra consulta, "Mis consultas" se vuelve a cargar. */}
       <FormContacto onCreada={setCodigoReciente} />
       <SeguimientoContacto key={codigoReciente} codigoInicial={codigoReciente} />
-      {conToken && perfil && !esDireccion && <MisConsultas key={codigoReciente} />}
+      {conToken && perfil && !esDireccion && <MisConsultas key={`mis-${codigoReciente}`} />}
       {conToken && esDireccion && <PanelContacto />}
     </section>
   )

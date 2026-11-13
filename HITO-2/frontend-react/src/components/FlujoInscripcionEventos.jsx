@@ -25,7 +25,7 @@ const METODOS = { transferencia: 'Transferencia Simulada', exento: 'Exento / Act
 const COLOR_ESTADO = { confirmado: 'bg-success', cancelado: 'bg-danger', pendiente: 'bg-warning text-dark', pagado: 'bg-primary' };
 
 export default function FlujoInscripcionEventos({ onCambioInscripcion, actualizacion = 0 }) {
-  const { perfil, abrirPortal, revisarError, actualizacionCatalogo = 0 } = useSesion() ?? {};
+  const { perfil, abrirPortal, revisarError } = useSesion() ?? {};
   const esPersonal = ['administrador', 'organizador'].includes(perfil?.rol);
   const esDireccion = perfil?.rol === 'administrador';
 
@@ -84,7 +84,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion, actualiza
     return () => {
       vigente = false;
     };
-  }, [usuarioId, esPersonal, version, actualizacion, actualizacionCatalogo]);
+  }, [usuarioId, esPersonal, version, actualizacion]);
 
   const recargar = () => {
     setCargando(true);

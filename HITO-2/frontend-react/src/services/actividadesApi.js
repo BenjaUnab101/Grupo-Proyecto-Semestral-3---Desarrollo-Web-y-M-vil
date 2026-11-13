@@ -22,20 +22,19 @@ export async function listarActividades() {
 }
 
 // Inscripciones (vigentes y canceladas) de los hijos del apoderado.
-export async function listarInscripciones(apoderadoId, usuarioId) {
-  const lista = await pedir(`/apoderados/${apoderadoId}/inscripciones`, { usuarioId })
+export async function listarInscripciones(apoderadoId) {
+  const lista = await pedir(`/apoderados/${apoderadoId}/inscripciones`)
   return lista.map((i) => ({ id: i.id, actividadId: i.actividad_id, alumnoId: i.alumno_id, estado: i.estado }))
 }
 
 // 409 si no quedan cupos o ya está inscrito; 403 si el alumno no es del apoderado.
-export async function inscribir(actividadId, alumnoId, apoderadoId, usuarioId) {
+export async function inscribir(actividadId, alumnoId, apoderadoId) {
   return pedir(`/eventos/${actividadId}/inscripciones`, {
     metodo: 'POST',
     cuerpo: { alumno_id: alumnoId, apoderado_id: apoderadoId },
-    usuarioId,
   })
 }
 
-export async function cancelarInscripcion(inscripcionId, apoderadoId, usuarioId) {
-  return pedir(`/inscripciones/${inscripcionId}/cancelar`, { metodo: 'POST', cuerpo: { apoderado_id: apoderadoId }, usuarioId })
+export async function cancelarInscripcion(inscripcionId, apoderadoId) {
+  return pedir(`/inscripciones/${inscripcionId}/cancelar`, { metodo: 'POST', cuerpo: { apoderado_id: apoderadoId } })
 }

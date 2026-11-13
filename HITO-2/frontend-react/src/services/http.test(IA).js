@@ -4,10 +4,10 @@ import assert from 'node:assert/strict'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { API_URL, ErrorApi, erroresPorCampo, pedir } from './http.js'
+import { API_URL, ErrorApi, erroresPorCampo, establecerToken, pedir } from './http.js'
 import { aComunicado, listarComunicados, publicarComunicado } from './comunicadosApi.js'
 import { aActividad, inscribir } from './actividadesApi.js'
-import { aPerfil } from './sesionApi.js'
+import { aPerfil } from './auth.js'
 
 const fetchOriginal = globalThis.fetch
 afterEach(() => {
@@ -35,12 +35,13 @@ async function errorDe(promesa) {
 
 // ---------- CA1: URL, parámetros y encabezados ----------
 
-test('CA1: usa la URL base, omite parámetros vacíos y envía X-Usuario-Id', async () => {
+test('CA1: usa la URL base, omite parámetros vacíos y no envía identidad demo', async () => {
   const llamada = simular(200, [])
-  await pedir('/comunicados', { parametros: { nivel: '', vigentes: true }, usuarioId: 7 })
+  await pedir('/comunicados', { parametros: { nivel: '', vigentes: true } })
   assert.equal(API_URL, 'http://localhost:8000/api/v1')
   assert.equal(llamada.url, `${API_URL}/comunicados?vigentes=true`)
-  assert.equal(llamada.opciones.headers['X-Usuario-Id'], '7')
+  assert.equal(llamada.opciones.headers['X-Usuario-Id'], undefined)
+  assert.equal(llamada.opciones.headers.Authorization, undefined)
 })
 
 test('CA1: POST envía el cuerpo en JSON; 204 devuelve null', async () => {
@@ -76,7 +77,7 @@ test('CA3: 400 trae los errores por campo, traducidos', async () => {
 
 test('CA3: 401 y 403 tienen su propio mensaje', async () => {
   simular(401, { detail: 'Debe identificarse' })
-  assert.match((await errorDe(pedir('/x'))).message, /elegir una cuenta/)
+  assert.match((await errorDe(pedir('/x'))).message, /iniciar sesión/)
   simular(403, { detail: 'Sin permiso para esta acción' })
   assert.equal((await errorDe(pedir('/x'))).message, 'Sin permiso para esta acción')
 })
@@ -119,8 +120,10 @@ test('comunicado: snake_case -> props de ComunicadoCard; fecha en hora de Chile'
 
 test('publicar comunicado: POST con la cuenta elegida', async () => {
   const llamada = simular(201, { id: 9, titulo: 'Hola', cuerpo: 'x', nivel: 'General', categoria: 'Aviso', es_urgente: false, fecha_publicacion: '2026-11-07T15:00:00Z' })
-  await publicarComunicado({ titulo: 'Hola', cuerpo: 'x', nivel: 'General', esUrgente: false }, 3)
-  assert.equal(llamada.opciones.headers['X-Usuario-Id'], '3')
+  establecerToken('tok-editor')
+  await publicarComunicado({ titulo: 'Hola', cuerpo: 'x', nivel: 'General', esUrgente: false })
+  establecerToken(null)
+  assert.equal(llamada.opciones.headers.Authorization, 'Bearer tok-editor')
   assert.equal(JSON.parse(llamada.opciones.body).categoria, 'Aviso')
 })
 

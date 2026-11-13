@@ -2,9 +2,9 @@
 // y HU-26 (contacto), con fetch simulado. Datos ficticios.
 import test, { afterEach } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { API_URL, establecerToken, pedir } from './http.js'
-import { cerrarSesion, iniciarSesion, listarMisAlumnos, obtenerFicha } from './authApi.js'
+import { cerrarSesion, iniciarSesion, listarCuentasPrueba, listarMisAlumnos, obtenerFicha } from './auth.js'
 import { aConsultaIn, cambiarEstadoConsulta, enviarConsulta, erroresDelContacto, listarConsultas } from './contactoApi.js'
 import { aPanel, obtenerBitacora, obtenerHistorial, obtenerPanel } from './panelApi.js'
 
@@ -39,16 +39,24 @@ test('HU-16: login envía email+contraseña por POST y devuelve token y perfil',
   assert.equal(sesion.perfil.apoderadoId, 9)
 })
 
-test('HU-16: con token, pedir() envía Authorization y NO X-Usuario-Id', async () => {
+test('HU-16: pedir() envía Authorization solo cuando hay sesión y nunca X-Usuario-Id', async () => {
   const llamadas = simular(200, [])
   establecerToken('tok-2')
-  await pedir('/portal/alumnos', { usuarioId: 7 })
+  await pedir('/portal/alumnos')
   assert.equal(llamadas[0].opciones.headers.Authorization, 'Bearer tok-2')
   assert.equal(llamadas[0].opciones.headers['X-Usuario-Id'], undefined)
   establecerToken(null)
-  await pedir('/x', { usuarioId: 7 })
+  await pedir('/x')
   assert.equal(llamadas[1].opciones.headers.Authorization, undefined)
-  assert.equal(llamadas[1].opciones.headers['X-Usuario-Id'], '7')
+  assert.equal(llamadas[1].opciones.headers['X-Usuario-Id'], undefined)
+})
+
+test('HU-16: cuentas de prueba para la pantalla de login (sin contraseñas)', async () => {
+  const llamadas = simular(200, { clave_configurada: true, cuentas: [{ email: 'ap@ejemplo.cl', rol: 'apoderado', nombre: 'Apoderado Demo' }] })
+  const datos = await listarCuentasPrueba()
+  assert.equal(llamadas[0].url, `${API_URL}/auth/cuentas-prueba`)
+  assert.equal(datos.claveConfigurada, true)
+  assert.equal(datos.cuentas[0].email, 'ap@ejemplo.cl')
 })
 
 test('HU-16: logout llama al servidor; credenciales inválidas -> ErrorApi 401', async () => {
@@ -73,11 +81,13 @@ test('HU-16: hijos y ficha desde la API; 403 de un alumno ajeno llega como error
   await assert.rejects(obtenerFicha(99), (e) => e.estado === 403 && /No tienes acceso/.test(e.message))
 })
 
-test('HU-16: el token no se guarda en el navegador y ya no existe la autenticación simulada', () => {
-  const codigo = ['./http.js', './authApi.js', '../context/SesionProvider.jsx', '../components/LoginForm.jsx',
-    '../components/PortalApoderados.jsx'].map((a) => sinComentarios(leer(a))).join('\n')
+test('HU-16: el token no se guarda en el navegador y el flujo sigue el diagrama (PortalApoderados -> useSesionApoderado -> auth.js)', () => {
+  const codigo = ['./http.js', './auth.js', '../hooks/useSesionApoderado.js', '../context/SesionProvider.jsx',
+    '../components/LoginForm.jsx', '../components/PortalApoderados.jsx'].map((a) => sinComentarios(leer(a))).join('\n')
   assert.doesNotMatch(codigo, /localStorage|sessionStorage|document\.cookie/)
-  assert.doesNotMatch(codigo, /apoderados\.json|services\/auth\.js|clave ===/)
+  assert.doesNotMatch(codigo, /apoderados\.json|X-Usuario-Id/)
+  assert.equal(existsSync(new URL('./authApi.js', import.meta.url)), false)
+  assert.equal(existsSync(new URL('./sesionApi.js', import.meta.url)), false)
 })
 
 // ---------- HU-26: contacto ----------

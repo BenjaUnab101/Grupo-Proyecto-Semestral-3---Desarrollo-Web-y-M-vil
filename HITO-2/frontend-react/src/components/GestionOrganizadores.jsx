@@ -16,7 +16,7 @@ export default function GestionOrganizadores({ onCambioCatalogo }) {
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
   // Los permisos los decide el servidor según el rol de la sesión iniciada.
-  const { perfil, notificarCambioCatalogo } = useSesion() ?? {};
+  const { perfil } = useSesion() ?? {};
   const puedeGestionar = perfil?.rol === 'administrador';
 
   // Formulario Organizador (Crear / Editar)
@@ -94,7 +94,7 @@ export default function GestionOrganizadores({ onCambioCatalogo }) {
       }
       limpiarFormOrg();
       recargar();
-      (onCambioCatalogo ?? notificarCambioCatalogo)?.(); // las listas de categorías y organizadores de otras secciones se actualizan
+      onCambioCatalogo?.(); // las listas de categorías y organizadores de otras secciones se actualizan
     } catch (err) {
       setError(err.message);
     }
@@ -118,7 +118,7 @@ export default function GestionOrganizadores({ onCambioCatalogo }) {
       }
       limpiarFormCat();
       recargar();
-      (onCambioCatalogo ?? notificarCambioCatalogo)?.(); // las listas de categorías y organizadores de otras secciones se actualizan
+      onCambioCatalogo?.(); // las listas de categorías y organizadores de otras secciones se actualizan
     } catch (err) {
       setError(err.message);
     }

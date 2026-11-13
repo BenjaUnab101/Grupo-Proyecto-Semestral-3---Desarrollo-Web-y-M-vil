@@ -1,49 +1,49 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useSesion } from '../context/sesionContexto.js'
 import { mensajeDeError } from '../services/http.js'
-import { listarMisAlumnos, obtenerFicha } from '../services/auth.js'
 
-// Hook del Portal de Apoderados: conecta PortalApoderados y LoginForm con SesionProvider y services/auth.js.
-export default function useSesionApoderado() {
+// "Sesión apoderado" del diagrama de arquitectura: une el Portal de apoderados con el
+// servicio de autenticación (services/auth.js, a través de SesionProvider).
+//   const { perfil, autenticado, ingresar, salir, enviando, error } = useSesionApoderado()
+export function useSesionApoderado() {
   const sesion = useSesion()
-  const [errorLogin, setErrorLogin] = useState(null)
   const [enviando, setEnviando] = useState(false)
+  const [error, setError] = useState(null)
 
-  const ingresar = useCallback(async (email, clave) => {
-    if (!email?.trim() || !clave) {
-      setErrorLogin('Ingresa tu correo y tu contraseña.')
+  // Devuelve true si inició sesión. Los errores quedan en `error` para el formulario.
+  const ingresar = async (email, clave) => {
+    const correo = email.trim().toLowerCase()
+    if (!correo || !clave) {
+      setError('Ingresa tu correo y tu contraseña.')
       return false
     }
     setEnviando(true)
-    setErrorLogin(null)
+    setError(null)
     try {
-      await sesion.iniciarSesion(email.trim(), clave)
+      await sesion.iniciarSesion(correo, clave)
       return true
     } catch (errorApi) {
-      setErrorLogin(
-        errorApi?.estado === 401 || errorApi?.estado === 400
-          ? 'Credenciales inválidas. Verifica tu correo y tu contraseña.'
-          : mensajeDeError(errorApi)
-      )
+      // Mensaje genérico: no se revela si el dato incorrecto fue el correo o la contraseña.
+      setError(errorApi?.estado === 401 || errorApi?.estado === 400
+        ? 'Credenciales inválidas. Verifica tu correo y tu contraseña.'
+        : mensajeDeError(errorApi))
       return false
     } finally {
       setEnviando(false)
     }
-  }, [sesion])
+  }
 
-  const salir = useCallback(async () => {
-    setErrorLogin(null)
+  const salir = async () => {
     await sesion.cerrarSesion()
-  }, [sesion])
+  }
 
   return {
-    ...sesion,
-    errorLogin,
-    setErrorLogin,
-    enviando,
+    perfil: sesion.perfil,
+    autenticado: sesion.conToken,
+    esApoderado: sesion.esApoderado,
     ingresar,
     salir,
-    listarMisAlumnos,
-    obtenerFicha,
+    enviando,
+    error,
   }
 }

@@ -1,89 +1,60 @@
 import { useCallback, useState } from 'react'
 import { SesionContexto } from './sesionContexto.js'
 import { establecerToken } from '../services/http.js'
-import { obtenerPerfil } from '../services/sesionApi.js'
-import {
-  cerrarSesion as cerrarSesionApi,
-  iniciarSesion as iniciarSesionApi,
-} from '../services/authApi.js'
+import { cerrarSesion as cerrarSesionApi, iniciarSesion as iniciarSesionApi } from '../services/auth.js'
 
-// TEC-17 + HU-16: Proveedor unificado de sesión en memoria.
-// - Soporta sesión real con token Bearer (POST /auth/login y POST /auth/logout).
-// - Mantiene compatibilidad con elegirCuenta (GET /sesion/yo), control del modal del portal
-//   y sincronización de catálogos entre paneles.
-// - El token vive solo en memoria (services/http.js), nunca en localStorage ni cookies.
+// Sesión compartida por toda la página (HU-16).
+// - Se inicia con correo + contraseña (POST /auth/login). El token queda solo en memoria
+//   (services/http.js): al recargar la página se vuelve a visitante.
+// - Cerrar sesión revoca el token en el servidor.
+// - React solo decide qué mostrar; los permisos los revisa la API en cada petición (401/403).
+// - También controla el modal "Portal familias", para que cualquier sección pueda pedir login.
 export default function SesionProvider({ children }) {
   const [perfil, setPerfil] = useState(null)
-  const [error, setError] = useState(null)
-  const [conToken, setConToken] = useState(false)
   const [portalAbierto, setPortalAbierto] = useState(false)
-  const [actualizacionCatalogo, setActualizacionCatalogo] = useState(0)
 
-  const abrirPortal = useCallback(() => setPortalAbierto(true), [])
-  const cerrarPortal = useCallback(() => setPortalAbierto(false), [])
-  const notificarCambioCatalogo = useCallback(() => setActualizacionCatalogo((v) => v + 1), [])
-
-  const olvidarToken = useCallback(() => {
+  const olvidarSesion = () => {
     establecerToken(null)
-    setConToken(false)
-  }, [])
+    setPerfil(null)
+  }
 
-  const cerrarSesion = useCallback(async () => {
+  // Lanza el ErrorApi si las credenciales no sirven (lo muestra el formulario de login).
+  const iniciarSesion = async (email, password) => {
+    const sesion = await iniciarSesionApi(email, password)
+    establecerToken(sesion.token)
+    setPerfil(sesion.perfil)
+    return sesion.perfil
+  }
+
+  const cerrarSesion = async () => {
     try {
       await cerrarSesionApi()
     } catch {
       // Si el token ya venció o no hay conexión, igual se olvida en el navegador.
     }
-    olvidarToken()
-    setPerfil(null)
-  }, [olvidarToken])
+    olvidarSesion()
+  }
 
-  const elegirCuenta = useCallback(async (usuarioId) => {
-    setError(null)
-    if (conToken) await cerrarSesion()
-    if (!usuarioId) return setPerfil(null)
-    try {
-      setPerfil(await obtenerPerfil(usuarioId))
-    } catch (errorPerfil) {
-      setPerfil(null)
-      setError(errorPerfil)
-    }
-  }, [conToken, cerrarSesion])
+  // Si la API responde 401 (la sesión venció o fue revocada), se vuelve a visitante.
+  const revisarError = (errorApi) => {
+    if (errorApi?.estado === 401) olvidarSesion()
+  }
 
-  const iniciarSesion = useCallback(async (email, password) => {
-    setError(null)
-    const sesion = await iniciarSesionApi(email, password)
-    establecerToken(sesion.token)
-    setConToken(true)
-    setPerfil(sesion.perfil)
-    return sesion.perfil
-  }, [])
-
-  const revisarError = useCallback((errorApi) => {
-    if (errorApi?.estado === 401) {
-      olvidarToken()
-      setPerfil(null)
-    }
-  }, [olvidarToken])
+  const abrirPortal = useCallback(() => setPortalAbierto(true), [])
+  const cerrarPortal = useCallback(() => setPortalAbierto(false), [])
 
   const valor = {
     perfil,
-    usuarioId: perfil?.usuarioId,
+    conToken: Boolean(perfil),
     esApoderado: Boolean(perfil?.apoderadoId),
     esEditor: Boolean(perfil?.esEditor),
     esDireccion: Boolean(perfil?.esDireccion),
-    conToken,
-    error,
-    portalAbierto,
-    abrirPortal,
-    cerrarPortal,
-    actualizacionCatalogo,
-    notificarCambioCatalogo,
-    elegirCuenta,
     iniciarSesion,
     cerrarSesion,
     revisarError,
+    portalAbierto,
+    abrirPortal,
+    cerrarPortal,
   }
-
   return <SesionContexto.Provider value={valor}>{children}</SesionContexto.Provider>
 }

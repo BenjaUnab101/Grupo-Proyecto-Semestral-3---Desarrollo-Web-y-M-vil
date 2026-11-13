@@ -5,7 +5,8 @@ import { readFileSync } from 'node:fs'
 import { cambiarEstado, consultarSeguimiento, enviarSolicitud, erroresDelFormulario, listarSolicitudes } from './prematriculaApi.js'
 import { guardarCodigo, leerCodigoGuardado } from '../utils/codigoSeguimiento.js'
 import { VALORES_INICIALES, validarFormulario } from '../utils/preMatricula.js'
-import { aPerfil } from './sesionApi.js'
+import { aPerfil } from './auth.js'
+import { establecerToken } from './http.js'
 
 const leer = (ruta) => readFileSync(new URL(ruta, import.meta.url), 'utf8')
 const niveles = JSON.parse(leer('../data/niveles.json'))
@@ -95,13 +96,15 @@ test('seguimiento: código y correo van en el cuerpo (no en la URL); 404 con el 
 
 test('CA3: dirección lista con filtro y cambia el estado con su cuenta; 403 para otros', async () => {
   let llamada = simular(200, [{ id: 3, codigo: 'PM-DEMAA2', estado: 'en_revision', rut: '11111111-1' }])
-  const lista = await listarSolicitudes('en_revision', 1)
+  establecerToken('tok-dir')
+  const lista = await listarSolicitudes('en_revision')
   assert.match(llamada.url, /\/prematriculas\?estado=en_revision$/)
-  assert.equal(llamada.opciones.headers['X-Usuario-Id'], '1')
+  assert.equal(llamada.opciones.headers.Authorization, 'Bearer tok-dir')
   assert.equal(lista[0].rut, '11111111-1')
 
   llamada = simular(200, { id: 3, codigo: 'PM-DEMAA2', estado: 'aceptada' })
-  await cambiarEstado(3, 'aceptada', '', 1)
+  await cambiarEstado(3, 'aceptada', '')
+  establecerToken(null)
   assert.equal(llamada.opciones.method, 'PATCH')
   assert.deepEqual(llamada.cuerpo, { estado: 'aceptada', mensaje_familia: null })
 

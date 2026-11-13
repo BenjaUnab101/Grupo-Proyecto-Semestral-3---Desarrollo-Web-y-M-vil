@@ -2,13 +2,16 @@
 // Todas las llamadas a la API pasan por pedir(): los componentes nunca usan fetch directo.
 
 // import.meta.env solo existe en Vite; en las pruebas con Node es undefined.
-export const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000/api/v1'
+export const API_URL =
+  import.meta.env?.VITE_API_WEB ||
+  import.meta.env?.VITE_API_URL ||
+  'http://localhost:8000/api/v1'
 
 // Mensaje para el usuario según el código HTTP.
 const MENSAJES = {
   0: 'No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.',
   400: 'Hay datos que corregir. Revisa los campos marcados.',
-  401: 'Debes elegir una cuenta para realizar esta acción.',
+  401: 'Debes iniciar sesión para realizar esta acción.',
   403: 'Tu cuenta no tiene permiso para realizar esta acción.',
   404: 'No encontramos lo que buscabas.',
   409: 'No se pudo completar la acción por un conflicto con los datos actuales.',
@@ -26,9 +29,9 @@ export class ErrorApi extends Error {
   }
 }
 
-// HU-16 (Sprint 3 · Daniel): token de la sesión REAL (POST /auth/login). Vive solo en memoria
-// (no en localStorage): al recargar la página la sesión del navegador se pierde. Lo fija
-// SesionProvider; si existe, viaja en Authorization y el backend ignora X-Usuario-Id.
+// HU-16: token de la sesión iniciada (POST /auth/login). Vive solo en memoria (no en
+// localStorage): al recargar la página hay que volver a iniciar sesión. Lo fija SesionProvider
+// y viaja en Authorization; el backend decide los permisos según el rol de esa sesión.
 let tokenSesion = null
 export function establecerToken(token) {
   tokenSesion = token || null
@@ -37,13 +40,12 @@ export function establecerToken(token) {
 /**
  * Llama a la API. Devuelve la respuesta en JSON o lanza un ErrorApi.
  * @param {string} ruta ej. '/comunicados'
- * @param {object} [opciones] { metodo, cuerpo, usuarioId, parametros }
+ * @param {object} [opciones] { metodo, cuerpo, parametros }
  */
-export async function pedir(ruta, { metodo = 'GET', cuerpo, usuarioId, parametros } = {}) {
+export async function pedir(ruta, { metodo = 'GET', cuerpo, parametros } = {}) {
   const encabezados = {}
   if (cuerpo !== undefined) encabezados['Content-Type'] = 'application/json'
-  if (tokenSesion) encabezados.Authorization = `Bearer ${tokenSesion}` // sesión real (HU-16)
-  else if (usuarioId) encabezados['X-Usuario-Id'] = String(usuarioId) // cuenta demo elegida
+  if (tokenSesion) encabezados.Authorization = `Bearer ${tokenSesion}`
 
   // Parámetros de consulta (?estado=recibida). Los vacíos no se envían.
   const consulta = new URLSearchParams(Object.entries(parametros ?? {}).filter(([, valor]) => valor)).toString()

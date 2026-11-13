@@ -14,12 +14,12 @@ export async function obtenerDocumentos({ soloVigentes = true, categoria = 'Todo
   });
 }
 
-export async function crearDocumento(payload, usuarioId) {
-  return pedir('/documentos', { metodo: 'POST', cuerpo: payload, usuarioId });
+export async function crearDocumento(payload) {
+  return pedir('/documentos', { metodo: 'POST', cuerpo: payload });
 }
 
-export async function actualizarDocumento(id, payload, usuarioId) {
-  return pedir(`/documentos/${id}`, { metodo: 'PATCH', cuerpo: payload, usuarioId });
+export async function actualizarDocumento(id, payload) {
+  return pedir(`/documentos/${id}`, { metodo: 'PATCH', cuerpo: payload });
 }
 
 export function filtrarDocumentosPorCategoria(documentos, categoria = 'Todos', soloVigentes = true) {

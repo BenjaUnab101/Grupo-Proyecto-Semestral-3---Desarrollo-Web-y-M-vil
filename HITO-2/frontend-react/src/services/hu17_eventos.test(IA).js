@@ -96,7 +96,7 @@ test('CA4: GestionOrganizadores está integrado en App.jsx y expone formularios 
   // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
   const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/GestionOrganizadores.jsx');
-  assert.match(appCode, /<GestionOrganizadores\s*\/>/);
+  assert.match(appCode, /<GestionOrganizadores onCambioCatalogo=\{alCambiarActividades\} \/>/);
   assert.match(compCode, /role="alert"/);
   assert.match(compCode, /Editar/);
 });

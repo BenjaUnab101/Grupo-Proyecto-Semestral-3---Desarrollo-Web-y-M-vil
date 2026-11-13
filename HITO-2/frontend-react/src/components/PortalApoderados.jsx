@@ -1,29 +1,27 @@
 import { useCallback, useState } from 'react'
-import useSesionApoderado from '../hooks/useSesionApoderado.js'
+import { useSesionApoderado } from '../hooks/useSesionApoderado.js'
 import { useRecurso } from '../hooks/useRecurso.js'
-import { listarMisAlumnos, obtenerFicha } from '../services/authApi.js'
-import { ETIQUETA_ROL } from '../services/sesionApi.js'
+import { ETIQUETA_ROL, listarMisAlumnos, obtenerFicha } from '../services/auth.js'
 import EstadoCarga from './EstadosApi.jsx'
 import LoginForm from './LoginForm.jsx'
 import SelectorHermanos from './SelectorHermanos.jsx'
 import FichaAlumno from './FichaAlumno.jsx'
 import AvisoPrivacidad from './AvisoPrivacidad.jsx'
 
-// HU-16 (Sprint 3 · Daniel): portal de familias con login REAL.
-// - Sin sesión real: formulario de acceso (POST /auth/login).
-// - Con sesión de apoderado: hijos desde la relación SQL (GET /portal/alumnos) y ficha del
-//   elegido (GET /portal/alumnos/{id}). El backend responde 403 si el alumno no es suyo.
-// - Personal / Dirección: ve accesos directos a sus herramientas de gestión en la página.
+// HU-16: portal de familias.
+// - Sin sesión: formulario de acceso (POST /auth/login).
+// - Apoderado: hijos desde la relación SQL (GET /portal/alumnos) y ficha del elegido
+//   (GET /portal/alumnos/{id}). El backend responde 403 si el alumno no es suyo.
+// - Personal o dirección: aviso con accesos a sus paneles de la página.
+// - "Cerrar sesión" revoca el token en el servidor (POST /auth/logout).
 export default function PortalApoderados({ onCerrar }) {
-  const { perfil, conToken, cerrarSesion } = useSesionApoderado()
+  const { perfil, autenticado, esApoderado, salir } = useSesionApoderado()
+
+  if (!autenticado) return <LoginForm />
 
   const manejarLogout = async () => {
-    await cerrarSesion()
+    await salir()
     onCerrar()
-  }
-
-  if (!conToken || !perfil) {
-    return <LoginForm />
   }
 
   return (
@@ -31,43 +29,14 @@ export default function PortalApoderados({ onCerrar }) {
       <div className="d-flex justify-content-between align-items-start mb-3">
         <p className="mb-0">
           Hola, <strong>{perfil.nombre}</strong>
-          <span className="d-block small text-muted">{ETIQUETA_ROL[perfil.rol]}</span>
+          <span className="d-block small text-muted">{ETIQUETA_ROL[perfil.rol]} · {perfil.email}</span>
         </p>
         <button type="button" className="btn btn-outline-secondary btn-sm" onClick={manejarLogout}>
           Cerrar sesión
         </button>
       </div>
 
-      {perfil.rol === 'apoderado' ? (
-        <HijosDelApoderado />
-      ) : (
-        <div>
-          <p className="text-muted small mb-2">
-            Iniciaste sesión con una cuenta del jardín. Las fichas de alumnos son exclusivas para apoderados; usa estos accesos para ir a tus herramientas:
-          </p>
-          <div className="d-flex flex-wrap gap-2">
-            <a href="#comunicados" className="btn btn-outline-primary btn-sm" onClick={onCerrar}>
-              Publicar comunicados
-            </a>
-            <a href="#gestion-actividades" className="btn btn-outline-primary btn-sm" onClick={onCerrar}>
-              Gestionar actividades
-            </a>
-            {perfil.rol === 'administrador' && (
-              <>
-                <a href="#gestion-organizadores" className="btn btn-outline-primary btn-sm" onClick={onCerrar}>
-                  Organizadores y categorías
-                </a>
-                <a href="#documentos" className="btn btn-outline-primary btn-sm" onClick={onCerrar}>
-                  Documentos y protocolos
-                </a>
-                <a href="#panel-direccion" className="btn btn-outline-primary btn-sm" onClick={onCerrar}>
-                  Panel de dirección y auditoría
-                </a>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {esApoderado ? <HijosDelApoderado /> : <AccesosPersonal rol={perfil.rol} onIr={onCerrar} />}
 
       <hr />
       <AvisoPrivacidad />
@@ -75,10 +44,41 @@ export default function PortalApoderados({ onCerrar }) {
   )
 }
 
+function AccesosPersonal({ rol, onIr }) {
+  const accesos = [
+    { href: '#gestion-actividades', texto: 'Gestión y publicación de actividades escolares' },
+    { href: '#flujo-inscripcion-eventos', texto: 'Inscripciones y comprobantes de pago simulados' },
+    { href: '#comunicados', texto: 'Publicar comunicados' },
+    ...(rol === 'administrador'
+      ? [
+          { href: '#gestion-organizadores', texto: 'Organizadores y categorías' },
+          { href: '#matricula', texto: 'Solicitudes de pre-matrícula' },
+          { href: '#panel-direccion', texto: 'Panel de participación y auditoría' },
+        ]
+      : [{ href: '#panel-direccion', texto: 'Panel de participación' }]),
+  ]
+  return (
+    <>
+      <p className="text-muted small">
+        Iniciaste sesión con una cuenta del jardín. Las fichas de alumnos son solo para apoderados; estas son tus
+        herramientas en la página:
+      </p>
+      <div className="list-group">
+        {accesos.map((a) => (
+          <a key={a.href} href={a.href} className="list-group-item list-group-item-action small" onClick={onIr}>
+            {a.texto}
+          </a>
+        ))}
+      </div>
+    </>
+  )
+}
+
 function HijosDelApoderado() {
   const alumnos = useRecurso(listarMisAlumnos)
   const [elegidoId, setElegidoId] = useState(null)
   const lista = alumnos.datos ?? []
+  // Sin elección (o si el elegido ya no está), se muestra el primer hijo.
   const seleccionadoId = lista.some((a) => a.id === elegidoId) ? elegidoId : lista[0]?.id ?? null
 
   return (
