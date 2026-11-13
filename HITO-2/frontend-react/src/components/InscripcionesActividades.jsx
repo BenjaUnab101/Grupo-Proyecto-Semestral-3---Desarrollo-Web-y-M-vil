@@ -8,7 +8,7 @@ import { formatearFecha } from '../utils/fechas.js'
 // Los cupos los controla la API: si otra familia tomó el último cupo responde 409, se
 // muestra el motivo y se recargan los números (onCambio).
 export default function InscripcionesActividades({ actividades, inscripciones, onCambio }) {
-  const { perfil, usuarioId, revisarError } = useSesion()
+  const { perfil, revisarError } = useSesion()
   const [ocupado, setOcupado] = useState(false)
   const [aviso, setAviso] = useState(null) // { exito: true|false, texto }
 
@@ -22,10 +22,10 @@ export default function InscripcionesActividades({ actividades, inscripciones, o
     setAviso(null)
     try {
       if (inscripcion) {
-        await cancelarInscripcion(inscripcion.id, perfil.apoderadoId, usuarioId)
+        await cancelarInscripcion(inscripcion.id, perfil.apoderadoId)
         setAviso({ exito: true, texto: `Se canceló la inscripción de ${hijo.nombre} en «${actividad.titulo}».` })
       } else {
-        await inscribir(actividad.id, hijo.id, perfil.apoderadoId, usuarioId)
+        await inscribir(actividad.id, hijo.id, perfil.apoderadoId)
         setAviso({ exito: true, texto: `${hijo.nombre} quedó inscrito/a en «${actividad.titulo}».` })
       }
     } catch (error) {

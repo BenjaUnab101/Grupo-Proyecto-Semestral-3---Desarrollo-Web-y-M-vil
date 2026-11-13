@@ -1,8 +1,6 @@
 import { useClima } from '../hooks/useClima';
-import { useSesion } from '../context/sesionContexto.js';
 import Navbar from '../components/Navbar';
 import BarraSesion from '../components/BarraSesion.jsx';
-import BarraSesionDemo from '../components/BarraSesionDemo.jsx';
 import Hero from '../components/Hero';
 import SectionTitle from '../components/SectionTitle';
 import Footer from '../components/Footer';
@@ -18,6 +16,7 @@ import CuposSeccion from './CuposSeccion.jsx';
 import ComunicadosSeccion from './ComunicadosSeccion.jsx';
 import CalendarioSeccion from './CalendarioSeccion.jsx';
 import MatriculaSeccion from './MatriculaSeccion.jsx';
+import { useSesion } from '../context/sesionContexto.js';
 
 // HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
 // ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
@@ -31,13 +30,12 @@ const hoyDePrueba = import.meta.env.DEV
 // API mediante services/. Los componentes de components/ solo dibujan lo que reciben.
 export default function PaginaPrincipal() {
   const { pronostico, cargando, error, reintentar } = useClima();
-  const { portalAbierto, abrirPortal, cerrarPortal } = useSesion() ?? {};
+  const { portalAbierto, abrirPortal, cerrarPortal } = useSesion();
 
   return (
     <div className="min-vh-100 d-flex flex-column">
       <Navbar onAbrirPortal={abrirPortal} />
       <BarraSesion />
-      <BarraSesionDemo />
 
       <main className="flex-grow-1">
         <Hero onAbrirPortal={abrirPortal} />
@@ -68,7 +66,7 @@ export default function PaginaPrincipal() {
           <section id="documentos">
             <SectionTitle
               titulo="Documentos y Protocolos"
-              subtitulo="Reglamentos internos y formularios informativos"
+              subtitulo="Reglamentos internos y formularios informativos (demo)"
             />
             <Documentos />
           </section>

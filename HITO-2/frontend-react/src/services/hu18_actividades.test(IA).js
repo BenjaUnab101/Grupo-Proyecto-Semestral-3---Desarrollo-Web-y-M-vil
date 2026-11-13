@@ -105,7 +105,7 @@ test('CA5: App.jsx integra GestionActividades y sincroniza Agenda con actividade
   // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
   const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/GestionActividades.jsx');
-  assert.match(appCode, /<GestionActividades onCambioActividades=\{cargarActividadesCalendario\} \/>/);
+  assert.match(appCode, /<GestionActividades onCambioActividades=\{alCambiarActividades\} actualizacion=\{cambiosActividades\} \/>/);
   assert.match(appCode, /<Agenda actividades=\{actividadesCalendario\}/);
   assert.match(compCode, /Publicar/);
   assert.match(compCode, /Cancelar/);

@@ -59,7 +59,7 @@ services:
       # mínimos (readWrite solo en la base pequenos_reyes), nunca la cuenta root.
       MONGODB_URL: mongodb://${MONGO_APP_USER:?Falta MONGO_APP_USER}:${MONGO_APP_PASSWORD:?Falta MONGO_APP_PASSWORD}@mongo:27017/pequenos_reyes?authSource=pequenos_reyes
       MONGODB_DATABASE: pequenos_reyes
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost,https://localhost,capacitor://localhost}
       # HU-16: DEMO_PASSWORD (solo development/test) da clave a las cuentas @ejemplo.cl.
       # R4: con APP_ENV=staging/production la API se niega a iniciar si está definida.
       DEMO_PASSWORD: ${DEMO_PASSWORD:-}

@@ -1,31 +1,30 @@
 // HU-17/18/20/23 · Organizadores, categorías, actividades escolares y pagos simulados.
-// Cierre H-01/H-03 (Sprint 3): ya no se envía X-Rol. Todas las llamadas pasan por pedir()
-// (services/http.js), que envía el token Bearer de la sesión iniciada; el servidor decide los
-// permisos según el rol de esa sesión.
+// Todas las llamadas pasan por pedir() (services/http.js), que envía el token Bearer de la
+// sesión iniciada; el servidor decide los permisos según el rol de esa sesión.
 import { pedir } from './http.js';
 
 export async function obtenerOrganizadores(soloActivos = false) {
   return pedir('/organizadores', { parametros: { solo_activos: soloActivos ? 'true' : '' } });
 }
 
-export async function crearOrganizador(payload, usuarioId) {
-  return pedir('/organizadores', { metodo: 'POST', cuerpo: payload, usuarioId });
+export async function crearOrganizador(payload) {
+  return pedir('/organizadores', { metodo: 'POST', cuerpo: payload });
 }
 
-export async function actualizarOrganizador(id, payload, usuarioId) {
-  return pedir(`/organizadores/${id}`, { metodo: 'PATCH', cuerpo: payload, usuarioId });
+export async function actualizarOrganizador(id, payload) {
+  return pedir(`/organizadores/${id}`, { metodo: 'PATCH', cuerpo: payload });
 }
 
 export async function obtenerCategoriasActividad(soloActivas = false) {
   return pedir('/categorias-actividad', { parametros: { solo_activas: soloActivas ? 'true' : '' } });
 }
 
-export async function crearCategoriaActividad(payload, usuarioId) {
-  return pedir('/categorias-actividad', { metodo: 'POST', cuerpo: payload, usuarioId });
+export async function crearCategoriaActividad(payload) {
+  return pedir('/categorias-actividad', { metodo: 'POST', cuerpo: payload });
 }
 
-export async function actualizarCategoriaActividad(id, payload, usuarioId) {
-  return pedir(`/categorias-actividad/${id}`, { metodo: 'PATCH', cuerpo: payload, usuarioId });
+export async function actualizarCategoriaActividad(id, payload) {
+  return pedir(`/categorias-actividad/${id}`, { metodo: 'PATCH', cuerpo: payload });
 }
 
 export async function obtenerActividades(soloPublicadas = true, categoriaId = null) {
@@ -34,76 +33,63 @@ export async function obtenerActividades(soloPublicadas = true, categoriaId = nu
   });
 }
 
-export async function obtenerEventosHU19() {
-  const eventos = await pedir('/eventos');
-  return eventos.map((evento) => ({
-    ...evento,
-    estado: evento.inscripciones_abiertas ? 'publicada' : 'cancelada',
-    capacidad: evento.cupo_maximo,
-    categoria_id: null,
-    costo: evento.costo ?? 0,
-    fuente: 'hu19',
-  }));
-}
-
 // Personal del jardín: lista completa de alumnos (H-02: requiere sesión de dirección o personal).
-export async function obtenerAlumnos(usuarioId) {
-  return pedir('/alumnos', { usuarioId });
+export async function obtenerAlumnos() {
+  return pedir('/alumnos');
 }
 
 // HU-19: el apoderado se toma de la sesión en el servidor (H-02). Solo el personal indica
 // `apoderadoId` para inscribir en nombre de una familia.
-export async function inscribirEnEvento(actividadId, alumnoId, apoderadoId = null, usuarioId) {
+export async function inscribirEnEvento(actividadId, alumnoId, apoderadoId = null) {
   const cuerpo = { alumno_id: Number(alumnoId) };
   if (apoderadoId) cuerpo.apoderado_id = Number(apoderadoId);
-  return pedir(`/eventos/${actividadId}/inscripciones`, { metodo: 'POST', cuerpo, usuarioId });
+  return pedir(`/eventos/${actividadId}/inscripciones`, { metodo: 'POST', cuerpo });
 }
 
-export async function crearActividad(payload, usuarioId) {
-  return pedir('/actividades', { metodo: 'POST', cuerpo: payload, usuarioId });
+export async function crearActividad(payload) {
+  return pedir('/actividades', { metodo: 'POST', cuerpo: payload });
 }
 
-export async function actualizarActividad(id, payload, usuarioId) {
-  return pedir(`/actividades/${id}`, { metodo: 'PATCH', cuerpo: payload, usuarioId });
+export async function actualizarActividad(id, payload) {
+  return pedir(`/actividades/${id}`, { metodo: 'PATCH', cuerpo: payload });
 }
 
-export async function publicarActividad(id, usuarioId) {
-  return pedir(`/actividades/${id}/publicar`, { metodo: 'POST', usuarioId });
+export async function publicarActividad(id) {
+  return pedir(`/actividades/${id}/publicar`, { metodo: 'POST' });
 }
 
-export async function cancelarActividad(id, usuarioId) {
-  return pedir(`/actividades/${id}/cancelar`, { metodo: 'POST', usuarioId });
+export async function cancelarActividad(id) {
+  return pedir(`/actividades/${id}/cancelar`, { metodo: 'POST' });
 }
 
 // HU-20 y HU-23: pagos simulados, inscripciones y comprobantes verificables (requieren sesión).
-export async function registrarPagoInscripcion(payload, usuarioId) {
-  return pedir('/pagos', { metodo: 'POST', cuerpo: payload, usuarioId });
+export async function registrarPagoInscripcion(payload) {
+  return pedir('/pagos', { metodo: 'POST', cuerpo: payload });
 }
 
-// Comprobantes emitidos por la cuenta de la sesión activa ("Mis comprobantes").
-export async function obtenerMisPagos(usuarioId) {
-  return pedir('/pagos/mios', { usuarioId });
+// Comprobantes emitidos por la cuenta de la sesión (apoderado o personal).
+export async function obtenerMisPagos() {
+  return pedir('/pagos/mios');
 }
 
 // Solo personal del jardín (contiene RUT y nombre del párvulo).
-export async function obtenerPagosInscripciones({ actividadId = null, apoderadoRut = '' } = {}, usuarioId) {
+export async function obtenerPagosInscripciones({ actividadId = null, apoderadoRut = '' } = {}) {
   return pedir('/pagos', {
     parametros: { actividad_id: actividadId ? String(actividadId) : '', apoderado_rut: apoderadoRut?.trim() ?? '' },
-    usuarioId,
   });
 }
 
-export async function consultarComprobantePago(codigo, usuarioId) {
+export async function consultarComprobantePago(codigo) {
   const limpio = String(codigo || '').trim();
   if (!limpio) {
     throw new Error('Ingresa un código de comprobante válido.');
   }
-  return pedir(`/pagos/comprobante/${encodeURIComponent(limpio)}`, { usuarioId });
+  return pedir(`/pagos/comprobante/${encodeURIComponent(limpio)}`);
 }
 
 // Solo dirección.
-export async function actualizarEstadoPago(pagoId, estadoPago, usuarioId) {
-  return pedir(`/pagos/${pagoId}/estado`, { metodo: 'PATCH', cuerpo: { estado_pago: estadoPago }, usuarioId });
+export async function actualizarEstadoPago(pagoId, estadoPago) {
+  return pedir(`/pagos/${pagoId}/estado`, { metodo: 'PATCH', cuerpo: { estado_pago: estadoPago } });
 }
 
 // HU-23 CA2: Función pura para filtrar actividades por categoría, cupos y estado

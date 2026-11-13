@@ -27,6 +27,8 @@ async def ciclo_de_vida(app: FastAPI):
             cambiadas = asignar_credenciales_demo(db)
             if cambiadas:
                 log.info("Credenciales demo asignadas a %s cuentas ficticias", cambiadas)
+        if settings.es_entorno_de_desarrollo and not settings.demo_password:
+            log.warning("DEMO_PASSWORD está vacía: las cuentas @ejemplo.cl no pueden iniciar sesión (ver .env.example)")
     except SQLAlchemyError as error:
         log.warning("No se asignaron credenciales demo (PostgreSQL no disponible: %s)", type(error).__name__)
     yield

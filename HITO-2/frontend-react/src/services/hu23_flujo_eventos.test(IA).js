@@ -76,7 +76,7 @@ test('CP-HU-23-02: maneja entradas inválidas en filtros, error de red 503 y est
   // Desde TEC-17 el calendario vive en pages/CalendarioSeccion.jsx (App.jsx solo arma la página).
   const appCode = leer('../pages/CalendarioSeccion.jsx');
   const compCode = leer('../components/FlujoInscripcionEventos.jsx');
-  assert.match(appCode, /<FlujoInscripcionEventos onCambioInscripcion=\{cargarActividadesCalendario\} \/>/);
+  assert.match(appCode, /<FlujoInscripcionEventos key=\{[^}]+\} actualizacion=\{cambiosActividades\} onCambioInscripcion=\{cargarActividadesCalendario\} \/>/);
   assert.match(compCode, /Confirmar/);
   assert.match(compCode, /Cancelar/);
   assert.match(compCode, /col-12 col-md-4/);

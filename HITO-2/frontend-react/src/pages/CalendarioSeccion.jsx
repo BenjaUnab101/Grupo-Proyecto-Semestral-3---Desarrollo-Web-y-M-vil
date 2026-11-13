@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import SectionTitle from '../components/SectionTitle.jsx'
 import Agenda from '../components/Agenda.jsx'
 import InscripcionesActividades from '../components/InscripcionesActividades.jsx'
@@ -15,8 +15,9 @@ import { obtenerActividades } from '../services/eventosApi.js'
 //  - los eventos con inscripción y cupos (HU-19, /eventos), y
 //  - las actividades escolares publicadas (HU-18, /actividades).
 // Si la cuenta es de un apoderado, debajo puede inscribir a sus hijos en los eventos (HU-19).
-// Al final quedan el flujo de inscripción con pago y la gestión de actividades y
-// organizadores de HU-17/18/20/23.
+// Luego el flujo de inscripción con pago simulado (HU-20/23) y, solo para el personal, la
+// gestión de actividades (HU-18: personal y dirección) y de organizadores y categorías
+// (HU-17: solo dirección).
 async function cargarCalendario() {
   const [eventos, escolares] = await Promise.all([
     listarActividades(),
@@ -29,24 +30,24 @@ async function cargarCalendario() {
 
 // HU-06: `pronostico` llega desde PaginaPrincipal (una sola llamada a useClima).
 export default function CalendarioSeccion({ hoy, pronostico = [] }) {
-  const { perfil, usuarioId, notificarCambioCatalogo } = useSesion()
+  const { perfil, esEditor, esDireccion } = useSesion()
   const apoderadoId = perfil?.apoderadoId
 
   const calendario = useRecurso(cargarCalendario)
   const actividadesCalendario = calendario.datos?.todas // eventos (HU-19) + actividades escolares (HU-18)
-
-  const cargarActividadesCalendario = useCallback(() => {
+  const cargarActividadesCalendario = calendario.recargar
+  // Al crear, publicar o cancelar una actividad, también se actualiza el catálogo de inscripción.
+  const [cambiosActividades, setCambiosActividades] = useState(0)
+  const alCambiarActividades = () => {
     calendario.recargar()
-    notificarCambioCatalogo?.()
-  }, [calendario, notificarCambioCatalogo])
-
-  const cargarInscripciones = useCallback(() => listarInscripciones(apoderadoId, usuarioId), [apoderadoId, usuarioId])
+    setCambiosActividades((n) => n + 1)
+  }
+  const cargarInscripciones = useCallback(() => listarInscripciones(apoderadoId), [apoderadoId])
   const inscripciones = useRecurso(apoderadoId ? cargarInscripciones : null) // solo con un apoderado elegido
 
   const recargarTodo = () => {
     calendario.recargar()
     inscripciones.recargar()
-    notificarCambioCatalogo?.()
   }
 
   return (
@@ -57,7 +58,7 @@ export default function CalendarioSeccion({ hoy, pronostico = [] }) {
 
         {apoderadoId && (
           <div className="mt-4 inscripciones-bloque">
-            <h3 className="h5">Inscribir a mis hijos</h3>
+            <h3 className="h5">Eventos del jardín: inscribir a mis hijos</h3>
             <EstadoCarga recurso={inscripciones} textoCargando="Cargando inscripciones…" textoError="No pudimos cargar tus inscripciones.">
               <InscripcionesActividades actividades={calendario.datos?.eventos} inscripciones={inscripciones.datos} onCambio={recargarTodo} />
             </EstadoCarga>
@@ -65,9 +66,11 @@ export default function CalendarioSeccion({ hoy, pronostico = [] }) {
         )}
       </EstadoCarga>
 
-      <FlujoInscripcionEventos onCambioInscripcion={cargarActividadesCalendario} />
-      <GestionActividades onCambioActividades={cargarActividadesCalendario} />
-      <GestionOrganizadores />
+      <FlujoInscripcionEventos key={perfil?.usuarioId ?? 'visitante'} actualizacion={cambiosActividades} onCambioInscripcion={cargarActividadesCalendario} />
+
+      {/* Herramientas internas: solo con sesión del personal (la API vuelve a revisar el rol). */}
+      {esEditor && <GestionActividades onCambioActividades={alCambiarActividades} actualizacion={cambiosActividades} />}
+      {esDireccion && <GestionOrganizadores onCambioCatalogo={alCambiarActividades} />}
     </section>
   )
 }

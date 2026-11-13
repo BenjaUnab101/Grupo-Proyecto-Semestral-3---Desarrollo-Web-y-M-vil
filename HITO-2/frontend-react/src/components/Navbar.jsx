@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSesion } from '../context/sesionContexto.js';
 
 const ENLACES_NAV = [
   { id: 'informacion', label: 'Nosotros' },
@@ -13,6 +14,7 @@ const ENLACES_NAV = [
 
 export default function Navbar({ onAbrirPortal }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const { perfil } = useSesion() ?? {};
 
   const toggleMenu = () => setMenuAbierto((prev) => !prev);
   const cerrarMenu = () => setMenuAbierto(false);
@@ -65,7 +67,7 @@ export default function Navbar({ onAbrirPortal }) {
                   if (onAbrirPortal) onAbrirPortal();
                 }}
               >
-                Portal familias
+                {perfil ? `👤 ${perfil.nombre.split(' ')[0]}` : 'Portal familias'}
               </button>
             </li>
           </ul>

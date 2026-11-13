@@ -13,20 +13,20 @@ import { mensajeDeError } from '../services/http.js'
 //  - Apoderado: solo los suyos (General + el nivel de sus hijos).
 //  - Dirección o personal: además, formulario para publicar y botón para eliminar.
 export default function ComunicadosSeccion() {
-  const { perfil, usuarioId, esEditor, revisarError } = useSesion()
+  const { perfil, esEditor, revisarError } = useSesion()
   const apoderadoId = perfil?.apoderadoId
   const [aviso, setAviso] = useState(null)
 
   const cargar = useCallback(
-    () => (apoderadoId ? listarComunicadosDeApoderado(apoderadoId, usuarioId) : listarComunicados()),
-    [apoderadoId, usuarioId],
+    () => (apoderadoId ? listarComunicadosDeApoderado(apoderadoId) : listarComunicados()),
+    [apoderadoId],
   )
   const comunicados = useRecurso(cargar)
 
   const eliminar = async (comunicado) => {
     if (!window.confirm(`¿Eliminar el comunicado «${comunicado.titulo}»?`)) return
     try {
-      await eliminarComunicado(comunicado.id, usuarioId)
+      await eliminarComunicado(comunicado.id)
       setAviso({ exito: true, texto: `Se eliminó «${comunicado.titulo}».` })
     } catch (error) {
       revisarError(error)

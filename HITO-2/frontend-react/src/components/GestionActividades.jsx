@@ -18,7 +18,7 @@ export default function GestionActividades({ onCambioActividades, actualizacion 
   const [error, setError] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
   // Los permisos los decide el servidor según el rol de la sesión iniciada.
-  const { perfil, actualizacionCatalogo = 0 } = useSesion() ?? {};
+  const { perfil } = useSesion() ?? {};
   const puedeGestionar = ['administrador', 'organizador'].includes(perfil?.rol);
 
   const [editId, setEditId] = useState(null);
@@ -54,7 +54,7 @@ export default function GestionActividades({ onCambioActividades, actualizacion 
     return () => {
       vigente = false;
     };
-  }, [version, actualizacion, actualizacionCatalogo]);
+  }, [version, actualizacion]);
 
   // Recarga tras una acción del usuario (patrón de hooks/useRecurso.js: el efecto vuelve a
   // pedir los datos y el estado solo cambia dentro de las promesas).

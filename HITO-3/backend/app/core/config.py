@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://pequenos_reyes:pequenos_reyes@localhost:5432/pequenos_reyes"
     mongodb_url: str = "mongodb://localhost:27017"
     mongodb_database: str = "pequenos_reyes"
-    cors_origins: str = "http://localhost:5173"
+    cors_origins: str = "http://localhost:5173,http://localhost,https://localhost,capacitor://localhost"
 
     # HU-16 (Sprint 3 · Daniel): autenticación real con sesiones en PostgreSQL.
     # Minutos que dura una sesión desde el login (luego el token deja de servir: 401).

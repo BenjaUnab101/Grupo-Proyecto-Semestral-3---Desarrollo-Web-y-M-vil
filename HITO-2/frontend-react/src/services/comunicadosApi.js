@@ -23,8 +23,8 @@ export async function listarComunicados() {
 }
 
 // Solo los del apoderado: General + el nivel de sus hijos.
-export async function listarComunicadosDeApoderado(apoderadoId, usuarioId) {
-  const datos = await pedir(`/apoderados/${apoderadoId}/comunicados`, { usuarioId })
+export async function listarComunicadosDeApoderado(apoderadoId) {
+  const datos = await pedir(`/apoderados/${apoderadoId}/comunicados`)
   return datos.comunicados.map(aComunicado)
 }
 
@@ -41,10 +41,10 @@ export function aComunicadoIn(formulario) {
   }
 }
 
-export async function publicarComunicado(formulario, usuarioId) {
-  return aComunicado(await pedir('/comunicados', { metodo: 'POST', cuerpo: aComunicadoIn(formulario), usuarioId }))
+export async function publicarComunicado(formulario) {
+  return aComunicado(await pedir('/comunicados', { metodo: 'POST', cuerpo: aComunicadoIn(formulario) }))
 }
 
-export async function eliminarComunicado(id, usuarioId) {
-  await pedir(`/comunicados/${id}`, { metodo: 'DELETE', usuarioId })
+export async function eliminarComunicado(id) {
+  await pedir(`/comunicados/${id}`, { metodo: 'DELETE' })
 }
