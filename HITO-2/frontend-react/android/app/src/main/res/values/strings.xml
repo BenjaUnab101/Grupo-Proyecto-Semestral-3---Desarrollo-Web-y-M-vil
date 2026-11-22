@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Pequeños Reyes</string>
+    <string name="title_activity_main">Pequeños Reyes</string>
+    <string name="package_name">cl.unab.pequenosreyes</string>
+    <string name="custom_url_scheme">cl.unab.pequenosreyes</string>
+</resources>
