@@ -24,6 +24,14 @@ import { useSesion } from '../context/sesionContexto.js';
 const METODOS = { transferencia: 'Transferencia Simulada', exento: 'Exento / Actividad Gratuita' };
 const COLOR_ESTADO = { confirmado: 'bg-success', cancelado: 'bg-danger', pendiente: 'bg-warning text-dark', pagado: 'bg-primary' };
 
+function normalizarNombre(texto) {
+  return texto
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
 export default function FlujoInscripcionEventos({ onCambioInscripcion, actualizacion = 0 }) {
   const { perfil, abrirPortal, revisarError } = useSesion() ?? {};
   const esPersonal = ['administrador', 'organizador'].includes(perfil?.rol);
@@ -39,6 +47,7 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion, actualiza
   const [filtroCategoria, setFiltroCategoria] = useState('todas');
   const [filtroCupos, setFiltroCupos] = useState('todos');
   const [filtroEstado, setFiltroEstado] = useState('publicada');
+  const [busquedaEvento, setBusquedaEvento] = useState('');
 
   // Formulario
   const [actividadId, setActividadId] = useState('');
@@ -98,10 +107,20 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion, actualiza
   const opcionesAlumno = esPersonal ? alumnos : perfil?.hijos ?? [];
   const alumnoElegido = opcionesAlumno.find((a) => String(a.id) === alumnoId) ?? opcionesAlumno[0];
 
-  const actividadesFiltradas = useMemo(
-    () => filtrarActividadesPortal(actividades, { categoriaId: filtroCategoria, filtroCupos, estado: filtroEstado }),
-    [actividades, filtroCategoria, filtroCupos, filtroEstado]
-  );
+  const actividadesFiltradas = useMemo(() => {
+    const actividadesConFiltros = filtrarActividadesPortal(actividades, {
+      categoriaId: filtroCategoria,
+      filtroCupos,
+      estado: filtroEstado,
+    });
+
+    const termino = normalizarNombre(busquedaEvento);
+    if (!termino) return actividadesConFiltros;
+
+    return actividadesConFiltros.filter((actividad) =>
+      normalizarNombre(actividad.titulo).includes(termino)
+    );
+  }, [actividades, filtroCategoria, filtroCupos, filtroEstado, busquedaEvento]);
 
   const ejecutar = async (accion) => {
     setAviso(null);
@@ -181,9 +200,24 @@ export default function FlujoInscripcionEventos({ onCambioInscripcion, actualiza
           <button type="button" className="btn btn-link btn-sm p-0 align-baseline" onClick={recargar}>reintentar</button>.
         </div>
       )}
-
       <div className="card p-3 border-0 shadow-sm rounded-4 bg-light mb-4">
         <div className="row g-3 align-items-end">
+          <div className="col-12">
+            <label
+            htmlFor="buscar-evento-hu23"
+            className="form-label small fw-bold mb-1"
+          >
+            Buscar evento por nombre
+          </label>
+          <input
+            id="buscar-evento-hu23"
+            type="search"
+            className="form-control form-control-sm"
+            placeholder="Ej. taller"
+            value={busquedaEvento}
+            onChange={(evento) => setBusquedaEvento(evento.target.value)}
+          />
+        </div>
           <Filtro id="filtro-cat-hu23" etiqueta="Categoría" valor={filtroCategoria} onCambio={setFiltroCategoria}
             opciones={[['todas', 'Todas las categorías'], ...categorias.map((c) => [String(c.id), c.nombre])]} />
           <Filtro id="filtro-cupos-hu23" etiqueta="Cupos" valor={filtroCupos} onCambio={setFiltroCupos}
