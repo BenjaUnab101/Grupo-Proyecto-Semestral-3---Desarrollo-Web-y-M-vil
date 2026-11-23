@@ -49,6 +49,8 @@ export default function SesionProvider({ children }) {
     esApoderado: Boolean(perfil?.apoderadoId),
     esEditor: Boolean(perfil?.esEditor),
     esDireccion: Boolean(perfil?.esDireccion),
+    // Personal del jardín (dirección, educadoras, etc.): habilita el apartado Panel.
+    esPersonal: Boolean(perfil) && perfil.rol !== 'apoderado',
     iniciarSesion,
     cerrarSesion,
     revisarError,

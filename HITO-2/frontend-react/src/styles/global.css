@@ -173,3 +173,52 @@ textarea:focus-visible {
   outline: 3px solid var(--pr-blue);
   outline-offset: 2px;
 }
+
+/* Navegación por apartados (utils/rutas.js) */
+.apartado:focus { outline: none; }
+
+.navbar .nav-link.active {
+  color: var(--pr-blue);
+  border-bottom: 3px solid var(--pr-blue);
+}
+@media (max-width: 1199.98px) {
+  .navbar .nav-link.active { border-bottom: 0; border-left: 3px solid var(--pr-blue); padding-left: 10px !important; }
+}
+
+/* Inicio: accesos directos a cada apartado */
+.accesos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.acceso {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 18px;
+  border: 1px solid #d9dee5;
+  border-radius: 12px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.acceso:hover,
+.acceso:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: var(--pr-blue);
+}
+.acceso:focus-visible { outline: 3px solid var(--pr-blue); outline-offset: 2px; }
+.acceso__icono { font-size: 1.8rem; }
+.acceso__titulo { font-weight: 700; color: var(--pr-blue-dark); }
+.acceso__descripcion { font-size: 0.9rem; color: #56606d; }
+@media (max-width: 480px) {
+  .accesos { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .acceso { padding: 14px; }
+  .acceso__descripcion { display: none; }
+}

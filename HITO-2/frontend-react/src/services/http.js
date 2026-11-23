@@ -1,8 +1,16 @@
 // TEC-17: cliente HTTP para la API propia (FastAPI).
 // Todas las llamadas a la API pasan por pedir(): los componentes nunca usan fetch directo.
 
+// HITO 4: dentro de la app Android (Capacitor) "localhost" es el propio teléfono, no el PC.
+// Capacitor inyecta window.Capacitor antes de cargar React, así que no hace falta importarlo.
+const esAndroidNativo =
+  Boolean(globalThis.Capacitor?.isNativePlatform?.()) && globalThis.Capacitor?.getPlatform?.() === 'android'
+
 // import.meta.env solo existe en Vite; en las pruebas con Node es undefined.
+// Navegador: VITE_API_WEB (o VITE_API_URL). Android: VITE_API_ANDROID (10.0.2.2 en el emulador,
+// la IP del PC en un teléfono físico). Ver .env.example y el README.
 export const API_URL =
+  (esAndroidNativo && import.meta.env?.VITE_API_ANDROID) ||
   import.meta.env?.VITE_API_WEB ||
   import.meta.env?.VITE_API_URL ||
   'http://localhost:8000/api/v1'

@@ -12,7 +12,7 @@ export default function Hero({ onAbrirPortal }) {
               Acompañamos a cada párvulo con atención especializada en un entorno seguro, afectivo y estimulante.
             </p>
             <div className="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
-              <a href="#matricula" className="btn-institucional-primary">
+              <a href="#/matricula" className="btn-institucional-primary">
                 Ver proceso de matrícula
               </a>
               <button

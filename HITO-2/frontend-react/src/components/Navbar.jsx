@@ -1,33 +1,25 @@
 import { useState } from 'react';
 import { useSesion } from '../context/sesionContexto.js';
+import { hrefDeRuta, rutasDelMenu } from '../utils/rutas.js';
 
-const ENLACES_NAV = [
-  { id: 'informacion', label: 'Nosotros' },
-  { id: 'galeria', label: 'Galería' },
-  { id: 'cupos-salas', label: 'Cupos' },
-  { id: 'comunicados', label: 'Comunicados' },
-  { id: 'calendario', label: 'Calendario' },
-  { id: 'documentos', label: 'Documentos' },
-  { id: 'matricula', label: 'Matrícula' },
-  { id: 'contacto', label: 'Contacto' },
-];
-
-export default function Navbar({ onAbrirPortal }) {
+// Menú principal: un enlace por apartado (utils/rutas.js). El apartado actual queda marcado
+// con aria-current="page"; "Panel" solo aparece con sesión del personal.
+export default function Navbar({ rutaActual, onAbrirPortal }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const { perfil } = useSesion() ?? {};
+  const { perfil, esPersonal } = useSesion() ?? {};
 
   const toggleMenu = () => setMenuAbierto((prev) => !prev);
   const cerrarMenu = () => setMenuAbierto(false);
 
   return (
     <header className="sticky-top bg-white border-bottom shadow-sm">
-      <nav className="navbar navbar-expand-lg navbar-light container py-2" aria-label="Navegación principal">
-        <a className="navbar-brand fw-bold d-flex align-items-center gap-2" href="#" style={{ color: 'var(--pr-blue)' }}>
+      <nav className="navbar navbar-expand-xl navbar-light container py-2" aria-label="Navegación principal">
+        <a className="navbar-brand fw-bold d-flex align-items-center gap-2" href={hrefDeRuta('inicio')} onClick={() => setMenuAbierto(false)} style={{ color: 'var(--pr-blue)' }}>
           <span style={{ fontSize: '1.5rem' }}>👑</span>
           <span>Pequeños Reyes</span>
         </a>
 
-        {/* Botón hamburguesa accesible (< 992px) */}
+        {/* Botón hamburguesa accesible (< 1200px) */}
         <button
           className="navbar-toggler"
           type="button"
@@ -44,21 +36,25 @@ export default function Navbar({ onAbrirPortal }) {
           id="navbarMenuContent"
           className={`collapse navbar-collapse ${menuAbierto ? 'show' : ''}`}
         >
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
-            {ENLACES_NAV.map((item) => (
-              <li key={item.id} className="nav-item">
-                <a
-                  className="nav-link fw-semibold px-2"
-                  href={`#${item.id}`}
-                  onClick={cerrarMenu}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+          <ul className="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center gap-xl-1">
+            {rutasDelMenu(esPersonal).map((item) => {
+              const activa = item.id === rutaActual;
+              return (
+                <li key={item.id} className="nav-item">
+                  <a
+                    className={`nav-link fw-semibold px-2${activa ? ' active' : ''}`}
+                    href={hrefDeRuta(item.id)}
+                    aria-current={activa ? 'page' : undefined}
+                    onClick={cerrarMenu}
+                  >
+                    {item.titulo}
+                  </a>
+                </li>
+              );
+            })}
 
             {/* Acción de Portal familias (CA3 / CP-HU-01-03) */}
-            <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <li className="nav-item ms-xl-2 mt-2 mt-xl-0">
               <button
                 type="button"
                 className="btn-institucional-primary py-2 px-3 fs-6 w-100"

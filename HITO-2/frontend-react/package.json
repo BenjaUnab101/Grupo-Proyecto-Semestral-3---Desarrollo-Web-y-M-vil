@@ -8,14 +8,20 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "node --test \"src/**/*.test(IA).js\""
+    "test": "node --test \"src/**/*.test(IA).js\"",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:abrir": "npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/local-notifications": "^8.0.0",
     "bootstrap": "^5.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
     "@eslint/js": "^10.0.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
