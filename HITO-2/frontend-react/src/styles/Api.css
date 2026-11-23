@@ -46,3 +46,22 @@
   .solicitud { background: #1c1e25; border-color: #343a45; color: #eef1f5; }
   .comunicado__eliminar { color: #ff8a80; }
 }
+
+/* HITO 4 · Recordatorio en el teléfono (solo dentro de la app Android) */
+.recordatorio-intro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--pr-blue-light, #e8f4f9);
+}
+.recordatorio-activo { color: #1f7a3f; font-weight: 600; }
+.inscripciones__acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 480px) {
+  .inscripciones__acciones { width: 100%; }
+  .inscripciones__acciones .btn { flex: 1 1 auto; min-height: 44px; }
+}

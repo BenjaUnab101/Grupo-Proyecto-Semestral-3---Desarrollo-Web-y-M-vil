@@ -50,9 +50,23 @@ Para trabajar solo en el frontend con la API ya levantada:
 2. `npm install` y luego `npm run dev`.
 3. Pruebas: `npm test` · Lint: `npm run lint` · Build: `npm run build`.
 
+## App Android (Hito 4)
+La misma aplicación se instala como APK con Capacitor y consume la API del Hito 3.
+Pasos, dirección de la API para emulador o teléfono, endpoints usados y la nueva función de
+**recordatorio en el teléfono**: ver [`docs/HITO-4-ANDROID.md`](docs/HITO-4-ANDROID.md).
+
+    npm install
+    npx cap add android      # solo la primera vez
+    npm run android:sync     # build + sincronizar con Android
+    npm run android:abrir    # abrir en Android Studio
+
 ## Estructura general de la aplicación
 - `src/main.jsx`: punto de entrada. `src/App.jsx`: monta la sesión y la página.
-- `src/pages/`: secciones de la página que piden datos a la API (calendario, comunicados, matrícula, contacto, panel).
+- `src/pages/`: un archivo por apartado. `PaginaPrincipal.jsx` es la estructura común (menú, barra de sesión, pie)
+  y muestra el apartado según la dirección: `#/` Inicio, `#/nosotros`, `#/galeria`, `#/cupos`, `#/comunicados`,
+  `#/calendario`, `#/documentos`, `#/matricula`, `#/contacto` y `#/panel` (solo personal).
+  Las rutas están en `src/utils/rutas.js` y `src/hooks/useRuta.js` escucha el cambio de dirección.
+  Se usa el `#` porque funciona igual en el navegador y en la app Android, y el botón "atrás" vuelve al apartado anterior.
 - `src/components/`: componentes de interfaz (dibujan lo que reciben).
 - `src/context/`: `SesionProvider.jsx`, sesión compartida (perfil, login/logout y el modal del portal).
 - `src/hooks/`: `useSesionApoderado.js` (sesión del portal), `useRecurso.js` (estados de carga), `useClima.js`, `useFormularioDemo.js`.

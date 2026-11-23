@@ -1,22 +1,23 @@
+import { useEffect, useRef } from 'react';
 import { useClima } from '../hooks/useClima';
+import { useRuta } from '../hooks/useRuta.js';
 import Navbar from '../components/Navbar';
 import BarraSesion from '../components/BarraSesion.jsx';
-import Hero from '../components/Hero';
-import SectionTitle from '../components/SectionTitle';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal.jsx';
 import PortalApoderados from '../components/PortalApoderados.jsx';
-import Documentos from '../components/Documentos.jsx';
-import ContactoSeccion from './ContactoSeccion.jsx';
-import PanelDireccionSeccion from './PanelDireccionSeccion.jsx';
-import ClimaWidget from '../components/ClimaWidget';
 import InfoJardin from '../components/InfoJardin.jsx';
 import Galeria from '../components/Galeria.jsx';
+import InicioPagina from './InicioPagina.jsx';
 import CuposSeccion from './CuposSeccion.jsx';
 import ComunicadosSeccion from './ComunicadosSeccion.jsx';
 import CalendarioSeccion from './CalendarioSeccion.jsx';
+import DocumentosSeccion from './DocumentosSeccion.jsx';
 import MatriculaSeccion from './MatriculaSeccion.jsx';
+import ContactoSeccion from './ContactoSeccion.jsx';
+import PanelDireccionSeccion from './PanelDireccionSeccion.jsx';
 import { useSesion } from '../context/sesionContexto.js';
+import { tituloDocumento } from '../utils/rutas.js';
 
 // HU-04: solo en desarrollo (npm run dev) se puede fijar la fecha base con
 // ?hoy=AAAA-MM-DD en la URL para probar ayer, hoy, +7 y +8 días. En producción
@@ -25,71 +26,75 @@ const hoyDePrueba = import.meta.env.DEV
   ? new URLSearchParams(window.location.search).get('hoy')
   : null;
 
-// TEC-17: la página arma las secciones. Las que muestran datos operacionales
-// (cupos, comunicados, calendario e inscripciones) viven en pages/ y los piden a la
-// API mediante services/. Los componentes de components/ solo dibujan lo que reciben.
+// Estructura común a todos los apartados: menú, barra de sesión, contenido y pie.
+// El contenido depende de la dirección (#/calendario, #/matricula...): ver utils/rutas.js.
+// Cada apartado vive en pages/ y pide sus propios datos a la API mediante services/.
 export default function PaginaPrincipal() {
-  const { pronostico, cargando, error, reintentar } = useClima();
-  const { portalAbierto, abrirPortal, cerrarPortal } = useSesion();
+  const ruta = useRuta();
+  const { pronostico, cargando, error, reintentar } = useClima(); // una sola llamada para todo el portal
+  const { portalAbierto, abrirPortal, cerrarPortal, esPersonal } = useSesion();
+  const principalRef = useRef(null);
+  const primeraVez = useRef(true);
+
+  // Al cambiar de apartado: título de la pestaña, volver arriba y llevar el foco al contenido
+  // (así un lector de pantalla anuncia la página nueva). En la carga inicial no se mueve el foco.
+  useEffect(() => {
+    document.title = tituloDocumento(ruta);
+    if (primeraVez.current) {
+      primeraVez.current = false;
+      return;
+    }
+    window.scrollTo(0, 0);
+    principalRef.current?.focus({ preventScroll: true });
+  }, [ruta]);
+
+  // Un componente por apartado. Las claves coinciden con los id de utils/rutas.js.
+  const apartados = {
+    inicio: <InicioPagina clima={{ pronostico, cargando, error, reintentar }} />,
+    nosotros: <InfoJardin />,
+    galeria: <Galeria />,
+    cupos: <CuposSeccion />,
+    comunicados: <EnContenedor><ComunicadosSeccion /></EnContenedor>,
+    // HU-06: si la API del clima falla, el calendario se muestra igual, sin insignias.
+    calendario: <EnContenedor><CalendarioSeccion hoy={hoyDePrueba} pronostico={error ? [] : pronostico} /></EnContenedor>,
+    documentos: <EnContenedor><DocumentosSeccion /></EnContenedor>,
+    matricula: <EnContenedor><MatriculaSeccion /></EnContenedor>,
+    contacto: <EnContenedor><ContactoSeccion /></EnContenedor>,
+    panel: <EnContenedor>{esPersonal ? <PanelDireccionSeccion /> : <SoloPersonal onIngresar={abrirPortal} />}</EnContenedor>,
+  };
 
   return (
     <div className="min-vh-100 d-flex flex-column">
-      <Navbar onAbrirPortal={abrirPortal} />
+      <Navbar rutaActual={ruta} onAbrirPortal={abrirPortal} />
       <BarraSesion />
 
-      <main className="flex-grow-1">
-        <Hero onAbrirPortal={abrirPortal} />
+      {portalAbierto && (
+        <Modal titulo="Portal familias" onCerrar={cerrarPortal}>
+          <PortalApoderados onCerrar={cerrarPortal} />
+        </Modal>
+      )}
 
-        {portalAbierto && (
-          <Modal titulo="Portal familias" onCerrar={cerrarPortal}>
-            <PortalApoderados onCerrar={cerrarPortal} />
-          </Modal>
-        )}
-
-        {/* HU-07: Información institucional, niveles y contacto */}
-        <InfoJardin />
-
-        {/* HU-08: Galería con Lightbox */}
-        <Galeria />
-
-        {/* HU-09 + TEC-17: Estado de cupos por sala (desde la API) */}
-        <CuposSeccion />
-
-        <section className="container py-4">
-          {/* HU-21 + TEC-17: comunicados desde la API */}
-          <ComunicadosSeccion />
-
-          {/* HU-04 + HU-19 + TEC-17: calendario e inscripciones desde la API */}
-          {/* HU-06: si la API del clima falla, el calendario se muestra igual, sin insignias. */}
-          <CalendarioSeccion hoy={hoyDePrueba} pronostico={error ? [] : pronostico} />
-
-          <section id="documentos">
-            <SectionTitle
-              titulo="Documentos y Protocolos"
-              subtitulo="Reglamentos internos y formularios informativos (demo)"
-            />
-            <Documentos />
-          </section>
-
-          {/* HU-11 + HU-25: pre-matrícula guardada en la API y seguimiento */}
-          <MatriculaSeccion />
-
-          {/* HU-12 + HU-26 (Sprint 3 · Daniel): contacto guardado en la API con seguimiento */}
-          <ContactoSeccion />
-
-          {/* HU-24 + HU-22 (Sprint 3 · Daniel): panel interno, solo con sesión real del personal */}
-          <PanelDireccionSeccion />
-        </section>
-
-        <ClimaWidget
-          pronostico={pronostico}
-          cargando={cargando}
-          error={error}
-          reintentar={reintentar}
-        />
+      {/* key: al cambiar de apartado se monta de nuevo (datos frescos y formularios limpios). */}
+      <main key={ruta} ref={principalRef} tabIndex={-1} className="flex-grow-1 apartado">
+        {apartados[ruta]}
       </main>
 
       <Footer />
+    </div>
+  );
+}
+
+function EnContenedor({ children }) {
+  return <div className="container py-4">{children}</div>;
+}
+
+function SoloPersonal({ onIngresar }) {
+  return (
+    <div className="estado-api--vacio text-center my-5">
+      <p className="mb-3">El panel es solo para el personal del jardín.</p>
+      <button type="button" className="btn-institucional-primary" onClick={onIngresar}>
+        Iniciar sesión
+      </button>
     </div>
   );
 }

@@ -1,0 +1,16 @@
+{
+  "appId": "cl.pequenosreyes.portal",
+  "appName": "Pequeños Reyes",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#0077A8"
+    }
+  }
+}
